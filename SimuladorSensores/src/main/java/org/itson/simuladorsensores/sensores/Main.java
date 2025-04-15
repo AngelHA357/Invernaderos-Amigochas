@@ -27,9 +27,9 @@ public class Main {
         } while (!tipoSensor.equalsIgnoreCase("Humedad") && !tipoSensor.equalsIgnoreCase("Temperatura"));
 
         if (tipoSensor.equalsIgnoreCase("Humedad")) {
-            sensor = new SensorHumedad();
+            sensor = new SensorHumedad("SEN-0101", "STEREN", "STEREN Sen 9827");
         } else if (tipoSensor.equalsIgnoreCase("Temperatura")) {
-            sensor = new SensorTemperatura();
+            sensor = new SensorTemperatura("SEN-0102", "STEREN", "STEREN SEN 9827");
         }
 
         Executor service = Executors.newCachedThreadPool();

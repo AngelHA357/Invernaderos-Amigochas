@@ -19,11 +19,17 @@ import java.util.logging.Logger;
 public class SensorHumedad extends Sensor implements Runnable {
 
     private DatagramSocket socket;
-    private long contador;
     private Random random;
+    private long contador;
     private Float dato;
 
-    public SensorHumedad() {
+    public SensorHumedad(String id, String marca, String modelo) {
+        super(id, marca, modelo);
+        
+        inicializarAtributos();
+    }
+    
+    private void inicializarAtributos() {
         try {
             contador = 0;
             socket = new DatagramSocket();
@@ -47,8 +53,8 @@ public class SensorHumedad extends Sensor implements Runnable {
                     contador = 0;
                 }
 
-                String datoString = dato.toString();
-                byte[] bytesToSend = datoString.getBytes();
+                String informacion = id + "/" + dato.toString();
+                byte[] bytesToSend = informacion.getBytes();
 
                 DatagramPacket sendPacket = new DatagramPacket(bytesToSend, bytesToSend.length, InetAddress.getLocalHost(), 1001);
                 socket.send(sendPacket);

@@ -23,13 +23,19 @@ public class SensorTemperatura extends Sensor implements Runnable {
     private long contador;
     private Float dato;
 
-    public SensorTemperatura() {
+    public SensorTemperatura(String id, String marca, String modelo) {
+        super(id, marca, modelo);
+        
+        inicializarAtributos();
+    }
+    
+    private void inicializarAtributos() {
         try {
+            contador = 0;
             socket = new DatagramSocket();
             random = new Random();
-            contador = 0;
         } catch (SocketException ex) {
-            Logger.getLogger(SensorTemperatura.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SensorHumedad.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -47,8 +53,8 @@ public class SensorTemperatura extends Sensor implements Runnable {
                     contador = 0;
                 }
 
-                String datoString = dato.toString();
-                byte[] bytesToSend = datoString.getBytes();
+                String informacion = id + "/" + dato.toString();
+                byte[] bytesToSend = informacion.getBytes();
 
                 DatagramPacket sendPacket = new DatagramPacket(bytesToSend, bytesToSend.length, InetAddress.getLocalHost(), 1001);
                 socket.send(sendPacket);
