@@ -47,7 +47,7 @@ public class SensorTemperatura extends Sensor implements Runnable {
             }
 
             // El mensaje a enviar es el id del sensor y la medición
-            String payload = id + "/" + String.valueOf(dato);
+            String payload = id + "/" + String.valueOf(dato) + "°C";
             // Se obtienen los bytes del payload
             MqttMessage message = new MqttMessage(payload.getBytes());
 
