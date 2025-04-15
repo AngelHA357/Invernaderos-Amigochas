@@ -23,7 +23,6 @@ public class ProtocoloGateway implements Runnable {
     @Override
     public void run() {
         try {
-            DatagramSocket socket = new DatagramSocket(1001);
             byte[] buffer = new byte[4096];
             
             while (true) {
