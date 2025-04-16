@@ -1,5 +1,6 @@
-package org.itson.GestionSensoresMicroservicio;
+package org.itson.GestionSensoresMicroservicio.persistence;
 
+import org.itson.GestionSensoresMicroservicio.entities.Sensor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

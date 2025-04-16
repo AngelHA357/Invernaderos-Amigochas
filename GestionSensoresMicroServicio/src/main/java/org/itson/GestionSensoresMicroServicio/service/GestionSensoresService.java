@@ -1,5 +1,8 @@
-package org.itson.GestionSensoresMicroservicio;
+package org.itson.GestionSensoresMicroservicio.service;
 
+import org.itson.GestionSensoresMicroservicio.persistence.IGestionSensoresRepository;
+import org.itson.GestionSensoresMicroservicio.entities.Sensor;
+import org.itson.GestionSensoresMicroservicio.dtos.SensorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package org.itson.GestionSensoresMicroservicio;
+package org.itson.GestionSensoresMicroservicio.entities;
 
 import java.util.List;
 import jakarta.persistence.*;

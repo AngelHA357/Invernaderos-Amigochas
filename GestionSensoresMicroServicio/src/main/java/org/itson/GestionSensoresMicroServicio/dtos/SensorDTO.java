@@ -1,4 +1,4 @@
-package org.itson.GestionSensoresMicroservicio;
+package org.itson.GestionSensoresMicroservicio.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

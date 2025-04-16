@@ -1,5 +1,7 @@
-package org.itson.GestionSensoresMicroservicio;
+package org.itson.GestionSensoresMicroservicio.controller;
 
+import org.itson.GestionSensoresMicroservicio.service.GestionSensoresService;
+import org.itson.GestionSensoresMicroservicio.dtos.SensorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
