@@ -4,7 +4,7 @@ import ListaInvernaderos from './GestionSensores/ListaInvernaderos.jsx';
 import ListaSensores from './GestionSensores/ListaSensores.jsx';
 import GenerarInforme from './Informes/GenerarInforme.jsx';
 import ListaAlarmas from './GestionAlarmas/ListaAlarmas.jsx';
-import AgregarAlarmas from './GestionAlarmas/AgregarAlarmas.jsx';
+import AgregarAlarmas from './GestionSensores/AgregarSensor.jsx';
 
 function App() {
     return (
