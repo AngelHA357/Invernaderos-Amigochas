@@ -4,6 +4,7 @@ import ListaInvernaderos from './GestionSensores/ListaInvernaderos.jsx';
 import ListaSensores from './GestionSensores/ListaSensores.jsx';
 import GenerarInforme from './Informes/GenerarInforme.jsx';
 import ListaAlarmas from './GestionAlarmas/ListaAlarmas.jsx';
+import AgregarAlarmas from './GestionAlarmas/AgregarAlarmas.jsx';
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
                 <Route path="/sensores/:invernaderoId" element={<ListaSensores />} />
                 <Route path="/informes" element={<GenerarInforme />} />
                 <Route path="/alarmas" element={<ListaAlarmas />} />
+                <Route path="/alarmas/agregar" element={<AgregarAlarmas />} />
                 <Route path="/anomalias" element={<div>Página de Anomalías</div>} />
             </Routes>
         </Router>
