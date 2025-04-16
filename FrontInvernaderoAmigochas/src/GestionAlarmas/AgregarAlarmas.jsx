@@ -87,6 +87,7 @@ function AgregarAlarmas() {
     const [selectedTipo, setSelectedTipo] = useState("");
     const [selectedInvernadero, setSelectedInvernadero] = useState("");
     const [selectedSector, setSelectedSector] = useState("");
+    const [showModal, setShowModal] = useState(false);
 
     return (
         <>
@@ -208,15 +209,36 @@ function AgregarAlarmas() {
                         </div>
                         <div className="flex justify-center space-x-4 mt-6">
                             <button
-                                onClick={() => navigate('/alarmas/agregar')}
+                                onClick={() => navigate('/alarmas')}
                                 className="text-lg px-10 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 font-bold">Cancelar</button>
                             <button
-                                onClick={() => navigate('/alarmas/agregar')}
+                                onClick={() => {setShowModal(true);}}
                                 className="text-lg px-10 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 font-bold">Agregar</button>
                         </div>
                     </div>
                 </div>
             </div>
+
+            {/* Modal de éxito */}
+            {showModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+                        <h3 className="text-xl font-bold text-gray-800 mb-4">¡Éxito!</h3>
+                        <p className="text-gray-600 mb-6">El sensor se ha creado correctamente.</p>
+                        <div className="flex justify-center">
+                            <button
+                                onClick={() => {
+                                    setShowModal(false);
+                                    navigate('/alarmas'); // O la ruta que desees
+                                }}
+                                className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 font-bold"
+                            >
+                                Confirmar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 }
