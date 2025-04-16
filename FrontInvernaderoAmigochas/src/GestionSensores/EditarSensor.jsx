@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
 
-function AgregarSensor() {
+function EditarSensor() {
     const navigate = useNavigate();
 
     const marcas = [
@@ -94,7 +94,7 @@ function AgregarSensor() {
             <BarraNavegacion />
             <div className="max-w-4xl mx-auto rounded-lg shadow-md p-6 mt-10 border border-zinc-600">
                 {/* Título */}
-                <h1 className="text-2xl font-bold text-gray-800">Agregar Sensor</h1>
+                <h1 className="text-2xl font-bold text-gray-800">Editar Sensor</h1>
 
                 <div className="mt-6">
                     <div className='flex space-x-4 ml-14 mr-14 justify-between'>
@@ -213,7 +213,7 @@ function AgregarSensor() {
                                 className="text-lg px-10 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 font-bold">Cancelar</button>
                             <button
                                 onClick={() => {setShowModal(true);}}
-                                className="text-lg px-10 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 font-bold">Agregar</button>
+                                className="text-lg px-10 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 font-bold">Actualizar</button>
                         </div>
                     </div>
                 </div>
@@ -224,7 +224,7 @@ function AgregarSensor() {
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
                         <h3 className="text-xl font-bold text-gray-800 mb-4">¡Éxito!</h3>
-                        <p className="text-gray-600 mb-6">El sensor se ha creado correctamente.</p>
+                        <p className="text-gray-600 mb-6">El sensor se ha actualizado correctamente.</p>
                         <div className="flex justify-center">
                             <button
                                 onClick={() => {
@@ -243,4 +243,4 @@ function AgregarSensor() {
     );
 }
 
-export default AgregarSensor;
+export default EditarSensor;
