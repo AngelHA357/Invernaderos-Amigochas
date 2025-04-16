@@ -1,12 +1,16 @@
 import React from 'react';
-import BarraNavegacion from './BarraNavegacion/BarraNavegacion.jsx';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ListaInvernaderos from './GestionSensores/ListaInvernaderos.jsx';
+import ListaSensores from './GestionSensores/ListaSensores.jsx';
 
 function App() {
     return (
-        <>
-            <ListaInvernaderos />
-        </>
+        <Router>
+            <Routes>
+                <Route path="/" element={<ListaInvernaderos />} />
+                <Route path="/sensores/:invernaderoId" element={<ListaSensores />} />
+            </Routes>
+        </Router>
     );
 }
 
