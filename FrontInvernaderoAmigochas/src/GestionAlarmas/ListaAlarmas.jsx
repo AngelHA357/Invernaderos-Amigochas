@@ -5,10 +5,38 @@ import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
 function ListaAlarmas() {
     const navigate = useNavigate();
     const [alarmas, setAlarmas] = useState([
-        { id: "ALA-001", sensor: "SE-0101", magnitud: "Temperatura", valor_limite: "30°C", estado: "Activa" },
-        { id: "ALA-002", sensor: "SE-0102", magnitud: "Humedad", valor_limite: "50%", estado: "Inactiva" },
-        { id: "ALA-004", sensor: "SE-0103", magnitud: "Temperatura", valor_limite: "12°C", estado: "Inactiva" }
+        {
+            id: "ALA-001",
+            invernaderoId: "INV-0101",
+            magnitud: "Temperatura (C°)",
+            valorMinimo: 15,
+            valorMaximo: 30,
+            formaNotificacion: "SMS",
+            sensores: ["SEN-0101", "SEN-0102"],
+            estado: "Activa"
+        },
+        {
+            id: "ALA-002",
+            invernaderoId: "INV-0201",
+            magnitud: "Humedad",
+            valorMinimo: 40,
+            valorMaximo: 60,
+            formaNotificacion: "EMAIL",
+            sensores: ["SEN-0103"],
+            estado: "Inactiva"
+        },
+        {
+            id: "ALA-003",
+            invernaderoId: "INV-0301",
+            magnitud: "CO2",
+            valorMinimo: 300,
+            valorMaximo: 600,
+            formaNotificacion: "SMS",
+            sensores: ["SEN-0104"],
+            estado: "Activa"
+        }
     ]);
+
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [alarmaToDelete, setAlarmaToDelete] = useState(null);
 
@@ -19,7 +47,7 @@ function ListaAlarmas() {
     const handleEditarAlarma = (alarma) => {
         // Guardar datos de la alarma en sessionStorage para acceder en la página de edición
         sessionStorage.setItem('alarmaSeleccionada', JSON.stringify(alarma));
-        navigate(`/alarmas/editarAlarma/${alarma.id}`);
+        navigate(`/alarmas/${alarma.id}`);
     };
 
     const handleEliminarAlarma = (alarma) => {
@@ -73,9 +101,8 @@ function ListaAlarmas() {
                         </div>
 
                         {/* Encabezados */}
-                        <div className="grid grid-cols-6 gap-4 bg-green-100 text-green-800 py-3 px-4 rounded-t-lg font-semibold">
+                        <div className="grid grid-cols-5 gap-4 bg-green-100 text-green-800 py-3 px-4 rounded-t-lg font-semibold">
                             <div>ID</div>
-                            <div>Sensor</div>
                             <div>Magnitud</div>
                             <div>Valor límite</div>
                             <div>Estado</div>
@@ -86,14 +113,13 @@ function ListaAlarmas() {
                         {alarmas.map((alarma, index) => (
                             <div
                                 key={alarma.id}
-                                className={`grid grid-cols-6 gap-4 py-3 px-4 ${
+                                className={`grid grid-cols-5 gap-4 py-3 px-4 ${
                                     index % 2 === 0 ? 'bg-white' : 'bg-green-50'
                                 } hover:bg-green-100 transition-colors duration-200 border-b border-green-100`}
                             >
                                 <div className="text-gray-800 font-medium">{alarma.id}</div>
-                                <div className="text-gray-800 font-medium">{alarma.sensor}</div>
                                 <div className="text-gray-600">{alarma.magnitud}</div>
-                                <div className="text-gray-600">{alarma.valor_limite}</div>
+                                <div className="text-gray-600">{alarma.valorMaximo}</div>
                                 <div>
                                     <button
                                         className={`px-3 py-1 text-sm font-semibold rounded-full ${

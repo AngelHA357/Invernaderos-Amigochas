@@ -9,6 +9,7 @@ import ListaAlarmas from './GestionAlarmas/ListaAlarmas.jsx';
 import AgregarAlarma from './GestionAlarmas/AgregarAlarma.jsx';
 import AgregarSensor from './GestionSensores/AgregarSensor.jsx';
 import EditarSensor from './GestionSensores/EditarSensor.jsx';
+import EditarAlarma from './GestionAlarmas/EditarAlarmas.jsx';
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                 <Route path="/informes" element={<GenerarInforme />} />
                 <Route path="/alarmas" element={<ListaAlarmas />} />
                 <Route path="/alarmas/agregarAlarma" element={<AgregarAlarma />} />
+                <Route path="/alarmas/:alarmaId" element={<EditarAlarma />} />
                 <Route path="/anomalias" element={<AlertasRecientes />} />
                 <Route path="/anomalias/:alertaId" element={<LevantarReporte />} />
             </Routes>

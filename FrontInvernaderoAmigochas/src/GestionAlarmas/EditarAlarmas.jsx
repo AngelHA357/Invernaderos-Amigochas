@@ -15,30 +15,54 @@ function EditarAlarma() {
         { id: 'SEN-0106', invernaderoId: 'INV-0101', invernaderoNombre: 'Invernadero 1', type: 'Humedad', sector: 'Sector 9', marca: 'Bosch', fila: 'Fila 7', modelo: 'Bosch TE 2373', status: 'Inactivo' }
     ];
 
-    const [selectedSensores, setSelectedSensores] = useState([]);
-
-    const handleSensorChange = (e) => {
-        const selectedId = e.target.value;
-        const sensor = sensores.find((sensor) => sensor.id === selectedId);
-        if (sensor && !selectedSensores.some((sensor) => sensor.id === selectedId)) {
-            setSelectedSensores([...selectedSensores, sensor]);
-        }
-    };
-
-    const removeSensor = (id) => {
-        setSelectedSensores(selectedSensores.filter((sensor) => sensor.id !== id));
-    };
-
-    const formas_notificacion = [
-        { id: 'SMS', name: 'Mensaje de texto' },
-        { id: 'EMAIL', name: 'Correo electrónico' }
-    ];
+    const alarmaSeleccionada = JSON.parse(sessionStorage.getItem('alarmaSeleccionada')) || {};
 
     const magnitud = [
         { id: 'HUM', name: 'Humedad' },
         { id: 'TEMC', name: 'Temperatura (C°)' },
         { id: 'TEMF', name: 'Temperatura (F°)' },
-        { id: 'CO2', name: 'CO2' }
+        { id: 'CO', name: 'CO' }
+    ];
+
+    const [formData, setFormData] = useState({
+        id: alarmaSeleccionada.id || '',
+        invernaderoId: alarmaSeleccionada.invernaderoId || '',
+        magnitud: magnitud.find((m) => m.name === alarmaSeleccionada.magnitud)?.id || '',
+        valorMinimo: alarmaSeleccionada.valorMinimo || '',
+        valorMaximo: alarmaSeleccionada.valorMaximo || '',
+        formaNotificacion: alarmaSeleccionada.formaNotificacion || '',
+        sensores: alarmaSeleccionada.sensores || [],
+    });
+
+    const [selectedSensores, setSelectedSensores] = useState(alarmaSeleccionada.sensores || []);
+
+    // Manejar cambios en los campos del formulario
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    // Manejar cambios en los sensores seleccionados
+    const handleSensorChange = (e) => {
+        const selectedId = e.target.value;
+        if (!selectedSensores.includes(selectedId)) {
+            setSelectedSensores([...selectedSensores, selectedId]);
+        }
+    };
+
+    const removeSensor = (id) => {
+        setSelectedSensores(selectedSensores.filter((sensorId) => sensorId !== id));
+    };
+
+    const handleSubmit = () => {
+        // Aquí puedes enviar los datos actualizados al backend
+        console.log('Datos actualizados:', formData);
+        setShowModal(true);
+    };
+
+    const formas_notificacion = [
+        { id: 'SMS', name: 'Mensaje de texto' },
+        { id: 'EMAIL', name: 'Correo electrónico' }
     ];
 
     const invernaderos = [
@@ -95,13 +119,11 @@ function EditarAlarma() {
                     <div className='flex space-x-4 ml-14 mr-14 justify-between'>
                         <div className="flex flex-col">
                             <h3 className="text-lg font-semibold text-gray-700 mb-2">ID Alarma</h3>
-                            <input type="text" className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500" />
+                            <input type="text" name="id" value={formData.id} onChange={handleChange} className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500" />
                         </div>
                         <div className="flex flex-col">
                             <h3 className="text-lg font-semibold text-gray-700 mb-2">Invernadero</h3>
-                            <select
-                                className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                            >
+                            <select name="invernaderoId" value={formData.invernaderoId} onChange={handleChange} className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
                                 <option value="">Seleccionar Invernadero</option>
                                 {invernaderos.map((invernadero) => (
                                     <option key={invernadero.id} value={invernadero.id}>
@@ -115,8 +137,9 @@ function EditarAlarma() {
                     <div className='flex space-x-4 ml-14 mr-14 mt-4 justify-between'>
                         <div className="flex flex-col">
                             <h3 className="text-lg font-semibold text-gray-700 mb-2">Magnitud</h3>
-                            <select
-                                className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                            <select name="magnitud"
+                                value={formData.magnitud}
+                                onChange={handleChange} className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
                             >
                                 <option value="">Seleccionar Magnitud</option>
                                 {magnitud.map((sensor) => (
@@ -128,15 +151,19 @@ function EditarAlarma() {
                         </div>
                         <div className="flex flex-col">
                             <h3 className="text-lg font-semibold text-gray-700 mb-2">Valor mínimo</h3>
-                            <input type="number" className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500" />
+                            <input type="number"
+                                name="valorMinimo"
+                                value={formData.valorMinimo}
+                                onChange={handleChange} className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500" />
                         </div>
                     </div>
 
                     <div className='flex space-x-4 ml-14 mr-14 mt-4 justify-between'>
                         <div className="flex flex-col">
                             <h3 className="text-lg font-semibold text-gray-700 mb-2">Notificar a través de</h3>
-                            <select
-                                className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                            <select name="formaNotificacion"
+                                value={formData.formaNotificacion}
+                                onChange={handleChange} className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
                             >
                                 <option value="">Seleccionar Forma de Notificación</option>
                                 {formas_notificacion.map((forma) => (
@@ -148,7 +175,10 @@ function EditarAlarma() {
                         </div>
                         <div className="flex flex-col">
                             <h3 className="text-lg font-semibold text-gray-700 mb-2">Valor máximo</h3>
-                            <input type="number" className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500" />
+                            <input type="number"
+                                name="valorMaximo"
+                                value={formData.valorMaximo}
+                                onChange={handleChange} className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500" />
                         </div>
                     </div>
 
@@ -170,20 +200,24 @@ function EditarAlarma() {
                                 ))}
                             </select>
                             <div className="mt-3 flex flex-wrap gap-2">
-                                {selectedSensores.map((sensor) => (
-                                    <span
-                                        key={sensor.id}
-                                        className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full flex items-center"
-                                    >
-                                        {sensor.id}
-                                        <button
-                                            className="ml-2 text-gray-500 hover:text-gray-700"
-                                            onClick={() => removeSensor(sensor.id)}
+                                {selectedSensores.map((sensorId) => {
+                                    // Buscar el objeto completo del sensor
+                                    const sensor = sensores.find((s) => s.id === sensorId);
+                                    return (
+                                        <span
+                                            key={sensorId}
+                                            className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full flex items-center"
                                         >
-                                            ✕
-                                        </button>
-                                    </span>
-                                ))}
+                                            {sensor ? sensor.id : 'Sensor no encontrado'}
+                                            <button
+                                                className="ml-2 text-gray-500 hover:text-gray-700"
+                                                onClick={() => removeSensor(sensorId)}
+                                            >
+                                                ✕
+                                            </button>
+                                        </span>
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
