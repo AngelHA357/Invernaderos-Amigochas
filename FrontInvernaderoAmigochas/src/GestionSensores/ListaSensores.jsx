@@ -7,10 +7,14 @@ function ListaSensores() {
     const { invernaderoId } = useParams();
     const navigate = useNavigate();
     const [invernadero, setInvernadero] = useState(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [sensorToDelete, setSensorToDelete] = useState(null);
+    const [sensores, setSensores] = useState([]);
     
-    const sensoresDelInvernadero = sensoresMock.filter(sensor => sensor.invernaderoId === invernaderoId);
-
     useEffect(() => {
+        // Inicializar el estado de sensores con los datos del mock
+        setSensores(sensoresMock.filter(sensor => sensor.invernaderoId === invernaderoId));
+        
         const invernaderoData = sessionStorage.getItem('invernaderoSeleccionado');
         if (invernaderoData) {
             setInvernadero(JSON.parse(invernaderoData));
@@ -21,6 +25,28 @@ function ListaSensores() {
 
     const volverAInvernaderos = () => {
         navigate('/');
+    };
+
+    const handleAgregarSensor = () => {
+        navigate('/sensores/agregar');
+    };
+
+    const handleEditarSensor = (sensor) => {
+        sessionStorage.setItem('sensorSeleccionado', JSON.stringify(sensor));
+        navigate(`/sensores/editar/${sensor.id}`);
+    };
+
+    const handleEliminarSensor = (sensor) => {
+        setSensorToDelete(sensor);
+        setShowDeleteModal(true);
+    };
+
+    const confirmarEliminarSensor = () => {
+        // Eliminar el sensor del estado local
+        setSensores(prevSensores => prevSensores.filter(sensor => sensor.id !== sensorToDelete.id));
+        setShowDeleteModal(false);
+        // Mostramos mensaje de éxito (en un caso real se haría después de la respuesta del backend)
+        alert(`El sensor ${sensorToDelete?.id} ha sido eliminado correctamente`);
     };
 
     // Función para obtener el icono según el tipo de sensor
@@ -83,23 +109,25 @@ function ListaSensores() {
                                 <span className="text-green-500 mr-2">📊</span>
                                 <h2 className="text-xl font-semibold text-gray-700">Sensores Disponibles</h2>
                             </div>
-                            <button className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300 flex items-center shadow-sm">
+                            <button 
+                                onClick={handleAgregarSensor} 
+                                className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300 flex items-center shadow-sm">
                                 <span className="mr-1">+</span> Agregar sensor
                             </button>
                         </div>
 
-                        {sensoresDelInvernadero.length > 0 ? (
+                        {sensores.length > 0 ? (
                             <>
                                 {/* Encabezados */}
                                 <div className="grid grid-cols-4 gap-4 bg-green-100 text-green-800 py-3 px-4 rounded-t-lg font-semibold">
                                     <div>ID Sensor</div>
                                     <div>Tipo</div>
                                     <div>Estado</div>
-                                    <div>Acciones</div>
+                                    <div className="text-center">Acciones</div>
                                 </div>
 
                                 {/* Filas */}
-                                {sensoresDelInvernadero.map((sensor, index) => (
+                                {sensores.map((sensor, index) => (
                                     <div
                                         key={sensor.id}
                                         className={`grid grid-cols-4 gap-4 py-3 px-4 ${
@@ -115,15 +143,17 @@ function ListaSensores() {
                                             <span className={`h-2.5 w-2.5 rounded-full mr-2 ${sensor.status === 'Activo' ? 'bg-green-500' : 'bg-red-500'}`}></span>
                                             {sensor.status}
                                         </div>
-                                        <div>
-                                            <div className="flex space-x-2">
-                                                <button className="inline-flex items-center px-3 py-1 text-sm font-semibold text-green-800 bg-green-100 rounded-full hover:bg-green-200 transition-colors duration-300">
-                                                    <span className="mr-1">✏️</span> Editar
-                                                </button>
-                                                <button className="inline-flex items-center px-3 py-1 text-sm font-semibold text-red-800 bg-red-100 rounded-full hover:bg-red-200 transition-colors duration-300">
-                                                    <span className="mr-1">🗑️</span> Eliminar
-                                                </button>
-                                            </div>
+                                        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 justify-center">
+                                            <button 
+                                                onClick={() => handleEditarSensor(sensor)}
+                                                className="inline-flex items-center px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full hover:bg-green-200 transition-colors duration-300">
+                                                <span className="mr-1">✏️</span> Editar
+                                            </button>
+                                            <button 
+                                                onClick={() => handleEliminarSensor(sensor)}
+                                                className="inline-flex items-center px-2 py-1 text-xs font-semibold text-red-800 bg-red-100 rounded-full hover:bg-red-200 transition-colors duration-300">
+                                                <span className="mr-1">🗑️</span> Eliminar
+                                            </button>
                                         </div>
                                     </div>
                                 ))}
@@ -133,7 +163,9 @@ function ListaSensores() {
                                 <div className="text-5xl mb-4">🌱</div>
                                 <p className="text-lg font-medium text-gray-700 mb-2">No hay sensores registrados</p>
                                 <p className="text-green-600 mb-4">Este invernadero aún no tiene sensores configurados.</p>
-                                <button className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300 inline-flex items-center">
+                                <button 
+                                    onClick={handleAgregarSensor} 
+                                    className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300 inline-flex items-center">
                                     <span className="mr-1">+</span> Agregar sensor ahora
                                 </button>
                             </div>
@@ -146,6 +178,33 @@ function ListaSensores() {
                     </div>
                 </div>
             </div>
+
+            {/* Modal de confirmación de eliminación */}
+            {showDeleteModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+                        <h3 className="text-xl font-bold text-gray-800 mb-4">Confirmar eliminación</h3>
+                        <p className="text-gray-600 mb-6">
+                            ¿Estás seguro de que deseas eliminar el sensor <span className="font-semibold">{sensorToDelete?.id}</span>?
+                            Esta acción no se puede deshacer.
+                        </p>
+                        <div className="flex justify-end space-x-3">
+                            <button
+                                onClick={() => setShowDeleteModal(false)}
+                                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition-colors"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={confirmarEliminarSensor}
+                                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+                            >
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 }
