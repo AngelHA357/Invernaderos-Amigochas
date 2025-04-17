@@ -1,7 +1,3 @@
-eureka:
-  client:
-    register-with-eureka: false
-
 server:
   port: 8080
 
@@ -15,7 +11,7 @@ spring:
           enabled: true
       routes:
         - id: msvc-gestion-sensores
-          uri: http://localhost:8090
+          uri: lb://msvc-gestion-sensores
           predicates:
             - Path=/api/v1/gestionSensores/**
 
@@ -23,3 +19,10 @@ management:
   tracing:
     sampling:
       probability: 1.0
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true

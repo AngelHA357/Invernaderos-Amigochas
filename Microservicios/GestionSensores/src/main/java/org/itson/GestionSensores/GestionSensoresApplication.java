@@ -8,8 +8,8 @@ import org.springframework.context.ApplicationContext;
 /**
  * Clase principal del microservicio.
  */
-@EnableDiscoveryClient
 @SpringBootApplication
+@EnableDiscoveryClient
 public class GestionSensoresApplication {
 
     public static void main(String[] args) {

@@ -17,7 +17,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/v1/gestionSensores")
-@CrossOrigin
 public class GestionSensoresController {
     // Para inyectar dependencias automáticamente
     @Autowired
@@ -28,7 +27,7 @@ public class GestionSensoresController {
      *
      * @return La respuesta HTTP con los sensores encontrados y el status 200. Se devuelve un error si no se encontró nada.
      */
-    @GetMapping
+    @GetMapping({"", "/"})
     public ResponseEntity<?> obtenerTodosSensores() {
         try {
             List<SensorDTO> sensores = gestionSensoresService.obtenerTodosSensores(); // Se obtienen los sensores.

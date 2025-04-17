@@ -1,10 +1,10 @@
 package org.itson.GestionSensores.service;
 
 import org.itson.GestionSensores.entities.Invernadero;
+import org.itson.GestionSensores.entities.Sensor;
 import org.itson.GestionSensores.excepciones.GestionSensoresException;
 import org.itson.GestionSensores.persistence.IInvernaderosRepository;
 import org.itson.GestionSensores.persistence.IGestionSensoresRepository;
-import org.itson.GestionSensores.entities.Sensor;
 import org.itson.GestionSensores.dtos.SensorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
