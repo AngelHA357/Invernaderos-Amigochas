@@ -1,0 +1,7 @@
+[
+  { "id": "INV-0101", "name": "Invernadero 1", "location": "Sector 1, Fila 1" },
+  { "id": "INV-0201", "name": "Invernadero 2", "location": "Sector 1, Fila 2" },
+  { "id": "INV-0301", "name": "Invernadero 3", "location": "Sector 1, Fila 3" },
+  { "id": "INV-0401", "name": "Invernadero 4", "location": "Sector 1, Fila 4" },
+  { "id": "INV-0501", "name": "Invernadero 5", "location": "Sector 1, Fila 5" }
+]
