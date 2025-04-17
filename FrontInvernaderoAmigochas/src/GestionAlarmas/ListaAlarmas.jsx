@@ -22,7 +22,7 @@ function ListaAlarmas() {
             <div className='flex items-center justify-between mb-6'>
             <h2 className="text-xl font-semibold text-gray-700 mb-4">Alarmas disponibles - {alarmas.length}</h2>
             <button 
-            onClick={() => navigate('/alarmas/agregar')}
+            onClick={() => navigate('/alarmas/agregarAlarma')}
             className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 font-bold">Agregar</button>
             </div>
 
