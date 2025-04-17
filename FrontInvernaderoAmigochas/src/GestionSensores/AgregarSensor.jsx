@@ -209,7 +209,7 @@ function AgregarSensor() {
                         </div>
                         <div className="flex justify-center space-x-4 mt-6">
                             <button
-                                onClick={() => navigate('/')}
+                                onClick={() => navigate(-1)}
                                 className="text-lg px-10 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 font-bold">Cancelar</button>
                             <button
                                 onClick={() => {setShowModal(true);}}
@@ -229,7 +229,7 @@ function AgregarSensor() {
                             <button
                                 onClick={() => {
                                     setShowModal(false);
-                                    navigate('/'); // O la ruta que desees
+                                    navigate(-1);
                                 }}
                                 className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 font-bold"
                             >

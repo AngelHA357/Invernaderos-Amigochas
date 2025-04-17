@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
 
 function EditarSensor() {
     const navigate = useNavigate();
+    const { sensorId } = useParams();
+    
+    const [sensorData, setSensorData] = useState(null);
+    const [selectedMarca, setSelectedMarca] = useState("");
+    const [selectedTipo, setSelectedTipo] = useState("");
+    const [selectedInvernadero, setSelectedInvernadero] = useState("");
+    const [selectedSector, setSelectedSector] = useState("");
+    const [selectedFila, setSelectedFila] = useState("");
+    const [selectedModelo, setSelectedModelo] = useState("");
+    const [showModal, setShowModal] = useState(false);
 
     const marcas = [
         {
@@ -33,7 +43,7 @@ function EditarSensor() {
         }
     ];
 
-    const tipo = [
+    const tipos = [
         { id: 'HUM', name: 'Humedad' },
         { id: 'TEMC', name: 'Temperatura (C°)' },
         { id: 'TEMF', name: 'Temperatura (F°)' },
@@ -83,11 +93,34 @@ function EditarSensor() {
         },
     ];
 
-    const [selectedMarca, setSelectedMarca] = useState("");
-    const [selectedTipo, setSelectedTipo] = useState("");
-    const [selectedInvernadero, setSelectedInvernadero] = useState("");
-    const [selectedSector, setSelectedSector] = useState("");
-    const [showModal, setShowModal] = useState(false);
+    useEffect(() => {
+        const sensorGuardado = sessionStorage.getItem('sensorSeleccionado');
+        if (sensorGuardado) {
+            const sensor = JSON.parse(sensorGuardado);
+            setSensorData(sensor);
+            
+            setSelectedInvernadero(sensor.invernaderoId);
+            setSelectedSector(sensor.sector);
+            setSelectedFila(sensor.fila);
+            
+            const marcaEncontrada = marcas.find(m => m.nombre === sensor.marca);
+            if (marcaEncontrada) {
+                setSelectedMarca(marcaEncontrada.id.toString());
+                setSelectedModelo(sensor.modelo);
+            }
+            
+            const tipoEncontrado = tipos.find(t => t.name === sensor.type);
+            if (tipoEncontrado) {
+                setSelectedTipo(tipoEncontrado.id);
+            }
+        } else {
+            navigate('/');
+        }
+    }, [navigate]);
+
+    if (!sensorData) {
+        return <div className="text-center p-10">Cargando...</div>;
+    }
 
     return (
         <>
@@ -100,15 +133,22 @@ function EditarSensor() {
                     <div className='flex space-x-4 ml-14 mr-14 justify-between'>
                         <div className="flex flex-col">
                             <h3 className="text-lg font-semibold text-gray-700 mb-2">ID Sensor</h3>
-                            <input type="text" className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500" />
+                            <input 
+                                type="text" 
+                                className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500" 
+                                value={sensorData.id} 
+                                readOnly
+                            />
                         </div>
                         <div className="flex flex-col">
                             <h3 className="text-lg font-semibold text-gray-700 mb-2">Invernadero</h3>
                             <select
                                 className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                value={selectedInvernadero}
                                 onChange={(e) => {
                                     setSelectedInvernadero(e.target.value);
-                                    setSelectedSector(""); // Reset sector when invernadero changes
+                                    setSelectedSector("");
+                                    setSelectedFila("");
                                 }}
                             >
                                 <option value="">Seleccionar Invernadero</option>
@@ -126,12 +166,13 @@ function EditarSensor() {
                             <h3 className="text-lg font-semibold text-gray-700 mb-2">Tipo de Sensor</h3>
                             <select
                                 className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                value={selectedTipo}
                                 onChange={(e) => setSelectedTipo(e.target.value)}
                             >
                                 <option value="">Seleccionar Tipo de Sensor</option>
-                                {tipo.map((sensor) => (
-                                    <option key={sensor.id} value={sensor.id}>
-                                        {sensor.name}
+                                {tipos.map((tipo) => (
+                                    <option key={tipo.id} value={tipo.id}>
+                                        {tipo.name}
                                     </option>
                                 ))}
                             </select>
@@ -140,7 +181,11 @@ function EditarSensor() {
                             <h3 className="text-lg font-semibold text-gray-700 mb-2">Sector</h3>
                             <select
                                 className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                                onChange={(e) => setSelectedSector(e.target.value)}
+                                value={selectedSector}
+                                onChange={(e) => {
+                                    setSelectedSector(e.target.value);
+                                    setSelectedFila("");
+                                }}
                             >
                                 <option value="">Seleccionar Sector</option>
                                 {selectedInvernadero &&
@@ -160,7 +205,11 @@ function EditarSensor() {
                             <h3 className="text-lg font-semibold text-gray-700 mb-2">Marca</h3>
                             <select
                                 className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                                onChange={(e) => setSelectedMarca(e.target.value)}
+                                value={selectedMarca}
+                                onChange={(e) => {
+                                    setSelectedMarca(e.target.value);
+                                    setSelectedModelo("");
+                                }}
                             >
                                 <option value="">Seleccionar Marca</option>
                                 {marcas.map((marca) => (
@@ -174,6 +223,8 @@ function EditarSensor() {
                             <h3 className="text-lg font-semibold text-gray-700 mb-2">Fila</h3>
                             <select
                                 className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                value={selectedFila}
+                                onChange={(e) => setSelectedFila(e.target.value)}
                             >
                                 <option value="">Seleccionar Fila</option>
                                 {selectedInvernadero &&
@@ -195,6 +246,8 @@ function EditarSensor() {
                             <h3 className="text-lg font-semibold text-gray-700 mb-2">Modelo</h3>
                             <select
                                 className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                value={selectedModelo}
+                                onChange={(e) => setSelectedModelo(e.target.value)}
                             >
                                 <option value="">Seleccionar Modelo</option>
                                 {selectedMarca &&
@@ -209,7 +262,7 @@ function EditarSensor() {
                         </div>
                         <div className="flex justify-center space-x-4 mt-6">
                             <button
-                                onClick={() => navigate('/')}
+                                onClick={() => navigate(-1)}
                                 className="text-lg px-10 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 font-bold">Cancelar</button>
                             <button
                                 onClick={() => {setShowModal(true);}}
@@ -229,7 +282,7 @@ function EditarSensor() {
                             <button
                                 onClick={() => {
                                     setShowModal(false);
-                                    navigate('/'); // O la ruta que desees
+                                    navigate(-1);
                                 }}
                                 className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 font-bold"
                             >
