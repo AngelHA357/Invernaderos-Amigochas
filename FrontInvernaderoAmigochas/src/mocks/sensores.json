@@ -1,0 +1,12 @@
+[
+  { "id": "SEN-0101", "invernaderoId": "INV-0101", "type": "Temperatura", "status": "Activo" },
+  { "id": "SEN-0102", "invernaderoId": "INV-0101", "type": "Humedad", "status": "Activo" },
+  { "id": "SEN-0103", "invernaderoId": "INV-0201", "type": "Temperatura", "status": "Activo" },
+  { "id": "SEN-0104", "invernaderoId": "INV-0301", "type": "CO2", "status": "Activo" },
+  { "id": "SEN-0105", "invernaderoId": "INV-0401", "type": "CO2", "status": "Activo" },
+  { "id": "SEN-0106", "invernaderoId": "INV-0101", "type": "Humedad", "status": "Inactivo" },
+  { "id": "SEN-0107", "invernaderoId": "INV-0201", "type": "Humedad", "status": "Activo" },
+  { "id": "SEN-0108", "invernaderoId": "INV-0301", "type": "Temperatura", "status": "Activo" },
+  { "id": "SEN-0109", "invernaderoId": "INV-0401", "type": "Humedad", "status": "Activo" },
+  { "id": "SEN-0110", "invernaderoId": "INV-0501", "type": "Temperatura", "status": "Activo" }
+]
