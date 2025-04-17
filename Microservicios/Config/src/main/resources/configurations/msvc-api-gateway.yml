@@ -1,0 +1,25 @@
+eureka:
+  client:
+    register-with-eureka: false
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: msvc-api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: msvc-gestion-sensores
+          uri: http://localhost:8090
+          predicates:
+            - Path=/api/v1/gestionSensores/**
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
