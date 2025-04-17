@@ -1,41 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
+import alarmasMock from '../mocks/alarmas.json';
 
 function ListaAlarmas() {
     const navigate = useNavigate();
-    const [alarmas, setAlarmas] = useState([
-        {
-            id: "ALA-001",
-            invernaderoId: "INV-0101",
-            magnitud: "Temperatura (C°)",
-            valorMinimo: 15,
-            valorMaximo: 30,
-            formaNotificacion: "SMS",
-            sensores: ["SEN-0101", "SEN-0102"],
-            estado: "Activa"
-        },
-        {
-            id: "ALA-002",
-            invernaderoId: "INV-0201",
-            magnitud: "Humedad",
-            valorMinimo: 40,
-            valorMaximo: 60,
-            formaNotificacion: "EMAIL",
-            sensores: ["SEN-0103"],
-            estado: "Inactiva"
-        },
-        {
-            id: "ALA-003",
-            invernaderoId: "INV-0301",
-            magnitud: "CO2",
-            valorMinimo: 300,
-            valorMaximo: 600,
-            formaNotificacion: "SMS",
-            sensores: ["SEN-0104"],
-            estado: "Activa"
-        }
-    ]);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [alarmaToDelete, setAlarmaToDelete] = useState(null);
@@ -92,7 +61,7 @@ function ListaAlarmas() {
                     {/* Lista de alarmas */}
                     <div className="mt-6">
                         <div className='flex items-center justify-between mb-6'>
-                            <h2 className="text-xl font-semibold text-gray-700">Alarmas disponibles - {alarmas.length}</h2>
+                            <h2 className="text-xl font-semibold text-gray-700">Alarmas disponibles - {alarmasMock.length}</h2>
                             <button 
                                 onClick={handleAgregarAlarma}
                                 className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300 flex items-center shadow-sm">
@@ -110,7 +79,7 @@ function ListaAlarmas() {
                         </div>
 
                         {/* Filas */}
-                        {alarmas.map((alarma, index) => (
+                        {alarmasMock.map((alarma, index) => (
                             <div
                                 key={alarma.id}
                                 className={`grid grid-cols-5 gap-4 py-3 px-4 ${
@@ -147,7 +116,7 @@ function ListaAlarmas() {
                             </div>
                         ))}
 
-                        {alarmas.length === 0 && (
+                        {alarmasMock.length === 0 && (
                             <div className="text-center p-8 bg-green-50 rounded-lg border border-green-100 text-gray-600">
                                 <div className="text-5xl mb-4">🔔</div>
                                 <p className="text-lg font-medium text-gray-700 mb-2">No hay alarmas configuradas</p>
