@@ -6,6 +6,7 @@ import alarmasMock from '../mocks/alarmas.json';
 function ListaAlarmas() {
     const navigate = useNavigate();
 
+    const [alarmas, setAlarmas] = useState(alarmasMock); // Estado local para manejar las alarmas
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [alarmaToDelete, setAlarmaToDelete] = useState(null);
 
@@ -14,7 +15,6 @@ function ListaAlarmas() {
     };
 
     const handleEditarAlarma = (alarma) => {
-        // Guardar datos de la alarma en sessionStorage para acceder en la página de edición
         sessionStorage.setItem('alarmaSeleccionada', JSON.stringify(alarma));
         navigate(`/alarmas/${alarma.id}`);
     };
@@ -25,19 +25,17 @@ function ListaAlarmas() {
     };
 
     const confirmarEliminarAlarma = () => {
-        // Eliminar la alarma del estado (en una aplicación real, esto sería una llamada a una API)
-        setAlarmas(prevAlarmas => prevAlarmas.filter(a => a.id !== alarmaToDelete.id));
+        setAlarmas((prevAlarmas) => prevAlarmas.filter((a) => a.id !== alarmaToDelete.id));
         setShowDeleteModal(false);
-        // Mostrar mensaje de éxito
         alert(`La alarma ${alarmaToDelete.id} ha sido eliminada correctamente`);
     };
 
     const toggleEstadoAlarma = (alarmaId) => {
-        setAlarmas(prevAlarmas =>
-            prevAlarmas.map(a =>
-                a.id === alarmaId
-                    ? { ...a, estado: a.estado === 'Activa' ? 'Inactiva' : 'Activa' }
-                    : a
+        setAlarmas((prevAlarmas) =>
+            prevAlarmas.map((alarma) =>
+                alarma.id === alarmaId
+                    ? { ...alarma, estado: alarma.estado === 'Activa' ? 'Inactiva' : 'Activa' }
+                    : alarma
             )
         );
     };
@@ -60,11 +58,12 @@ function ListaAlarmas() {
 
                     {/* Lista de alarmas */}
                     <div className="mt-6">
-                        <div className='flex items-center justify-between mb-6'>
-                            <h2 className="text-xl font-semibold text-gray-700">Alarmas disponibles - {alarmasMock.length}</h2>
-                            <button 
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-xl font-semibold text-gray-700">Alarmas disponibles - {alarmas.length}</h2>
+                            <button
                                 onClick={handleAgregarAlarma}
-                                className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300 flex items-center shadow-sm">
+                                className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300 flex items-center shadow-sm"
+                            >
                                 <span className="mr-1">+</span> Agregar alarma
                             </button>
                         </div>
@@ -79,7 +78,7 @@ function ListaAlarmas() {
                         </div>
 
                         {/* Filas */}
-                        {alarmasMock.map((alarma, index) => (
+                        {alarmas.map((alarma, index) => (
                             <div
                                 key={alarma.id}
                                 className={`grid grid-cols-5 gap-4 py-3 px-4 ${
@@ -92,9 +91,9 @@ function ListaAlarmas() {
                                 <div>
                                     <button
                                         className={`px-3 py-1 text-sm font-semibold rounded-full ${
-                                        alarma.estado === 'Activa'
-                                            ? 'bg-green-500 text-white hover:bg-green-600'
-                                            : 'bg-red-500 text-white hover:bg-red-600'
+                                            alarma.estado === 'Activa'
+                                                ? 'bg-green-500 text-white hover:bg-green-600'
+                                                : 'bg-red-500 text-white hover:bg-red-600'
                                         }`}
                                         onClick={() => toggleEstadoAlarma(alarma.id)}
                                     >
@@ -102,28 +101,31 @@ function ListaAlarmas() {
                                     </button>
                                 </div>
                                 <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 justify-center">
-                                    <button 
+                                    <button
                                         onClick={() => handleEditarAlarma(alarma)}
-                                        className="inline-flex items-center px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full hover:bg-green-200 transition-colors duration-300">
+                                        className="inline-flex items-center px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full hover:bg-green-200 transition-colors duration-300"
+                                    >
                                         <span className="mr-1">✏️</span> Editar
                                     </button>
-                                    <button 
+                                    <button
                                         onClick={() => handleEliminarAlarma(alarma)}
-                                        className="inline-flex items-center px-2 py-1 text-xs font-semibold text-red-800 bg-red-100 rounded-full hover:bg-red-200 transition-colors duration-300">
+                                        className="inline-flex items-center px-2 py-1 text-xs font-semibold text-red-800 bg-red-100 rounded-full hover:bg-red-200 transition-colors duration-300"
+                                    >
                                         <span className="mr-1">🗑️</span> Eliminar
                                     </button>
                                 </div>
                             </div>
                         ))}
 
-                        {alarmasMock.length === 0 && (
+                        {alarmas.length === 0 && (
                             <div className="text-center p-8 bg-green-50 rounded-lg border border-green-100 text-gray-600">
                                 <div className="text-5xl mb-4">🔔</div>
                                 <p className="text-lg font-medium text-gray-700 mb-2">No hay alarmas configuradas</p>
                                 <p className="text-green-600 mb-4">Agrega una nueva alarma para comenzar el monitoreo.</p>
-                                <button 
-                                    onClick={handleAgregarAlarma} 
-                                    className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300 inline-flex items-center">
+                                <button
+                                    onClick={handleAgregarAlarma}
+                                    className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300 inline-flex items-center"
+                                >
                                     <span className="mr-1">+</span> Agregar alarma ahora
                                 </button>
                             </div>
