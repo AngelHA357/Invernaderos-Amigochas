@@ -7,7 +7,7 @@
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>23</maven.compiler.release>
+        <maven.compiler.release>21</maven.compiler.release>
         <exec.mainClass>org.itson.pruebasensores.PruebaSensores</exec.mainClass>
     </properties>
     <name>Gateway</name>
@@ -20,11 +20,6 @@
         </dependency>
         
         <!-- DTOs -->
-        <dependency>
-            <groupId>com.itson</groupId>
-            <artifactId>DTOs</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
 
         <!-- GSON -->
         <dependency>
@@ -38,6 +33,11 @@
             <groupId>com.rabbitmq</groupId>
             <artifactId>amqp-client</artifactId>
             <version>5.20.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itson</groupId>
+            <artifactId>DTOs</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

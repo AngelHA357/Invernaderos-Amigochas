@@ -8,17 +8,17 @@ package org.itson.dtos;
  *
  * @author Equipo 1
  */
-public class MedicionDTO {
+public class LecturaDTO {
 
     private String idSensor;
     private String tipoSensor;
-    private double medicion;
+    private double valor;
     private String timestamp;
 
-    public MedicionDTO(String idSensor, String tipoSensor, double medicion, String timestamp) {
+    public LecturaDTO(String idSensor, String tipoSensor, double medicion, String timestamp) {
         this.idSensor = idSensor;
         this.tipoSensor = tipoSensor;
-        this.medicion = medicion;
+        this.valor = medicion;
         this.timestamp = timestamp;
     }
 
@@ -38,12 +38,12 @@ public class MedicionDTO {
         this.tipoSensor = tipoSensor;
     }
 
-    public double getMedicion() {
-        return medicion;
+    public double getValor() {
+        return valor;
     }
 
-    public void setMedicion(double medicion) {
-        this.medicion = medicion;
+    public void setValor(double medicion) {
+        this.valor = medicion;
     }
 
     public String getTimestamp() {

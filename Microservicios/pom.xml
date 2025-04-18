@@ -23,6 +23,7 @@
         <module>Config</module>
         <module>GestionSensores</module>
         <module>ReportesAnomalias</module>
+        <module>Lecturas</module>
     </modules>
 
     <properties>

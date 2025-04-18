@@ -19,7 +19,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.itson.dtos.MedicionDTO;
+import org.itson.dtos.LecturaDTO;
 
 /**
  *
@@ -109,11 +109,11 @@ public class Gateway {
                             String timestamp = Instant.now().toString();
 
                             /**
-                             * Creamos un objeto MedicionDTO con el id del
+                             * Creamos un objeto LecturaDTO con el id del
                              * sensor, el tipo de sensor, el valor medico y el
                              * timestamp de la lecutura.
                              */
-                            MedicionDTO medicion = new MedicionDTO(idSensor, tipoSensor, valor, timestamp);
+                            LecturaDTO medicion = new LecturaDTO(idSensor, tipoSensor, valor, timestamp);
                             String json = gson.toJson(medicion);
 
                             // Publicar en RabbitMQ
