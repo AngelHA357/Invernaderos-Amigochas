@@ -22,6 +22,7 @@
         <module>Eureka</module>
         <module>Config</module>
         <module>GestionSensores</module>
+        <module>ReportesAnomalias</module>
     </modules>
 
     <properties>
