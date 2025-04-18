@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SensorDTO {
+
     private Long id;
     private String macAddress;
     private String marca;
