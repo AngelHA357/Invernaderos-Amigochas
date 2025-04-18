@@ -1,53 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
 
 function EditarSensor() {
     const navigate = useNavigate();
-    const { sensorId } = useParams();
-    
-    const [sensorData, setSensorData] = useState(null);
-    const [selectedMarca, setSelectedMarca] = useState("");
-    const [selectedTipo, setSelectedTipo] = useState("");
-    const [selectedInvernadero, setSelectedInvernadero] = useState("");
-    const [selectedSector, setSelectedSector] = useState("");
-    const [selectedFila, setSelectedFila] = useState("");
-    const [selectedModelo, setSelectedModelo] = useState("");
-    const [showModal, setShowModal] = useState(false);
+    const sensorSeleccionado = JSON.parse(sessionStorage.getItem('sensorSeleccionado')) || {};
 
     const marcas = [
-        {
-            id: 1,
-            nombre: 'Bosch',
-            modelos: ['Bosch TE 2373', 'Bosch CO 7362', 'Bosch HU 2327']
-        },
-        {
-            id: 2,
-            nombre: 'Banner',
-            modelos: ['Banner 3000', 'Banner X1300']
-        },
-        {
-            id: 3,
-            nombre: 'Cognex',
-            modelos: ['COGX4000', 'COGY1000', 'COGZ9000', 'COGW8000']
-        },
-        {
-            id: 4,
-            nombre: 'Steren',
-            modelos: ['Steren Sen 1234', 'Steren Sen 4382']
-        },
-        {
-            id: 5,
-            nombre: 'Omron',
-            modelos: ['Omron Pro', 'Omron Lite', 'Omron Ultra']
-        }
+        { id: '1', nombre: 'Bosch', modelos: ['Bosch TE 2373', 'Bosch CO 7362', 'Bosch HU 2327'] },
+        { id: '2', nombre: 'Banner', modelos: ['Banner 3000', 'Banner X1300'] },
+        { id: '3', nombre: 'Cognex', modelos: ['COGX4000', 'COGY1000', 'COGZ9000', 'COGW8000'] },
+        { id: '4', nombre: 'Steren', modelos: ['Steren Sen 1234', 'Steren Sen 4382'] },
+        { id: '5', nombre: 'Omron', modelos: ['Omron Pro', 'Omron Lite', 'Omron Ultra'] },
     ];
 
     const tipos = [
         { id: 'HUM', name: 'Humedad' },
         { id: 'TEMC', name: 'Temperatura (C°)' },
         { id: 'TEMF', name: 'Temperatura (F°)' },
-        { id: 'CO2', name: 'CO2' }
+        { id: 'CO2', name: 'CO2' },
     ];
 
     const invernaderos = [
@@ -56,219 +27,223 @@ function EditarSensor() {
             name: 'Invernadero 1',
             sectors: [
                 { sector: 'Sector 1', rows: ['Fila 1', 'Fila 2', 'Fila 3'] },
-                { sector: 'Sector 2', rows: ['Fila 1', 'Fila 2'] }
-            ]
+                { sector: 'Sector 2', rows: ['Fila 1', 'Fila 2'] },
+            ],
         },
         {
             id: 'INV-0201',
             name: 'Invernadero 2',
             sectors: [
                 { sector: 'Sector 1', rows: ['Fila 1', 'Fila 2'] },
-                { sector: 'Sector 3', rows: ['Fila 1', 'Fila 2', 'Fila 3', 'Fila 4'] }
-            ]
-        },
-        {
-            id: 'INV-0301',
-            name: 'Invernadero 3',
-            sectors: [
-                { sector: 'Sector 2', rows: ['Fila 1', 'Fila 2', 'Fila 3'] },
-                { sector: 'Sector 4', rows: ['Fila 1'] }
-            ]
-        },
-        {
-            id: 'INV-0401',
-            name: 'Invernadero 4',
-            sectors: [
-                { sector: 'Sector 1', rows: ['Fila 1', 'Fila 2', 'Fila 3', 'Fila 4'] },
-                { sector: 'Sector 5', rows: ['Fila 1', 'Fila 2'] }
-            ]
-        },
-        {
-            id: 'INV-0501',
-            name: 'Invernadero 5',
-            sectors: [
-                { sector: 'Sector 3', rows: ['Fila 1', 'Fila 2', 'Fila 3'] },
-                { sector: 'Sector 6', rows: ['Fila 1', 'Fila 2', 'Fila 3', 'Fila 4', 'Fila 5'] }
-            ]
+                { sector: 'Sector 3', rows: ['Fila 1', 'Fila 2', 'Fila 3', 'Fila 4'] },
+            ],
         },
     ];
 
-    useEffect(() => {
-        const sensorGuardado = sessionStorage.getItem('sensorSeleccionado');
-        if (sensorGuardado) {
-            const sensor = JSON.parse(sensorGuardado);
-            setSensorData(sensor);
-            
-            setSelectedInvernadero(sensor.invernaderoId);
-            setSelectedSector(sensor.sector);
-            setSelectedFila(sensor.fila);
-            
-            const marcaEncontrada = marcas.find(m => m.nombre === sensor.marca);
-            if (marcaEncontrada) {
-                setSelectedMarca(marcaEncontrada.id.toString());
-                setSelectedModelo(sensor.modelo);
-            }
-            
-            const tipoEncontrado = tipos.find(t => t.name === sensor.type);
-            if (tipoEncontrado) {
-                setSelectedTipo(tipoEncontrado.id);
-            }
-        } else {
-            navigate('/');
-        }
-    }, [navigate]);
+    const [formData, setFormData] = useState({
+        id: sensorSeleccionado.id || '',
+        invernaderoId: sensorSeleccionado.invernaderoId || '',
+        sector: sensorSeleccionado.sector || '',
+        fila: sensorSeleccionado.fila || '',
+        tipo: tipos.find((t) => t.name === sensorSeleccionado.type)?.id || '',
+        marca: marcas.find((m) => m.nombre === sensorSeleccionado.marca)?.id || '',
+        modelo: sensorSeleccionado.modelo || '',
+    });
 
-    if (!sensorData) {
-        return <div className="text-center p-10">Cargando...</div>;
-    }
+    const [errors, setErrors] = useState({});
+    const [showModal, setShowModal] = useState(false);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const validateForm = () => {
+        const newErrors = {};
+        if (!formData.id) newErrors.id = 'El ID del sensor es obligatorio.';
+        if (!formData.invernaderoId) newErrors.invernaderoId = 'Debe seleccionar un invernadero.';
+        if (!formData.sector) newErrors.sector = 'Debe seleccionar un sector.';
+        if (!formData.fila) newErrors.fila = 'Debe seleccionar una fila.';
+        if (!formData.tipo) newErrors.tipo = 'Debe seleccionar un tipo de sensor.';
+        if (!formData.marca) newErrors.marca = 'Debe seleccionar una marca.';
+        if (!formData.modelo) newErrors.modelo = 'Debe seleccionar un modelo.';
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (validateForm()) {
+            console.log('Datos actualizados:', formData);
+            setShowModal(true);
+        }
+    };
 
     return (
         <>
             <BarraNavegacion />
-            <div className="max-w-4xl mx-auto rounded-lg shadow-md p-6 mt-10 border border-zinc-600">
-                {/* Título */}
-                <h1 className="text-2xl font-bold text-gray-800">Editar Sensor</h1>
-
-                <div className="mt-6">
-                    <div className='flex space-x-4 ml-14 mr-14 justify-between'>
-                        <div className="flex flex-col">
-                            <h3 className="text-lg font-semibold text-gray-700 mb-2">ID Sensor</h3>
-                            <input 
-                                type="text" 
-                                className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500" 
-                                value={sensorData.id} 
-                                readOnly
-                            />
+            <div className="min-h-screen bg-gradient-to-b from-green-50 to-white p-6">
+                <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg border border-green-200">
+                    {/* Título con icono */}
+                    <div className="flex items-center mb-6">
+                        <div className="bg-green-100 p-3 rounded-full mr-4">
+                            <span className="text-2xl" role="img" aria-label="sensor">📡</span>
                         </div>
-                        <div className="flex flex-col">
-                            <h3 className="text-lg font-semibold text-gray-700 mb-2">Invernadero</h3>
-                            <select
-                                className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                                value={selectedInvernadero}
-                                onChange={(e) => {
-                                    setSelectedInvernadero(e.target.value);
-                                    setSelectedSector("");
-                                    setSelectedFila("");
-                                }}
-                            >
-                                <option value="">Seleccionar Invernadero</option>
-                                {invernaderos.map((invernadero) => (
-                                    <option key={invernadero.id} value={invernadero.id}>
-                                        {invernadero.name}
-                                    </option>
-                                ))}
-                            </select>
+                        <div>
+                            <h1 className="text-2xl font-bold text-gray-800">Editar Sensor</h1>
+                            <p className="text-sm text-green-600">Actualiza los datos del sensor seleccionado</p>
                         </div>
                     </div>
 
-                    <div className='flex space-x-4 ml-14 mr-14 mt-4 justify-between'>
-                        <div className="flex flex-col">
-                            <h3 className="text-lg font-semibold text-gray-700 mb-2">Tipo de Sensor</h3>
-                            <select
-                                className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                                value={selectedTipo}
-                                onChange={(e) => setSelectedTipo(e.target.value)}
-                            >
-                                <option value="">Seleccionar Tipo de Sensor</option>
-                                {tipos.map((tipo) => (
-                                    <option key={tipo.id} value={tipo.id}>
-                                        {tipo.name}
-                                    </option>
-                                ))}
-                            </select>
+                    <form onSubmit={handleSubmit}>
+                        {/* Sección 1: Información básica */}
+                        <div className="grid grid-cols-2 gap-4 mb-6">
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-2">ID Sensor</label>
+                                <input
+                                    type="text"
+                                    name="id"
+                                    value={formData.id}
+                                    onChange={handleChange}
+                                    className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                />
+                                {errors.id && <p className="text-red-500 text-xs mt-1">{errors.id}</p>}
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-2">Invernadero</label>
+                                <select
+                                    name="invernaderoId"
+                                    value={formData.invernaderoId}
+                                    onChange={handleChange}
+                                    className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
+                                >
+                                    <option value="">Seleccionar Invernadero</option>
+                                    {invernaderos.map((invernadero) => (
+                                        <option key={invernadero.id} value={invernadero.id}>
+                                            {invernadero.name}
+                                        </option>
+                                    ))}
+                                </select>
+                                {errors.invernaderoId && <p className="text-red-500 text-xs mt-1">{errors.invernaderoId}</p>}
+                            </div>
                         </div>
-                        <div className="flex flex-col">
-                            <h3 className="text-lg font-semibold text-gray-700 mb-2">Sector</h3>
-                            <select
-                                className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                                value={selectedSector}
-                                onChange={(e) => {
-                                    setSelectedSector(e.target.value);
-                                    setSelectedFila("");
-                                }}
-                            >
-                                <option value="">Seleccionar Sector</option>
-                                {selectedInvernadero &&
-                                    invernaderos
-                                        .find((invernadero) => invernadero.id === selectedInvernadero)
-                                        ?.sectors.map((sector, index) => (
-                                            <option key={index} value={sector.sector}>
-                                                {sector.sector}
-                                            </option>
-                                        ))}
-                            </select>
-                        </div>
-                    </div>
 
-                    <div className='flex space-x-4 ml-14 mr-14 mt-4 justify-between'>
-                        <div className="flex flex-col">
-                            <h3 className="text-lg font-semibold text-gray-700 mb-2">Marca</h3>
-                            <select
-                                className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                                value={selectedMarca}
-                                onChange={(e) => {
-                                    setSelectedMarca(e.target.value);
-                                    setSelectedModelo("");
-                                }}
-                            >
-                                <option value="">Seleccionar Marca</option>
-                                {marcas.map((marca) => (
-                                    <option key={marca.id} value={marca.id}>
-                                        {marca.nombre}
-                                    </option>
-                                ))}
-                            </select>
+                        {/* Sección 2: Ubicación */}
+                        <div className="grid grid-cols-2 gap-4 mb-6">
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-2">Sector</label>
+                                <select
+                                    name="sector"
+                                    value={formData.sector}
+                                    onChange={handleChange}
+                                    className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
+                                >
+                                    <option value="">Seleccionar Sector</option>
+                                    {formData.invernaderoId &&
+                                        invernaderos
+                                            .find((inv) => inv.id === formData.invernaderoId)
+                                            ?.sectors.map((sector, index) => (
+                                                <option key={index} value={sector.sector}>
+                                                    {sector.sector}
+                                                </option>
+                                            ))}
+                                </select>
+                                {errors.sector && <p className="text-red-500 text-xs mt-1">{errors.sector}</p>}
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-2">Fila</label>
+                                <select
+                                    name="fila"
+                                    value={formData.fila}
+                                    onChange={handleChange}
+                                    className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
+                                >
+                                    <option value="">Seleccionar Fila</option>
+                                    {formData.invernaderoId &&
+                                        formData.sector &&
+                                        invernaderos
+                                            .find((inv) => inv.id === formData.invernaderoId)
+                                            ?.sectors.find((sec) => sec.sector === formData.sector)
+                                            ?.rows.map((fila, index) => (
+                                                <option key={index} value={fila}>
+                                                    {fila}
+                                                </option>
+                                            ))}
+                                </select>
+                                {errors.fila && <p className="text-red-500 text-xs mt-1">{errors.fila}</p>}
+                            </div>
                         </div>
-                        <div className="flex flex-col">
-                            <h3 className="text-lg font-semibold text-gray-700 mb-2">Fila</h3>
-                            <select
-                                className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                                value={selectedFila}
-                                onChange={(e) => setSelectedFila(e.target.value)}
-                            >
-                                <option value="">Seleccionar Fila</option>
-                                {selectedInvernadero &&
-                                    selectedSector &&
-                                    invernaderos
-                                        .find((invernadero) => invernadero.id === selectedInvernadero)
-                                        ?.sectors.find((sector) => sector.sector === selectedSector)
-                                        ?.rows.map((fila, index) => (
-                                            <option key={index} value={fila}>
-                                                {fila}
-                                            </option>
-                                        ))}
-                            </select>
-                        </div>
-                    </div>
 
-                    <div className='flex space-x-4 ml-14 mr-14 mt-4 justify-between'>
-                        <div className="flex flex-col">
-                            <h3 className="text-lg font-semibold text-gray-700 mb-2">Modelo</h3>
+                        {/* Sección 3: Configuración del sensor */}
+                        <div className="grid grid-cols-2 gap-4 mb-6">
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-2">Tipo de Sensor</label>
+                                <select
+                                    name="tipo"
+                                    value={formData.tipo}
+                                    onChange={handleChange}
+                                    className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
+                                >
+                                    <option value="">Seleccionar Tipo de Sensor</option>
+                                    {tipos.map((t) => (
+                                        <option key={t.id} value={t.id}>
+                                            {t.name}
+                                        </option>
+                                    ))}
+                                </select>
+                                {errors.tipo && <p className="text-red-500 text-xs mt-1">{errors.tipo}</p>}
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-2">Marca</label>
+                                <select
+                                    name="marca"
+                                    value={formData.marca}
+                                    onChange={handleChange}
+                                    className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
+                                >
+                                    <option value="">Seleccionar Marca</option>
+                                    {marcas.map((marca) => (
+                                        <option key={marca.id} value={marca.id}>
+                                            {marca.nombre}
+                                        </option>
+                                    ))}
+                                </select>
+                                {errors.marca && <p className="text-red-500 text-xs mt-1">{errors.marca}</p>}
+                            </div>
+                        </div>
+
+                        {/* Sección 4: Modelo */}
+                        <div className="mb-6">
+                            <label className="block text-gray-700 font-medium mb-2">Modelo</label>
                             <select
-                                className="w-80 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                                value={selectedModelo}
-                                onChange={(e) => setSelectedModelo(e.target.value)}
+                                name="modelo"
+                                value={formData.modelo}
+                                onChange={handleChange}
+                                className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
                             >
                                 <option value="">Seleccionar Modelo</option>
-                                {selectedMarca &&
+                                {formData.marca &&
                                     marcas
-                                        .find((marca) => marca.id === parseInt(selectedMarca))
+                                        .find((marca) => marca.id === formData.marca)
                                         ?.modelos.map((modelo, index) => (
                                             <option key={index} value={modelo}>
                                                 {modelo}
                                             </option>
                                         ))}
                             </select>
+                            {errors.modelo && <p className="text-red-500 text-xs mt-1">{errors.modelo}</p>}
                         </div>
-                        <div className="flex justify-center space-x-4 mt-6">
+
+                        <div className="flex justify-center mt-6">
+                            {/* Botón Actualizar */}
                             <button
-                                onClick={() => navigate(-1)}
-                                className="text-lg px-10 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 font-bold">Cancelar</button>
-                            <button
-                                onClick={() => {setShowModal(true);}}
-                                className="text-lg px-10 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 font-bold">Actualizar</button>
+                                type="submit"
+                                className="px-6 py-3 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors duration-300 shadow-sm flex items-center justify-center"
+                            >
+                                <span className="mr-2">✔</span> Actualizar Sensor
+                            </button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
 
