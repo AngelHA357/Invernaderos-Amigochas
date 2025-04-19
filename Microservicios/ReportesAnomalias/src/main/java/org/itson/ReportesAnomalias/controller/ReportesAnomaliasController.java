@@ -39,9 +39,9 @@ public class ReportesAnomaliasController {
     }
 
     @GetMapping("/invernadero/{id}")
-    public ResponseEntity<?> obtenerAnomaliasPorInvernadero(@PathVariable String idInvernadero) {
+    public ResponseEntity<?> obtenerAnomaliasPorInvernadero(@PathVariable String id) {
         try {
-            List<AnomaliaDTO> anomalias = reportesAnomaliasService.obtenerAnomaliasPorInvernadero(idInvernadero);
+            List<AnomaliaDTO> anomalias = reportesAnomaliasService.obtenerAnomaliasPorInvernadero(id);
             ResponseEntity<List<AnomaliaDTO>> response = new ResponseEntity<>(anomalias, HttpStatus.OK);
             return response;
         } catch (ReportesAnomaliasServiceException e) {
@@ -53,9 +53,9 @@ public class ReportesAnomaliasController {
     }
 
     @GetMapping("/sensor/{id}")
-    public ResponseEntity<?> obtenerAnomaliasPorSensor(@PathVariable String idSensor) {
+    public ResponseEntity<?> obtenerAnomaliasPorSensor(@PathVariable String id) {
         try {
-            List<AnomaliaDTO> anomalias = reportesAnomaliasService.obtenerAnomaliasPorSensor(idSensor);
+            List<AnomaliaDTO> anomalias = reportesAnomaliasService.obtenerAnomaliasPorSensor(id);
             ResponseEntity<List<AnomaliaDTO>> response = new ResponseEntity<>(anomalias, HttpStatus.OK);
             return response;
         } catch (ReportesAnomaliasServiceException e) {

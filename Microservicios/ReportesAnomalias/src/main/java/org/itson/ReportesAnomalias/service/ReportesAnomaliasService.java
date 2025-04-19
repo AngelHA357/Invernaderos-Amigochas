@@ -47,8 +47,8 @@ public class ReportesAnomaliasService {
         }
     }
 
-    public List<AnomaliaDTO> obtenerAnomaliasPorInvernadero(String idInvernadero) throws ReportesAnomaliasServiceException {
-        List<Anomalia> anomaliasEncontradas = anomaliasRepository.findAllByInvernadero(idInvernadero);
+    public List<AnomaliaDTO> obtenerAnomaliasPorInvernadero(String id) throws ReportesAnomaliasServiceException {
+        List<Anomalia> anomaliasEncontradas = anomaliasRepository.findAllByInvernadero(id);
         if (!anomaliasEncontradas.isEmpty()) {
             // Si se obtuvo algo, se convierte a DTO y se regresa eso.
             List<AnomaliaDTO> anomalias = new LinkedList<>();
@@ -57,12 +57,12 @@ public class ReportesAnomaliasService {
             }
             return anomalias;
         } else {
-            throw new ReportesAnomaliasServiceException("Anomalias del invernadero con ID: " + idInvernadero + " no encontradas");
+            throw new ReportesAnomaliasServiceException("Anomalias del invernadero con ID: " + id + " no encontradas");
         }
     }
 
-    public List<AnomaliaDTO> obtenerAnomaliasPorSensor(String idSensor) throws ReportesAnomaliasServiceException {
-        List<Anomalia> anomaliasEncontradas = anomaliasRepository.findAllBySensor(idSensor);
+    public List<AnomaliaDTO> obtenerAnomaliasPorSensor(String id) throws ReportesAnomaliasServiceException {
+        List<Anomalia> anomaliasEncontradas = anomaliasRepository.findAllBySensor(id);
         if (!anomaliasEncontradas.isEmpty()) {
             // Si se obtuvo algo, se convierte a DTO y se regresa eso.
             List<AnomaliaDTO> anomalias = new LinkedList<>();
@@ -71,7 +71,7 @@ public class ReportesAnomaliasService {
             }
             return anomalias;
         } else {
-            throw new ReportesAnomaliasServiceException("Anomalias del sensor con ID: " + idSensor + " no encontradas");
+            throw new ReportesAnomaliasServiceException("Anomalias del sensor con ID: " + id + " no encontradas");
         }
     }
 

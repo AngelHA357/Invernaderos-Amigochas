@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+// Creo que este es el paquete papá de los pollitos.
+package org.itson.gestionSensores;
+
+option java_multiple_files = true; // Indica que habrá una clase por mensaje y por servicio. En vez de una para todo.
+option java_package = "org.itson.GestionSensores.proto"; // Paquete donde se generarán las clases.
+option java_outer_classname = "GestionSensoresProto"; // Nombre de la clase externa por default.
+
+// Servicio
+service GestionSensoresServicio {
+  rpc GetSensorByMac (SensorPeticion) returns (SensorRespuesta);
+}
+
+// Mensaje de solicitud
+message SensorPeticion {
+  string macAddress = 1;
+}
+
+// Mensaje de respuesta
+message SensorRespuesta {
+  string macAddress = 1;
+  string marca = 2;
+  string modelo = 3;
+  int64 idInvernadero = 4;
+  string nombreInvernadero = 5;
+  string sector = 6;
+  int32 fila = 7;
+}

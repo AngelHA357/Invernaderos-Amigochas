@@ -102,7 +102,7 @@ public class Gateway {
             // Conectamos el cliente al broker
             client.connect();
 
-            // Indicamos que reciberá todas las mediciones de cual quier tipo de sensor
+            // Indicamos que reciberá todas las lecturas de cualquier tipo de sensor
             client.subscribe("sensores/lecturas/#");
 
             System.out.println("Suscrito al topic: sensores/lecturas/#");
