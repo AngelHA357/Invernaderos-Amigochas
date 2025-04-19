@@ -8,5 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IReportesAnomaliasRepository extends MongoRepository<ReporteAnomalia, ObjectId> {
+
     public ReporteAnomalia findByAnomalia(Anomalia anomalia);
+
 }

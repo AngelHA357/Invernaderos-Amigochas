@@ -107,13 +107,14 @@ public class ReportesAnomaliasService {
     }
 
     public ReporteAnomaliaDTO registrarReporte(ReporteAnomaliaDTO reporte) throws ReportesAnomaliasServiceException {
-        if (obtenerReporte(reporte.getAnomalia()) != null) {
-            throw new ReportesAnomaliasServiceException("Ya se ha registrado el reporte anteriormente");
+        try {
+            obtenerReporte(reporte.getAnomalia());
+            throw new ReportesAnomaliasServiceException("Ya se ha registrado el reporte anteriormente.");
+        } catch (ReportesAnomaliasServiceException e) {
+            ReporteAnomalia reporteNuevo = convertirReporteAnomaliaDTO(reporte);
+            ReporteAnomalia resultado = reportesAnomaliasRepository.save(reporteNuevo);
+            return convertirReporteAnomalia(resultado);
         }
-
-        ReporteAnomalia reporteNuevo = convertirReporteAnomaliaDTO(reporte);
-        ReporteAnomalia resultado = reportesAnomaliasRepository.save(reporteNuevo);
-        return convertirReporteAnomalia(resultado);
     }
 
     /**
@@ -136,7 +137,6 @@ public class ReportesAnomaliasService {
     private AnomaliaDTO convertirAnomalia(Anomalia anomalia) {
         AnomaliaDTO anomaliaCreada = new AnomaliaDTO();
 
-        anomaliaCreada.setId(anomalia.get_id().toString());
         anomaliaCreada.setFechaHora(anomalia.getFechaHora());
         anomaliaCreada.setCausa(anomalia.getCausa());
         anomaliaCreada.setInvernadero(anomalia.getInvernadero());
