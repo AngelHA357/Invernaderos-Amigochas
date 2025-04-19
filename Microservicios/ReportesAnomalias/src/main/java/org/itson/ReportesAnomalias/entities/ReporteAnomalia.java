@@ -10,14 +10,10 @@ import java.util.Calendar;
 @NoArgsConstructor
 public class ReporteAnomalia {
 
-    private ObjectId _id;
-
+    private ObjectId id;
     private Calendar fecha;
-
     private String descripcion;
-
     private Anomalia anomalia;
-
     private Usuario usuario;
 
     public ReporteAnomalia(Calendar fecha, String descripcion, Anomalia anomalia, Usuario usuario) {

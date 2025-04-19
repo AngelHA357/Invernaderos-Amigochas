@@ -1,28 +1,22 @@
 package org.itson.ReportesAnomalias.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class Usuario {
 
-    private ObjectId _id;
-
     private String nombreUsuario;
-
-    private String contrasenia;
-
     private String nombre;
-
     private String apellidoPaterno;
-
     private String apellidoMaterno;
 
-    public Usuario(String nombreUsuario, String contrasenia, String nombre, String apellidoPaterno) {
+    public Usuario(String nombreUsuario, String nombre, String apellidoPaterno) {
         this.nombreUsuario = nombreUsuario;
-        this.contrasenia = contrasenia;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
     }

@@ -15,6 +15,8 @@ public class ReporteAnomaliaDTO {
 
     private Long id;
 
+    private String codigo;
+
     private Calendar fecha;
 
     private String descripcion;

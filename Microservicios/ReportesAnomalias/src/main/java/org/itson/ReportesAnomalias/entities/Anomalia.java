@@ -10,17 +10,13 @@ import java.util.Calendar;
 @NoArgsConstructor
 public class Anomalia {
 
-    private ObjectId _id;
-
+    private ObjectId id;
     private Calendar fechaHora;
-
     private String causa;
+    private String invernadero;
+    private String sensor;
 
-    private Invernadero invernadero;
-
-    private Sensor sensor;
-
-    public Anomalia(Calendar fechaHora, String causa, Invernadero invernadero, Sensor sensor) {
+    public Anomalia(Calendar fechaHora, String causa, String invernadero, String sensor) {
         this.fechaHora = fechaHora;
         this.causa = causa;
         this.invernadero = invernadero;
