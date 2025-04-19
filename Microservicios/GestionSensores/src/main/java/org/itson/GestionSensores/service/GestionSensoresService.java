@@ -97,11 +97,14 @@ public class GestionSensoresService {
             sensorEntidad.setMacAddress(sensorDTO.getMacAddress());
             sensorEntidad.setMarca(sensorDTO.getMarca());
             sensorEntidad.setModelo(sensorDTO.getModelo());
+            sensorEntidad.setTipoSensor(sensorDTO.getTipoSensor());
+            sensorEntidad.setMagnitud(sensorDTO.getMagnitud());
             // Si esto tira excepción es porque no existe el invernadero.
             obtenerInvernaderoPorId(new ObjectId(sensorDTO.getIdInvernadero()));
             sensorEntidad.setIdInvernadero(new ObjectId(sensorDTO.getIdInvernadero()));
             sensorEntidad.setSector(sensorDTO.getSector());
             sensorEntidad.setFila(sensorDTO.getFila());
+            sensorEntidad.setEstado(sensorDTO.isEstado());
             // Si llegamos a esta parte es porque sí existe el sensor.
             try {
                 resultado = gestionSensoresRepository.save(sensorEntidad);
@@ -137,7 +140,7 @@ public class GestionSensoresService {
      *  | |   | |  | |  \| |\ \  / /| |__  | |__) | (___ | |  | | |__) | |__  | (___
      *  | |   | |  | | . ` | \ \/ / |  __| |  _  / \___ \| |  | |  _  /|  __|  \___ \
      *  | |___| |__| | |\  |  \  /  | |____| | \ \ ____) | |__| | | \ \| |____ ____) |
-     *  \______\____/|_| \_|   \/   |______|_|  \_\_____/ \____/|_|  \_\______|_____/
+     *   \_____\____/|_| \_|   \/   |______|_|  \_\_____/ \____/|_|  \_\______|_____/
      */
 
     /**
@@ -162,8 +165,8 @@ public class GestionSensoresService {
      */
     public SensorDTO convertirSensorEntidadDTO(Sensor sensorEntidad) throws GestionSensoresException {
         return new SensorDTO(
-                sensorEntidad.getIdSensor(),
                 sensorEntidad.get_id().toString(),
+                sensorEntidad.getIdSensor(),
                 sensorEntidad.getMacAddress(),
                 sensorEntidad.getMarca(),
                 sensorEntidad.getModelo(),
@@ -172,7 +175,8 @@ public class GestionSensoresService {
                 sensorEntidad.getIdInvernadero().toString(),
                 obtenerInvernaderoPorId(sensorEntidad.getIdInvernadero()).getNombre(),
                 sensorEntidad.getSector(),
-                sensorEntidad.getFila()
+                sensorEntidad.getFila(),
+                sensorEntidad.isEstado()
         );
     }
 
@@ -195,6 +199,15 @@ public class GestionSensoresService {
                 sensorDTO.getFila()
         );
     }
+
+    /**
+     *   _____ _   ___      ________ _____  _   _          _____  ______ _____   ____   _____
+     *  |_   _| \ | \ \    / /  ____|  __ \| \ | |   /\   |  __ \|  ____|  __ \ / __ \ / ____|
+     *    | | |  \| |\ \  / /| |__  | |__) |  \| |  /  \  | |  | | |__  | |__) | |  | | (___
+     *    | | | . ` | \ \/ / |  __| |  _  /| . ` | / /\ \ | |  | |  __| |  _  /| |  | |\___ \
+     *   _| |_| |\  |  \  /  | |____| | \ \| |\  |/ ____ \| |__| | |____| | \ \| |__| |____) |
+     *  |_____|_| \_|   \/   |______|_|  \_\_| \_/_/    \_\_____/|______|_|  \_\\____/|_____/
+     */
 
     /**
      * Método para obtener un invernadero dado su nombre.
