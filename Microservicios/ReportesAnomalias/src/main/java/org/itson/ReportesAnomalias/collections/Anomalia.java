@@ -25,11 +25,14 @@ public class Anomalia {
     private String sector;
     private String fila;
 
-    public Anomalia(Date fechaHora, String causa, String invernadero, String sensor) {
+    public Anomalia(Date fechaHora, String causa, String invernadero, String magnitud, float valor, String sensor, String sector, String fila) {
         this.fechaHora = fechaHora;
         this.causa = causa;
         this.invernadero = invernadero;
+        this.magnitud = magnitud;
+        this.valor = valor;
         this.sensor = sensor;
+        this.sector = sector;
+        this.fila = fila;
     }
-
 }

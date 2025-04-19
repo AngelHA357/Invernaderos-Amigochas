@@ -90,10 +90,6 @@ public class ReportesAnomaliasService {
     }
 
     public AnomaliaDTO registrarAnomalia(AnomaliaDTO anomalia) throws ReportesAnomaliasServiceException {
-        if (obtenerAnomalia(anomalia.getId()) != null) {
-            throw new ReportesAnomaliasServiceException("Ya se ha registrado la anomalía anteriormente");
-        }
-
         Anomalia anomaliaNueva = convertirAnomaliaDTO(anomalia);
         Anomalia resultado = anomaliasRepository.save(anomaliaNueva);
         return convertirAnomalia(resultado);
@@ -130,7 +126,9 @@ public class ReportesAnomaliasService {
      */
 
     private Anomalia convertirAnomaliaDTO(AnomaliaDTO anomalia) {
-        Anomalia anomaliaCreada = new Anomalia(anomalia.getFechaHora(), anomalia.getCausa(), anomalia.getInvernadero(), anomalia.getSensor());
+        Anomalia anomaliaCreada = new Anomalia(anomalia.getFechaHora(), anomalia.getCausa(),
+                anomalia.getInvernadero(), anomalia.getMagnitud(), anomalia.getValor(),
+                anomalia.getSensor(), anomalia.getSector(), anomalia.getFila());
 
         return anomaliaCreada;
     }
