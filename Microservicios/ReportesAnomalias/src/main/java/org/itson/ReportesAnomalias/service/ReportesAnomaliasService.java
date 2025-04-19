@@ -1,6 +1,5 @@
 package org.itson.ReportesAnomalias.service;
 
-import org.bson.types.ObjectId;
 import org.itson.ReportesAnomalias.dtos.AnomaliaDTO;
 import org.itson.ReportesAnomalias.dtos.ReporteAnomaliaDTO;
 import org.itson.ReportesAnomalias.entities.Anomalia;
@@ -11,8 +10,9 @@ import org.itson.ReportesAnomalias.excepciones.ReportesAnomaliasServiceException
 import org.itson.ReportesAnomalias.persistence.IAnomaliasRepository;
 import org.itson.ReportesAnomalias.persistence.IReportesAnomaliasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ReportesAnomaliasService {
 
@@ -28,28 +28,48 @@ public class ReportesAnomaliasService {
         return convertirAnomalia(anomaliaEncontrada);
     }
 
-    public AnomaliaDTO obtenerAnomaliasPorPeriodo(Calendar fechaIncio, Calendar fechaFin) {
-        Anomalia anomaliaEncontrada = anomaliasRepository.obtenerAnomaliasPorPeriodo(fechaIncio, fechaFin);
+    public List<AnomaliaDTO> obtenerAnomaliasPorPeriodo(Calendar fechaIncio, Calendar fechaFin) {
+        List<Anomalia> anomaliasEncontradas = anomaliasRepository.obtenerAnomaliasPorPeriodo(fechaIncio, fechaFin);
+        List<AnomaliaDTO> anomalias = new LinkedList<>();
 
-        return convertirAnomalia(anomaliaEncontrada);
+        for(Anomalia anomalia: anomaliasEncontradas) {
+            anomalias.add(convertirAnomalia(anomalia));
+        }
+
+        return anomalias;
     }
 
-    public AnomaliaDTO obtenerAnomaliasPorInvernadero(String idInvernadero) {
-        Anomalia anomaliaEncontrada = anomaliasRepository.obtenerAnomaliasPorInvernadero(idInvernadero);
+    public List<AnomaliaDTO> obtenerAnomaliasPorInvernadero(String idInvernadero) {
+        List<Anomalia> anomaliasEncontradas = anomaliasRepository.obtenerAnomaliasPorInvernadero(idInvernadero);
+        List<AnomaliaDTO> anomalias = new LinkedList<>();
 
-        return convertirAnomalia(anomaliaEncontrada);
+        for(Anomalia anomalia: anomaliasEncontradas) {
+            anomalias.add(convertirAnomalia(anomalia));
+        }
+
+        return anomalias;
     }
 
-    public AnomaliaDTO obtenerAnomaliasPorSensor(String idSensor) {
-        Anomalia anomaliaEncontrada = anomaliasRepository.obtenerAnomaliasPorSensor(idSensor);
+    public List<AnomaliaDTO> obtenerAnomaliasPorSensor(String idSensor) {
+        List<Anomalia> anomaliasEncontradas = anomaliasRepository.obtenerAnomaliasPorSensor(idSensor);
+        List<AnomaliaDTO> anomalias = new LinkedList<>();
 
-        return convertirAnomalia(anomaliaEncontrada);
+        for(Anomalia anomalia: anomaliasEncontradas) {
+            anomalias.add(convertirAnomalia(anomalia));
+        }
+
+        return anomalias;
     }
 
-    public AnomaliaDTO obtnerAnomaliasPorMagnitud(String magnitud) {
-        Anomalia anomaliaEncontrada = anomaliasRepository.obtenerAnomaliasPorMagnitud(magnitud);
+    public List<AnomaliaDTO> obtenerAnomaliasPorMagnitud(String magnitud) {
+        List<Anomalia> anomaliasEncontradas = anomaliasRepository.obtenerAnomaliasPorMagnitud(magnitud);
+        List<AnomaliaDTO> anomalias = new LinkedList<>();
 
-        return convertirAnomalia(anomaliaEncontrada);
+        for(Anomalia anomalia: anomaliasEncontradas) {
+            anomalias.add(convertirAnomalia(anomalia));
+        }
+
+        return anomalias;
     }
 
     public AnomaliaDTO registrarAnomalia(AnomaliaDTO anomalia) throws ReportesAnomaliasServiceException {
@@ -106,7 +126,7 @@ public class ReportesAnomaliasService {
     }
 
     private ReporteAnomalia convertirReporteAnomaliaDTO(ReporteAnomaliaDTO reporte) {
-        ReporteAnomalia reporteCreado = new ReporteAnomalia(reporte.getCodigo(), reporte.getFecha(), reporte.getDescripcion(), reporte.getAnomalia(), reporte.getUsuario());
+        ReporteAnomalia reporteCreado = new ReporteAnomalia(reporte.getCodigo(), reporte.getFecha(), reporte.getDescripcion(), convertirAnomaliaDTO(reporte.getAnomalia()), reporte.getUsuario());
 
         return reporteCreado;
     }
