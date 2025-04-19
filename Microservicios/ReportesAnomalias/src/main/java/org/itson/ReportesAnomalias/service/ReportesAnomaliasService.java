@@ -137,10 +137,15 @@ public class ReportesAnomaliasService {
     private AnomaliaDTO convertirAnomalia(Anomalia anomalia) {
         AnomaliaDTO anomaliaCreada = new AnomaliaDTO();
 
+        anomaliaCreada.setId(anomalia.get_id().toString());
         anomaliaCreada.setFechaHora(anomalia.getFechaHora());
         anomaliaCreada.setCausa(anomalia.getCausa());
         anomaliaCreada.setInvernadero(anomalia.getInvernadero());
         anomaliaCreada.setSensor(anomalia.getSensor());
+        anomaliaCreada.setValor(anomalia.getValor());
+        anomaliaCreada.setSector(anomalia.getSector());
+        anomaliaCreada.setFila(anomalia.getFila());
+        anomaliaCreada.setMagnitud(anomalia.getMagnitud());
 
         return anomaliaCreada;
     }
