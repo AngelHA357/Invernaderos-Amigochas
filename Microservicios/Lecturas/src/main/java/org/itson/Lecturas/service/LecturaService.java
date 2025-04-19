@@ -1,7 +1,7 @@
 package org.itson.Lecturas.service;
 
 import org.itson.Lecturas.dtos.LecturaDTO;
-import org.itson.Lecturas.entities.Lectura;
+import org.itson.Lecturas.collections.Lectura;
 import org.itson.Lecturas.excepciones.LecturasException;
 import org.itson.Lecturas.persistence.ILecturasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class LecturaService {
@@ -24,9 +23,9 @@ public class LecturaService {
      * @throws LecturasException en caso de que no se haya encontrado ninguna lectura.
      */
     public List<LecturaDTO> obtenerTodasLecturas() throws LecturasException {
-        List<Lectura> lecturasEntidad = lecturasRepository.findAll(); // Se obtienen los lecturas.
-        if (!lecturasEntidad.isEmpty()) {
-            List<LecturaDTO> lecturasDTO = conversorLecturasEntidadDTO(lecturasEntidad); // Se convierten a DTO.
+        List<Lectura> lecturasColeccion = lecturasRepository.findAll(); // Se obtienen los lecturas.
+        if (!lecturasColeccion.isEmpty()) {
+            List<LecturaDTO> lecturasDTO = conversorLecturasColeccionDTO(lecturasColeccion); // Se convierten a DTO.
             return lecturasDTO; // Se devuelven.
         } else {
             throw new LecturasException("No se encontró ninguna lectura.");
@@ -41,9 +40,9 @@ public class LecturaService {
      * @throws LecturasException En caso de que ocurra un error durante el registro.
      */
     public LecturaDTO registrarLectura(LecturaDTO lecturaDTO) throws LecturasException {
-        Lectura lecturaEntidad = conversorLecturaDTOEntidad(lecturaDTO);
-        Lectura resultado = lecturasRepository.save(lecturaEntidad);
-        return conversorLecturaEntidadDTO(resultado);
+        Lectura lecturaColeccion = conversorLecturaDTOColeccion(lecturaDTO);
+        Lectura resultado = lecturasRepository.save(lecturaColeccion);
+        return conversorLecturaColeccionDTO(resultado);
     }
 
     /**
@@ -56,48 +55,55 @@ public class LecturaService {
      */
 
     /**
-     * Método que convierte una lista de lecturas de tipo Entidad a tipo DTO.
+     * Método que convierte una lista de lecturas de tipo Colección a tipo DTO.
      *
-     * @param lecturasEntidad Lista Entidad a convertir.
+     * @param lecturasColeccion Lista lecturas a convertir.
      * @return La lista de lecturas de tipo DTO.
      */
-    private List<LecturaDTO> conversorLecturasEntidadDTO(List<Lectura> lecturasEntidad) {
+    private List<LecturaDTO> conversorLecturasColeccionDTO(List<Lectura> lecturasColeccion) {
         List<LecturaDTO> lecturasDTO = new ArrayList<>();
-        for (Lectura lecturaEntidad : lecturasEntidad) {
-            lecturasDTO.add(conversorLecturaEntidadDTO(lecturaEntidad));
+        for (Lectura lecturaColeccion : lecturasColeccion) {
+            lecturasDTO.add(conversorLecturaColeccionDTO(lecturaColeccion));
         }
         return lecturasDTO;
     }
 
     /**
-     * Método que convierte una lectura de tipo Entidad a tipo DTO.
+     * Método que convierte una lectura de tipo Colección a tipo DTO.
      *
-     * @param lecturaEntidad Lectura Entidad a convertir.
+     * @param lecturaColeccion Lectura a convertir.
      * @return La lectura de tipo DTO.
      */
-    private LecturaDTO conversorLecturaEntidadDTO(Lectura lecturaEntidad) {
+    private LecturaDTO conversorLecturaColeccionDTO(Lectura lecturaColeccion) {
         return new LecturaDTO(
-                lecturaEntidad.getId(),
-                lecturaEntidad.getIdSensor(),
-                lecturaEntidad.getTipoSensor(),
-                lecturaEntidad.getValor(),
-                lecturaEntidad.getTimestamp()
+                lecturaColeccion.get_id(),
+                lecturaColeccion.getIdSensor(),
+                lecturaColeccion.getMacAddress(),
+                lecturaColeccion.getMarca(),
+                lecturaColeccion.getModelo(),
+                lecturaColeccion.getTipoLectura(),
+                lecturaColeccion.getMagnitud(),
+                lecturaColeccion.getValor(),
+                lecturaColeccion.getFechaHora()
         );
     }
 
     /**
-     * Método que convierte una lectura de tipo DTO a tipo Entidad.
+     * Método que convierte una lectura de tipo DTO a tipo Colección.
      *
      * @param lecturaDTO Lectura DTO a convertir.
-     * @return La lectura de tipo Entidad.
+     * @return La lectura de tipo Colección.
      */
-    private Lectura conversorLecturaDTOEntidad(LecturaDTO lecturaDTO) throws LecturasException {
+    private Lectura conversorLecturaDTOColeccion(LecturaDTO lecturaDTO) throws LecturasException {
         return new Lectura(
-                lecturaDTO.getIdLectura(),
                 lecturaDTO.getIdSensor(),
-                lecturaDTO.getTipoSensor(),
+                lecturaDTO.getMacAddress(),
+                lecturaDTO.getMarca(),
+                lecturaDTO.getModelo(),
+                lecturaDTO.getTipoLectura(),
+                lecturaDTO.getMagnitud(),
                 lecturaDTO.getValor(),
-                lecturaDTO.getTimestamp()
+                lecturaDTO.getFechaHora()
         );
     }
 }

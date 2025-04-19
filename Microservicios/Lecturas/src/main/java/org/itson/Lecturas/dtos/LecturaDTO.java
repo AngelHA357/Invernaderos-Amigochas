@@ -3,6 +3,9 @@ package org.itson.Lecturas.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+
+import java.util.Date;
 
 /**
  * Clase DTO que representa una lectura.
@@ -11,9 +14,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LecturaDTO {
-    private String idLectura;
+    private ObjectId _id;
     private String idSensor;
-    private String tipoSensor;
-    private double valor;
-    private String timestamp;
+    private String macAddress;
+    private String marca;
+    private String modelo;
+    private String tipoLectura;
+    private String magnitud;
+    private float valor;
+    private Date fechaHora;
 }

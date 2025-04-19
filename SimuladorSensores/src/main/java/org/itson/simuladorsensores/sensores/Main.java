@@ -37,29 +37,40 @@ public class Main {
             // Le preguntamos al usuario qué tipo de sensor quiere usar
             String tipoSensor;
             System.out.print("Indique el tipo de sensor que desea iniciar (Humedad / Temperatura): ");
-            tipoSensor = tec.nextLine();
             do {
+                tipoSensor = tec.nextLine();
                 if (!tipoSensor.equalsIgnoreCase("Humedad") && !tipoSensor.equalsIgnoreCase("Temperatura")) {
-                    System.out.print("Ingrese un tipo de sensor valido (Humedad / Temperatura): ");
-                    tipoSensor = tec.nextLine();
+                    System.out.print("Ingrese un tipo de sensor - Humedad / Temperatura: ");
                 }
             } while (!tipoSensor.equalsIgnoreCase("Humedad") && !tipoSensor.equalsIgnoreCase("Temperatura"));
+
+            String magnitud = "";
+            if (tipoSensor.equalsIgnoreCase("Temperatura")) {
+                System.out.print("Indique la magnitud de la temperatura - C (Celsius) / F (Fahrenheit) / K (Kelvin): ");
+                do {
+                    magnitud = tec.nextLine();
+                    if (!magnitud.equalsIgnoreCase("C") && !magnitud.equalsIgnoreCase("F") && !magnitud.equalsIgnoreCase("K")) {
+                        System.out.print("Indique la magnitud de la temperatura - C (Celsius) / F (Fahrenheit) / K (Kelvin): ");
+                        magnitud = tec.nextLine();
+                    }
+                } while (!magnitud.equalsIgnoreCase("C") && !magnitud.equalsIgnoreCase("F") && !magnitud.equalsIgnoreCase("K"));
+            }
 
             // Creamos un sensor dependiendo del seleccionado
             Sensor sensor = null;
             if (tipoSensor.equalsIgnoreCase("Humedad")) {
-                sensor = new SensorHumedad("SEN-0101", "STEREN", "S_MOIST-999", client);
+                sensor = new SensorHumedad("SEN-0101", "AA:BB:CC:DD:EE:FF", "SensorTech", "S_MOIST-ST-100", client);
             } else if (tipoSensor.equalsIgnoreCase("Temperatura")) {
-                sensor = new SensorTemperatura("SEN-0102", "STEREN", "S_TEMP-777", client);
+                sensor = new SensorTemperatura("SEN-0102", "AA:11:BB:22:CC:33", "TempTech", "T-300", magnitud, client);
             }
 
             // Creamos un servicio
             Executor service = Executors.newCachedThreadPool();
 
             while (true) {
-                // Mandamos mediciones del sensor infinitamente :D
+                // Mandamos las lecturas del sensor infinitamente :D
                 service.execute(sensor);
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             }
         } catch (InterruptedException | MqttException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

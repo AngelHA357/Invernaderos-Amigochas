@@ -48,7 +48,7 @@ public class GestionSensoresController {
      * @return La respuesta HTTP con el sensor encontrado y el código 200. Se devuelve un error si no se encontró el sensor.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<?> obtenerSensorPorId(@PathVariable Long id) {
+    public ResponseEntity<?> obtenerSensorPorId(@PathVariable String id) {
         try {
             SensorDTO sensor = gestionSensoresService.obtenerSensorPorId(id); // Se obtiene el sensor por ID.
             ResponseEntity<SensorDTO> respuesta = new ResponseEntity<>(sensor, HttpStatus.OK); // Se crea la respuesta.
@@ -113,7 +113,7 @@ public class GestionSensoresController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> eliminarSensor(@PathVariable String id) {
         try {
-            gestionSensoresService.eliminarSensor(Long.valueOf(id));
+            gestionSensoresService.eliminarSensor(id);
             ResponseEntity<Void> respuesta = new ResponseEntity<>(HttpStatus.OK); // Se crea la respuesta. Void indica que el body está vacío.
             return respuesta;
         } catch (GestionSensoresException gse) {

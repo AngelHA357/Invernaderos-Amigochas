@@ -4,6 +4,8 @@
  */
 package org.itson.dtos;
 
+import java.util.Date;
+
 /**
  *
  * @author Equipo 1
@@ -11,15 +13,23 @@ package org.itson.dtos;
 public class LecturaDTO {
 
     private String idSensor;
-    private String tipoSensor;
+    private String macAddress;
+    private String marca;
+    private String modelo;
+    private String tipoLectura;
+    private String magnitud;
     private double valor;
-    private String timestamp;
+    private Date fechaHora;
 
-    public LecturaDTO(String idSensor, String tipoSensor, double medicion, String timestamp) {
+    public LecturaDTO(String idSensor, String macAddress, String marca, String modelo, String tipoLectura, String magnitud, double valor, Date fechaHora) {
         this.idSensor = idSensor;
-        this.tipoSensor = tipoSensor;
-        this.valor = medicion;
-        this.timestamp = timestamp;
+        this.macAddress = macAddress;
+        this.marca = marca;
+        this.modelo = modelo;
+        this.tipoLectura = tipoLectura;
+        this.magnitud = magnitud;
+        this.valor = valor;
+        this.fechaHora = fechaHora;
     }
 
     public String getIdSensor() {
@@ -30,27 +40,61 @@ public class LecturaDTO {
         this.idSensor = idSensor;
     }
 
-    public String getTipoSensor() {
-        return tipoSensor;
+    public String getMacAddress() {
+        return macAddress;
     }
 
-    public void setTipoSensor(String tipoSensor) {
-        this.tipoSensor = tipoSensor;
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public String getTipoLectura() {
+        return tipoLectura;
+    }
+
+    public void setTipoLectura(String tipoLectura) {
+        this.tipoLectura = tipoLectura;
+    }
+
+    public String getMagnitud() {
+        return magnitud;
+    }
+
+    public void setMagnitud(String magnitud) {
+        this.magnitud = magnitud;
     }
 
     public double getValor() {
         return valor;
     }
 
-    public void setValor(double medicion) {
-        this.valor = medicion;
+    public void setValor(double valor) {
+        this.valor = valor;
     }
 
-    public String getTimestamp() {
-        return timestamp;
+    public Date getFechaHora() {
+        return fechaHora;
     }
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
+    public void setFechaHora(Date fechaHora) {
+        this.fechaHora = fechaHora;
     }
+
+    
 }

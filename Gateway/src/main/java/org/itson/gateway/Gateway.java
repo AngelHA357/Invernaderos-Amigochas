@@ -27,7 +27,7 @@ import org.itson.dtos.LecturaDTO;
  */
 public class Gateway {
 
-    private static final String QUEUE_NAME = "mediciones";
+    private static final String QUEUE_NAME = "lecturas";
 
     public static void main(String[] args) {
         try {
@@ -74,61 +74,28 @@ public class Gateway {
                      */
                     executor.submit(() -> {
                         try {
-                            // Mensaje recibido
-                            String payload = message.toString();
+                            String payload = new String(message.getPayload());
                             System.out.println("Mensaje recibido en " + topic + ": " + payload);
 
-                            // Separar el sensor y el dato
-                            String[] partes = payload.split("/");
-
-                            if (partes.length != 2) {
-                                System.err.println("Formato incorrecto del mensaje: " + payload);
-                                return;
-                            }
-
-                            String idSensor = partes[0];
-                            String tipoSensor;
-                            String lectura = partes[1];
-
-                            // Obtenemos el valor numérico
-                            double valor;
-                            if (lectura.endsWith("%")) { // Humedad
-                                tipoSensor = "Humedad";
-                                lectura = lectura.substring(0, lectura.length() - 1); // Remover el '%'
-                                valor = Double.parseDouble(lectura);
-                            } else if (lectura.endsWith("°C") || lectura.endsWith("°F")) { // Temperatura
-                                tipoSensor = "Temperatura";
-                                lectura = lectura.substring(0, lectura.length() - 2); // Remover '°C'
-                                valor = Double.parseDouble(lectura);
-                            } else {
-                                System.err.println("Dato no válido: " + lectura);
-                                return;
-                            }
-
-                            // Obtenemos el timestamp
-                            String timestamp = Instant.now().toString();
-
-                            /**
-                             * Creamos un objeto LecturaDTO con el id del
-                             * sensor, el tipo de sensor, el valor medico y el
-                             * timestamp de la lecutura.
-                             */
-                            LecturaDTO medicion = new LecturaDTO(idSensor, tipoSensor, valor, timestamp);
-                            String json = gson.toJson(medicion);
+                            // Deserializar JSON
+                            LecturaDTO lectura = gson.fromJson(payload, LecturaDTO.class);
 
                             // Publicar en RabbitMQ
+                            String json = gson.toJson(lectura);
                             channel.basicPublish("", QUEUE_NAME, null, json.getBytes());
-                            System.out.println("Publicado en RabbitMQ: " + json);
+
+                            System.out.println("Mensaje publicado en RabbitMQ con éxito.");
                         } catch (IOException e) {
                             System.err.println("Error publicando en RabbitMQ: " + e.getMessage());
+                        } catch (Exception e) {
+                            System.err.println("Error al procesar mensaje: " + e.getMessage());
                         }
                     });
                 }
 
-                // No lo usamos aquí.
+                // No lo usamos.
                 @Override
                 public void deliveryComplete(IMqttDeliveryToken imdt) {
-                    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
                 }
             });
 
@@ -136,9 +103,9 @@ public class Gateway {
             client.connect();
 
             // Indicamos que reciberá todas las mediciones de cual quier tipo de sensor
-            client.subscribe("sensores/#");
+            client.subscribe("sensores/lecturas/#");
 
-            System.out.println("Suscrito al topic: sensores/#");
+            System.out.println("Suscrito al topic: sensores/lecturas/#");
         } catch (MqttException | IOException | TimeoutException ex) {
             Logger.getLogger(Gateway.class.getName()).log(Level.SEVERE, null, ex);
         }

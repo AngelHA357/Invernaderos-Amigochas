@@ -3,6 +3,8 @@ package org.itson.GestionSensores.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 /**
  * Clase DTO que representa un sensor.
@@ -11,17 +13,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SensorDTO {
-
-    private Long id;
+    private String _id;
     private String macAddress;
     private String marca;
     private String modelo;
-    private String invernadero;
+    private String idInvernadero;
+    private String nombreInvernadero;
+    private String sector;
+    private String fila;
 
-    public SensorDTO(String macAddress, String marca, String modelo, String invernadero) {
+    public SensorDTO(String macAddress, String marca, String modelo, String idInvernadero, String sector, String fila) {
         this.macAddress = macAddress;
         this.marca = marca;
         this.modelo = modelo;
-        this.invernadero = invernadero;
+        this.idInvernadero = idInvernadero;
+        this.sector = sector;
+        this.fila = fila;
     }
 }

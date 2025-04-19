@@ -8,14 +8,18 @@ package org.itson.simuladorsensores.sensores;
  */
 public class Sensor implements Runnable {
 
-    protected String id;
+    protected String idSensor;
+    protected String macAddress;
     protected String marca;
     protected String modelo;
+    protected Float valor;
 
-    public Sensor(String id, String marca, String modelo) {
-        this.id = id;
+    public Sensor(String idSensor, String macAddress, String marca, String modelo) {
+        this.idSensor = idSensor;
+        this.macAddress = macAddress;
         this.marca = marca;
         this.modelo = modelo;
+
     }
 
     @Override

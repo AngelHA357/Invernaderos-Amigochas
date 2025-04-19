@@ -1,28 +1,27 @@
-/*
- * SensorTemperatura.java
- */
 package org.itson.simuladorsensores.sensores;
 
+import com.google.gson.Gson;
+import java.util.Date;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.itson.dtos.LecturaDTO;
 
-/**
- * @author Equipo1
- */
 public class SensorTemperatura extends Sensor implements Runnable {
 
+    private String magnitud;
     private Random random;
     private long contador;
-    private Float dato;
     private MqttClient client;
     private String topic;
+    private Gson gson;
 
-    public SensorTemperatura(String id, String marca, String modelo, MqttClient client) {
-        super(id, marca, modelo);
+    public SensorTemperatura(String id, String macAddress, String marca, String modelo, String magnitud, MqttClient client) {
+        super(id, macAddress, marca, modelo);
+        this.magnitud = magnitud;
         this.client = client;
         inicializarAtributos();
     }
@@ -30,38 +29,40 @@ public class SensorTemperatura extends Sensor implements Runnable {
     private void inicializarAtributos() {
         contador = 0;
         random = new Random();
-        // Tópico donde se publicará la información del sensor
-        topic = "sensores/temperatura";
+        topic = "sensores/lecturas/temperatura";
+        gson = new Gson();
     }
 
     @Override
     public void run() {
         try {
             if (contador <= 1000 || contador >= 1100) {
-                //Se genera un dato de temperatura entre 18°C y 24°C
-                dato = random.nextFloat(18.0f, 24.0f);
+                valor = random.nextFloat(18.0f, 24.0f);
             } else {
-                //Una vez que se mandaron 1000 datos, manda 100 datos anómalos
-                dato = random.nextFloat(24.0f, 35.0f);
+                valor = random.nextFloat(24.0f, 35.0f);
                 contador = 0;
             }
 
-            // El mensaje a enviar es el id del sensor y la medición
-            String payload = id + "/" + String.valueOf(dato) + "°C";
-            // Se obtienen los bytes del payload
+            // Creamos el DTO
+            LecturaDTO lectura = new LecturaDTO(
+                idSensor,
+                macAddress,
+                marca,
+                modelo,
+                "Temperatura",
+                magnitud,
+                valor,
+                new Date()
+            );
+
+            // Serializamos a JSON
+            String payload = gson.toJson(lectura);
+
             MqttMessage message = new MqttMessage(payload.getBytes());
-
-            /**
-             * Establecemos la calidad del servicio con 0 para indicar que el
-             * mensaje se envía una sola vez sin necesidad de confirmar nada ni
-             * ACKS.
-             */
             message.setQos(0);
-
-            // Publicamos el mensaje con el tópico correspondiente.
             client.publish(topic, message);
-            System.out.println(contador + " - " + "Mensaje publicado: " + payload + "°C");
 
+            System.out.println(contador + " - DTO publicado: " + payload);
             contador++;
         } catch (MqttException ex) {
             Logger.getLogger(SensorTemperatura.class.getName()).log(Level.SEVERE, null, ex);
