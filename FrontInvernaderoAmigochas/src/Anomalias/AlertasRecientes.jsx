@@ -195,7 +195,7 @@ function AlertasRecientes() {
     <BarraNavegacion />
     <div className="flex justify-center bg-gray-50 min-h-screen">
       <div className="max-w-3xl w-full p-6">
-        <h1 className="text-2xl font-bold text-green-800 mb-1">Alertas recientes</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-1">Alertas recientes</h1>
         <p className="text-sm text-gray-500 mb-6">Últimas alertas detectadas por el sistema</p>
 
         {/* Barra de filtros */}

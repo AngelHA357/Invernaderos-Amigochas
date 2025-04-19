@@ -10,12 +10,14 @@ import AgregarAlarma from './GestionAlarmas/AgregarAlarma.jsx';
 import AgregarSensor from './GestionSensores/AgregarSensor.jsx';
 import EditarSensor from './GestionSensores/EditarSensor.jsx';
 import EditarAlarma from './GestionAlarmas/EditarAlarmas.jsx';
+import InicioSesion from './Principal/InicioSesion.jsx';
 
 function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<ListaInvernaderos />} />
+                <Route path="/" element={<InicioSesion />} />
+                <Route path="/invernaderos" element={<ListaInvernaderos />} />
                 <Route path="/sensores/:invernaderoId" element={<ListaSensores />} />
                 <Route path="/sensores/agregar" element={<AgregarSensor />} />
                 <Route path="/sensores/editar/:sensorId" element={<EditarSensor />} />

@@ -1,9 +1,10 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import logo from '../logo/logo.png'; 
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import logo from '../recursos/logo.png'; 
 
 function BarraNavegacion() {
   const location = useLocation();
+  const navigate = useNavigate();
   const path = location.pathname;
   
   const isActive = (route) => {
@@ -19,11 +20,16 @@ function BarraNavegacion() {
         : 'hover:bg-zinc-700 text-white'
     }`;
   };
+
+  const handleLogout = () => {
+    console.log('Sesión cerrada');
+    navigate('/');
+  };
   
   return (
     <nav className="bg-zinc-800 text-white flex items-center justify-between p-4 shadow-lg">
       <div className="flex items-center">
-        <Link to="/" className="flex items-center">
+        <Link to="/invernaderos" className="flex items-center">
           <img
             src={logo}
             alt="Logo Invernaderos Amigochas"
@@ -33,7 +39,7 @@ function BarraNavegacion() {
       </div>
       
       <div className="flex items-center space-x-2">
-        <Link to="/" className={navLinkClass("/")}>
+        <Link to="/invernaderos" className={navLinkClass("/invernaderos")}>
           Sensores
         </Link>
         <Link to="/informes" className={navLinkClass("/informes")}>
@@ -45,6 +51,12 @@ function BarraNavegacion() {
         <Link to="/anomalias" className={navLinkClass("/anomalias")}>
           Anomalías
         </Link>
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-600 transition-all duration-200 font-medium"
+        >
+          Cerrar Sesión
+        </button>
       </div>
     </nav>
   );
