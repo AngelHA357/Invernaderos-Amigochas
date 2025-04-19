@@ -59,7 +59,7 @@ public class Main {
             // Creamos un sensor dependiendo del seleccionado
             Sensor sensor = null;
             if (tipoSensor.equalsIgnoreCase("Humedad")) {
-                sensor = new SensorHumedad("AAAAAA", "AAAAAAAAA", "SensorTech", "AAAAAAAAAA", client);
+                sensor = new SensorHumedad("WachoSensor", "su ip", "Nueva Palmira", "NyE", client);
             } else if (tipoSensor.equalsIgnoreCase("Temperatura")) {
                 sensor = new SensorTemperatura("SEN-0202", "OLA SOY UNA MAC ADDRESS", "TempTech", "T-300", magnitud, client);
             }

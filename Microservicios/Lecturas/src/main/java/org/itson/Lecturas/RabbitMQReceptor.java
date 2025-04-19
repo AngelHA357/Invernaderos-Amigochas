@@ -16,7 +16,7 @@ public class RabbitMQReceptor {
 
     @Autowired
     private ProcesadorLecturas procesadorLecturas;
-    private static final String QUEUE_NAME = "lecturas";
+    private static final String QUEUE_NAME = "lecturas_crudas";
     private final ConcurrentHashMap<String, LecturaDTO> lecturasPorSensor = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, Boolean> estadoSensores = new ConcurrentHashMap<>();
 
@@ -40,10 +40,10 @@ public class RabbitMQReceptor {
                     Gson gson = new Gson();
                     LecturaDTO lectura = gson.fromJson(mensaje, LecturaDTO.class);
                     // Si el valor asociado al ID sensor es positivo, está activo, si no, está desactivado.
-                    if (estadoSensores.get(lectura.getIdSensor())) {
+                    //if (estadoSensores.get(lectura.getIdSensor())) {
                         lecturasPorSensor.put(lectura.getIdSensor(), lectura);
                         System.out.println("Lectura recibida");
-                    }
+                    //}
                 };
 
                 channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {

@@ -1,17 +1,17 @@
 package org.itson.Lecturas.proto;
 
-import com.itson.grpc.GestionSensoresServicioGrpc;
-import com.itson.grpc.SensorLectura;
-import com.itson.grpc.SensorPeticion;
-import com.itson.grpc.SensorRespuesta;
 import net.devh.boot.grpc.client.inject.GrpcClient;
+import org.itson.grpc.GestionSensoresServidorGrpc;
+import org.itson.grpc.SensorLectura;
+import org.itson.grpc.SensorPeticion;
+import org.itson.grpc.SensorRespuesta;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ClienteGestionSensoresGRPC {
-    private GestionSensoresServicioGrpc.GestionSensoresServicioBlockingStub stub;
+    private GestionSensoresServidorGrpc.GestionSensoresServidorBlockingStub stub;
 
-    public ClienteGestionSensoresGRPC(@GrpcClient("gestion-sensores")GestionSensoresServicioGrpc.GestionSensoresServicioBlockingStub stub) {
+    public ClienteGestionSensoresGRPC(@GrpcClient("gestion-sensores")GestionSensoresServidorGrpc.GestionSensoresServidorBlockingStub stub) {
         this.stub = stub;
     }
 

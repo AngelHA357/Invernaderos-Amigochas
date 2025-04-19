@@ -4,11 +4,11 @@ syntax = "proto3";
 package org.itson.gestionSensores;
 
 option java_multiple_files = true; // Indica que habrá una clase por mensaje y por servicio. En vez de una para todo.
-option java_package = "com.itson.grpc"; // Paquete donde se generarán las clases.
+option java_package = "org.itson.grpc"; // Paquete donde se generarán las clases.
 option java_outer_classname = "GestionSensoresProto"; // Nombre de la clase externa por default.
 
-// Servicio
-service GestionSensoresServicio {
+// Servidor
+service GestionSensoresServidor {
   rpc GetSensor (SensorPeticion) returns (SensorRespuesta);
 }
 
@@ -39,4 +39,5 @@ message SensorRespuesta {
   string nombreInvernadero = 8;
   string sector = 9;
   string fila = 10;
+  bool estado = 11;
 }

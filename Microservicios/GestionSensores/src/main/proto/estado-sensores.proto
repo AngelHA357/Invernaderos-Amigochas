@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+// Creo que este es el paquete papá de los pollitos.
+package org.itson.lecturas;
+
+option java_multiple_files = true; // Indica que habrá una clase por mensaje y por servicio. En vez de una para todo.
+option java_package = "org.itson.grpc"; // Paquete donde se generarán las clases.
+option java_outer_classname = "EstadoSensoresProto"; // Nombre de la clase externa por default.
+
+// Servidor
+service EstadoSensorServidor {
+  rpc ActualizarEstado (EstadoPeticion) returns (EstadoRespuesta);
+}
+
+// Mensaje de solicitud
+message EstadoPeticion {
+  string idSensor = 1;
+  bool estado = 2;
+}
+
+message EstadoRespuesta {
+  string respuesta = 1;
+}

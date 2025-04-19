@@ -26,7 +26,7 @@ import org.itson.dtos.LecturaDTO;
  */
 public class Gateway {
 
-    private static final String QUEUE_NAME = "lecturas";
+    private static final String QUEUE_NAME = "lecturas_crudas";
 
     public static void main(String[] args) {
         try {

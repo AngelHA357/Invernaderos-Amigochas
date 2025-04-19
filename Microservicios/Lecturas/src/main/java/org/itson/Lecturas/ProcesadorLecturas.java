@@ -41,9 +41,15 @@ public class ProcesadorLecturas {
                         ResponseEntity<?> respuesta = lecturasController.registrarLectura(lectura);
                         if (respuesta.getStatusCode().is2xxSuccessful()) { // Si todo salió bien
                             lectura = (LecturaDTO) respuesta.getBody(); // Obtener datos completos de la lectura
-                        }
-                        else if (respuesta.getStatusCode().is4xxClientError()) { // Si todo salió mal
-                            System.out.println(respuesta.getBody());
+                        } else if (respuesta.getStatusCode().is4xxClientError()) { // Si todo salió mal
+                            Object cuerpo = respuesta.getBody();
+                            if (cuerpo instanceof Map) {
+                                Map<?, ?> cuerpoMap = (Map<?, ?>) cuerpo;
+                                Object mensaje = cuerpoMap.get("mensaje");
+                                System.out.println(mensaje);
+                            } else {
+                                System.out.println("Respuesta no esperada: " + cuerpo);
+                            }
                             continue;
                         }
                         imprimirLectura(lectura);

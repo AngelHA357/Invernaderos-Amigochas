@@ -31,6 +31,7 @@ public class Lectura {
     private String invernadero;
     private String sector;
     private String fila;
+    private boolean estado;
 
     public Lectura(String idSensor, String macAddress, String marca, String modelo, String tipoLectura, String magnitud, float valor, Date fechaHora, String invernadero, String sector, String fila) {
         this.idSensor = idSensor;

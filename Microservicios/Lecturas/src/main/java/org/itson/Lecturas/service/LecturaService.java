@@ -1,13 +1,13 @@
 package org.itson.Lecturas.service;
 
-import com.itson.grpc.SensorLectura;
-import com.itson.grpc.SensorRespuesta;
 import io.grpc.StatusRuntimeException;
-import org.itson.Lecturas.dtos.LecturaDTO;
 import org.itson.Lecturas.collections.Lectura;
+import org.itson.Lecturas.dtos.LecturaDTO;
 import org.itson.Lecturas.excepciones.LecturasException;
 import org.itson.Lecturas.persistence.ILecturasRepository;
 import org.itson.Lecturas.proto.ClienteGestionSensoresGRPC;
+import org.itson.grpc.SensorLectura;
+import org.itson.grpc.SensorRespuesta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -82,15 +82,23 @@ public class LecturaService {
      * @return La lectura de tipo DTO.
      */
     private LecturaDTO conversorLecturaColeccionDTO(Lectura lecturaColeccion) throws LecturasException {
-        SensorRespuesta sensorRespuestaGRPC = clienteGRPC.obtenerSensor(
-                SensorLectura.newBuilder()
-                        .setIdSensor(lecturaColeccion.getIdSensor())
-                        .setMacAddress(lecturaColeccion.getMacAddress())
-                        .setMarca(lecturaColeccion.getMarca())
-                        .setModelo(lecturaColeccion.getModelo())
-                        .setTipoSensor(lecturaColeccion.getTipoLectura())
-                        .setMagnitud(lecturaColeccion.getMagnitud())
-                        .build());
+        SensorRespuesta sensorRespuestaGRPC;
+        try {
+            sensorRespuestaGRPC = clienteGRPC.obtenerSensor(
+                    SensorLectura.newBuilder()
+                            .setIdSensor(lecturaColeccion.getIdSensor())
+                            .setMacAddress(lecturaColeccion.getMacAddress())
+                            .setMarca(lecturaColeccion.getMarca())
+                            .setModelo(lecturaColeccion.getModelo())
+                            .setTipoSensor(lecturaColeccion.getTipoLectura())
+                            .setMagnitud(lecturaColeccion.getMagnitud())
+                            .build());
+        } catch (StatusRuntimeException sre) {
+            System.err.println("No se pudo conectar al microservicio de gestión de sensores: " + sre.getMessage());
+
+            // Puedes optar por lanzar una excepción controlada o continuar con valores por defecto
+            throw new LecturasException("Error al obtener datos del sensor que emitió la lectura.");
+        }
 
         return new LecturaDTO(
                 lecturaColeccion.get_id(),
@@ -115,15 +123,23 @@ public class LecturaService {
      * @return La lectura de tipo Colección.
      */
     private Lectura conversorLecturaDTOColeccion(LecturaDTO lecturaDTO) throws LecturasException {
-        SensorRespuesta sensorRespuestaGRPC = clienteGRPC.obtenerSensor(
-                SensorLectura.newBuilder()
-                        .setIdSensor(lecturaDTO.getIdSensor())
-                        .setMacAddress(lecturaDTO.getMacAddress())
-                        .setMarca(lecturaDTO.getMarca())
-                        .setModelo(lecturaDTO.getModelo())
-                        .setTipoSensor(lecturaDTO.getTipoLectura())
-                        .setMagnitud(lecturaDTO.getMagnitud())
-                        .build());
+        SensorRespuesta sensorRespuestaGRPC;
+        try {
+            sensorRespuestaGRPC = clienteGRPC.obtenerSensor(
+                    SensorLectura.newBuilder()
+                            .setIdSensor(lecturaDTO.getIdSensor())
+                            .setMacAddress(lecturaDTO.getMacAddress())
+                            .setMarca(lecturaDTO.getMarca())
+                            .setModelo(lecturaDTO.getModelo())
+                            .setTipoSensor(lecturaDTO.getTipoLectura())
+                            .setMagnitud(lecturaDTO.getMagnitud())
+                            .build());
+        } catch (StatusRuntimeException sre) {
+            System.err.println("No se pudo conectar al microservicio de gestión de sensores: " + sre.getMessage());
+
+            // Puedes optar por lanzar una excepción controlada o continuar con valores por defecto
+            throw new LecturasException("Error al obtener datos del sensor que emitió la lectura.");
+        }
 
         return new Lectura(
                 lecturaDTO.getIdSensor(),

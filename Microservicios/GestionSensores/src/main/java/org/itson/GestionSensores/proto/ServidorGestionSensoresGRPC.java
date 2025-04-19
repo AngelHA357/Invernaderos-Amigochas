@@ -1,24 +1,20 @@
 package org.itson.GestionSensores.proto;
 
-import com.itson.grpc.GestionSensoresServicioGrpc;
-import com.itson.grpc.SensorLectura;
-import com.itson.grpc.SensorPeticion;
-import com.itson.grpc.SensorRespuesta;
-import io.grpc.Status;
+
 import io.grpc.stub.StreamObserver;
-import jakarta.validation.constraints.Null;
-import org.bson.types.ObjectId;
 import org.itson.GestionSensores.collections.Invernadero;
-import org.itson.GestionSensores.collections.Sensor;
 import org.itson.GestionSensores.dtos.SensorDTO;
 import org.itson.GestionSensores.excepciones.GestionSensoresException;
-import org.itson.GestionSensores.persistence.IInvernaderosRepository;
 import org.itson.GestionSensores.service.GestionSensoresService;
+import org.itson.grpc.GestionSensoresServidorGrpc;
+import org.itson.grpc.SensorLectura;
+import org.itson.grpc.SensorPeticion;
+import org.itson.grpc.SensorRespuesta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ServidorGestionSensoresGRPC extends GestionSensoresServicioGrpc.GestionSensoresServicioImplBase {
+public class ServidorGestionSensoresGRPC extends GestionSensoresServidorGrpc.GestionSensoresServidorImplBase {
     @Autowired
     private GestionSensoresService gestionSensoresService;
 
@@ -30,6 +26,7 @@ public class ServidorGestionSensoresGRPC extends GestionSensoresServicioGrpc.Ges
             sensor = gestionSensoresService.obtenerSensorPorId(sensorLectura.getIdSensor());
         } catch (GestionSensoresException e) {
             try {
+                // Si llega aquí es porque el sensor no está registrado
                 Invernadero invernadero = gestionSensoresService.obtenerInvernaderoPorNombre("N/A");
                 sensor = new SensorDTO(
                         sensorLectura.getIdSensor(),
@@ -61,6 +58,7 @@ public class ServidorGestionSensoresGRPC extends GestionSensoresServicioGrpc.Ges
                 .setNombreInvernadero(sensor.getNombreInvernadero())
                 .setSector(sensor.getSector())
                 .setFila(sensor.getFila())
+                .setEstado(sensor.isEstado())
                 .build();
 
         responseObserver.onNext(response);
