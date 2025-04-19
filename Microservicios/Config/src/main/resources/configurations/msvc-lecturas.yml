@@ -9,6 +9,14 @@ spring:
       database: lecturas_db
       uri: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
 
+grpc:
+  client:
+    gestion-sensores:
+      address: static://localhost:50051
+      negotiation-type: plaintext
+      enable-keep-alive: true
+
+
 management:
   tracing:
     sampling:

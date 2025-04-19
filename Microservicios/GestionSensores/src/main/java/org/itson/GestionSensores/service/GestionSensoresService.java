@@ -23,6 +23,7 @@ public class GestionSensoresService {
     // Para la inyección de dependencias.
     @Autowired
     private IGestionSensoresRepository gestionSensoresRepository;
+
     @Autowired
     private IInvernaderosRepository invernaderosRepository;
 
@@ -158,6 +159,7 @@ public class GestionSensoresService {
      */
     private SensorDTO convertirSensorEntidadDTO(Sensor sensorEntidad) throws GestionSensoresException {
         return new SensorDTO(
+                sensorEntidad.getIdSensor(),
                 sensorEntidad.get_id().toString(),
                 sensorEntidad.getMacAddress(),
                 sensorEntidad.getMarca(),
@@ -177,6 +179,7 @@ public class GestionSensoresService {
      */
     private Sensor convertirSensorDTOEntidad(SensorDTO sensorDTO) throws GestionSensoresException {
         return new Sensor(
+                sensorDTO.getIdSensor(),
                 sensorDTO.getMacAddress(),
                 sensorDTO.getMarca(),
                 sensorDTO.getModelo(),

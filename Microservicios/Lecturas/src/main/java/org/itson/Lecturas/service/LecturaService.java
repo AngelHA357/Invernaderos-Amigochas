@@ -1,9 +1,11 @@
 package org.itson.Lecturas.service;
 
+import com.itson.grpc.SensorRespuesta;
 import org.itson.Lecturas.dtos.LecturaDTO;
 import org.itson.Lecturas.collections.Lectura;
 import org.itson.Lecturas.excepciones.LecturasException;
 import org.itson.Lecturas.persistence.ILecturasRepository;
+import org.itson.Lecturas.proto.ClienteGestionSensoresGRPC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,9 @@ public class LecturaService {
     // Para la inyección de dependencias.
     @Autowired
     private ILecturasRepository lecturasRepository;
+
+    @Autowired
+    private ClienteGestionSensoresGRPC clienteGRPC;
 
     /**
      * Método que obtiene todas las lecturas.
@@ -84,7 +89,10 @@ public class LecturaService {
                 lecturaColeccion.getTipoLectura(),
                 lecturaColeccion.getMagnitud(),
                 lecturaColeccion.getValor(),
-                lecturaColeccion.getFechaHora()
+                lecturaColeccion.getFechaHora(),
+                clienteGRPC.obtenerSensor(lecturaColeccion.getMacAddress()).getNombreInvernadero(),
+                clienteGRPC.obtenerSensor(lecturaColeccion.getMacAddress()).getSector(),
+                clienteGRPC.obtenerSensor(lecturaColeccion.getMacAddress()).getFila()
         );
     }
 
@@ -103,7 +111,10 @@ public class LecturaService {
                 lecturaDTO.getTipoLectura(),
                 lecturaDTO.getMagnitud(),
                 lecturaDTO.getValor(),
-                lecturaDTO.getFechaHora()
+                lecturaDTO.getFechaHora(),
+                clienteGRPC.obtenerSensor(lecturaDTO.getMacAddress()).getNombreInvernadero(),
+                clienteGRPC.obtenerSensor(lecturaDTO.getMacAddress()).getSector(),
+                clienteGRPC.obtenerSensor(lecturaDTO.getMacAddress()).getFila()
         );
     }
 }

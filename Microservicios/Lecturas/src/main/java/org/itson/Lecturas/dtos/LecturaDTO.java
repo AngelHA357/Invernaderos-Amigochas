@@ -23,4 +23,7 @@ public class LecturaDTO {
     private String magnitud;
     private float valor;
     private Date fechaHora;
+    private String invernadero;
+    private String sector;
+    private String fila;
 }

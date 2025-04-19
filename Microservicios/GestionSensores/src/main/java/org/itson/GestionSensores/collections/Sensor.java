@@ -23,6 +23,8 @@ public class Sensor {
     @Id
     private ObjectId _id;
     @Indexed(unique = true)
+    private String idSensor;
+    @Indexed(unique = true)
     private String macAddress;
     private String marca;
     private String modelo;
@@ -30,7 +32,8 @@ public class Sensor {
     private String sector;
     private String fila;
 
-    public Sensor(String macAddress, String marca, String modelo, ObjectId idInvernadero, String sector, String fila) {
+    public Sensor(String idSensor, String macAddress, String marca, String modelo, ObjectId idInvernadero, String sector, String fila) {
+        this.idSensor = idSensor;
         this.macAddress = macAddress;
         this.marca = marca;
         this.modelo = modelo;
