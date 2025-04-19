@@ -4,10 +4,7 @@ import com.itson.grpc.GestionSensoresServicioGrpc;
 import com.itson.grpc.SensorLectura;
 import com.itson.grpc.SensorPeticion;
 import com.itson.grpc.SensorRespuesta;
-import io.grpc.Status;
-import io.grpc.StatusRuntimeException;
 import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component

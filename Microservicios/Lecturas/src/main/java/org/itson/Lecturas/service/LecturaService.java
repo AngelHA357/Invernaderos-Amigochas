@@ -82,13 +82,15 @@ public class LecturaService {
      * @return La lectura de tipo DTO.
      */
     private LecturaDTO conversorLecturaColeccionDTO(Lectura lecturaColeccion) throws LecturasException {
-        SensorRespuesta sensorRespuestaGRPC = clienteGRPC.obtenerSensor(new SensorLectura(
-                lecturaColeccion.getIdSensor(),
-                lecturaColeccion.getMacAddress(),
-                lecturaColeccion.getMarca(),
-                lecturaColeccion.getModelo(),
-                lecturaColeccion.getTipoLectura(),
-                lecturaColeccion.getMagnitud()));
+        SensorRespuesta sensorRespuestaGRPC = clienteGRPC.obtenerSensor(
+                SensorLectura.newBuilder()
+                        .setIdSensor(lecturaColeccion.getIdSensor())
+                        .setMacAddress(lecturaColeccion.getMacAddress())
+                        .setMarca(lecturaColeccion.getMarca())
+                        .setModelo(lecturaColeccion.getModelo())
+                        .setTipoSensor(lecturaColeccion.getTipoLectura())
+                        .setMagnitud(lecturaColeccion.getMagnitud())
+                        .build());
 
         return new LecturaDTO(
                 lecturaColeccion.get_id(),
@@ -113,13 +115,16 @@ public class LecturaService {
      * @return La lectura de tipo Colección.
      */
     private Lectura conversorLecturaDTOColeccion(LecturaDTO lecturaDTO) throws LecturasException {
-        SensorRespuesta sensorRespuestaGRPC = clienteGRPC.obtenerSensor(new SensorLectura(
-                lecturaDTO.getIdSensor(),
-                lecturaDTO.getMacAddress(),
-                lecturaDTO.getMarca(),
-                lecturaDTO.getModelo(),
-                lecturaDTO.getTipoLectura(),
-                lecturaDTO.getMagnitud()));
+        SensorRespuesta sensorRespuestaGRPC = clienteGRPC.obtenerSensor(
+                SensorLectura.newBuilder()
+                        .setIdSensor(lecturaDTO.getIdSensor())
+                        .setMacAddress(lecturaDTO.getMacAddress())
+                        .setMarca(lecturaDTO.getMarca())
+                        .setModelo(lecturaDTO.getModelo())
+                        .setTipoSensor(lecturaDTO.getTipoLectura())
+                        .setMagnitud(lecturaDTO.getMagnitud())
+                        .build());
+
         return new Lectura(
                 lecturaDTO.getIdSensor(),
                 lecturaDTO.getMacAddress(),
