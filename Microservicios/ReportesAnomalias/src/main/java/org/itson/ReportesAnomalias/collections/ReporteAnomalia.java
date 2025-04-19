@@ -1,4 +1,4 @@
-package org.itson.ReportesAnomalias.entities;
+package org.itson.ReportesAnomalias.collections;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,6 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Calendar;
 import java.util.Date;
 
 @Document(collection = "reportes_anomalias")

@@ -9,9 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,38 +21,66 @@ public class ReportesAnomaliasController {
     @Autowired
     private ReportesAnomaliasService reportesAnomaliasService;
 
-    @GetMapping("/query")
+    @GetMapping("/periodo/query")
     public ResponseEntity<?> obtenerAnomaliasPorPeriodo(
-            @RequestParam("inicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Calendar inicio,
-            @RequestParam("fin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Calendar fin
+            @RequestParam("inicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date inicio,
+            @RequestParam("fin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fin
     ) {
-        List<AnomaliaDTO> anomalias = reportesAnomaliasService.obtenerAnomaliasPorPeriodo(inicio, fin);
-        ResponseEntity<List<AnomaliaDTO>> response = new ResponseEntity<>(anomalias, HttpStatus.OK);
-        return response;
+        try {
+            List<AnomaliaDTO> anomalias = reportesAnomaliasService.obtenerAnomaliasPorPeriodo(inicio, fin);
+            ResponseEntity<List<AnomaliaDTO>> response = new ResponseEntity<>(anomalias, HttpStatus.OK);
+            return response;
+        } catch (ReportesAnomaliasServiceException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("mensaje", e.getMessage()); // Se mapea el error del mensaje.
+            ResponseEntity<Map<String, String>> respuesta = new ResponseEntity<>(error, HttpStatus.NOT_FOUND); // Creamos la respuesta.
+            return respuesta;
+        }
     }
 
     @GetMapping("/invernadero/{id}")
     public ResponseEntity<?> obtenerAnomaliasPorInvernadero(@PathVariable String idInvernadero) {
-        List<AnomaliaDTO> anomalias = reportesAnomaliasService.obtenerAnomaliasPorInvernadero(idInvernadero);
-        ResponseEntity<List<AnomaliaDTO>> response = new ResponseEntity<>(anomalias, HttpStatus.OK);
-        return response;
+        try {
+            List<AnomaliaDTO> anomalias = reportesAnomaliasService.obtenerAnomaliasPorInvernadero(idInvernadero);
+            ResponseEntity<List<AnomaliaDTO>> response = new ResponseEntity<>(anomalias, HttpStatus.OK);
+            return response;
+        } catch (ReportesAnomaliasServiceException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("mensaje", e.getMessage()); // Se mapea el error del mensaje.
+            ResponseEntity<Map<String, String>> respuesta = new ResponseEntity<>(error, HttpStatus.NOT_FOUND); // Creamos la respuesta.
+            return respuesta;
+        }
     }
 
     @GetMapping("/sensor/{id}")
     public ResponseEntity<?> obtenerAnomaliasPorSensor(@PathVariable String idSensor) {
-        List<AnomaliaDTO> anomalias = reportesAnomaliasService.obtenerAnomaliasPorSensor(idSensor);
-        ResponseEntity<List<AnomaliaDTO>> response = new ResponseEntity<>(anomalias, HttpStatus.OK);
-        return response;
+        try {
+            List<AnomaliaDTO> anomalias = reportesAnomaliasService.obtenerAnomaliasPorSensor(idSensor);
+            ResponseEntity<List<AnomaliaDTO>> response = new ResponseEntity<>(anomalias, HttpStatus.OK);
+            return response;
+        } catch (ReportesAnomaliasServiceException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("mensaje", e.getMessage()); // Se mapea el error del mensaje.
+            ResponseEntity<Map<String, String>> respuesta = new ResponseEntity<>(error, HttpStatus.NOT_FOUND); // Creamos la respuesta.
+            return respuesta;
+        }
     }
 
-    @GetMapping("/query")
+    @GetMapping("/{magnitud}")
     public ResponseEntity<?> obtenerAnomaliasPorMagnitud(@RequestParam("magnitud") String magnitud) {
-        List<AnomaliaDTO> anomalias = reportesAnomaliasService.obtenerAnomaliasPorMagnitud(magnitud);
-        ResponseEntity<List<AnomaliaDTO>> response = new ResponseEntity<>(anomalias, HttpStatus.OK);
-        return response;
+        try {
+            List<AnomaliaDTO> anomalias = reportesAnomaliasService.obtenerAnomaliasPorMagnitud(magnitud);
+            ResponseEntity<List<AnomaliaDTO>> response = new ResponseEntity<>(anomalias, HttpStatus.OK);
+            return response;
+        } catch (ReportesAnomaliasServiceException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("mensaje", e.getMessage()); // Se mapea el error del mensaje.
+            ResponseEntity<Map<String, String>> respuesta = new ResponseEntity<>(error, HttpStatus.NOT_FOUND); // Creamos la respuesta.
+            return respuesta;
+        }
     }
 
-    @PostMapping("/registrar")
+    @PostMapping("/registrarAnomalia")
     public ResponseEntity<?> registrarAnomalia(@RequestBody AnomaliaDTO anomalia) {
         try {
             AnomaliaDTO anomaliaRegistrada = reportesAnomaliasService.registrarAnomalia(anomalia);
@@ -68,13 +94,21 @@ public class ReportesAnomaliasController {
         }
     }
 
-    @GetMapping()
+    @GetMapping("")
     public ResponseEntity<?> obtenerReporte(@RequestBody AnomaliaDTO anomalia) {
-        ReporteAnomaliaDTO reporteObtenido = reportesAnomaliasService.obtenerReporte(anomalia);
-        ResponseEntity<ReporteAnomaliaDTO> response = new ResponseEntity<>(reporteObtenido, HttpStatus.OK);
-        return response;
+        try {
+            ReporteAnomaliaDTO reporteObtenido = reportesAnomaliasService.obtenerReporte(anomalia);
+            ResponseEntity<ReporteAnomaliaDTO> response = new ResponseEntity<>(reporteObtenido, HttpStatus.OK);
+            return response;
+        } catch (ReportesAnomaliasServiceException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("mensaje", e.getMessage()); // Se mapea el error del mensaje.
+            ResponseEntity<Map<String, String>> respuesta = new ResponseEntity<>(error, HttpStatus.NOT_FOUND); // Creamos la respuesta.
+            return respuesta;
+        }
     }
 
+    @PostMapping("/registrarReporte")
     public ResponseEntity<?> registrarReporte(@RequestBody ReporteAnomaliaDTO reporte) {
         try {
             ReporteAnomaliaDTO reporteRegistrado = reportesAnomaliasService.registrarReporte(reporte);

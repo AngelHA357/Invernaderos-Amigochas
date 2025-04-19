@@ -1,13 +1,10 @@
 package org.itson.ReportesAnomalias.persistence;
 
 import org.bson.types.ObjectId;
-import org.itson.ReportesAnomalias.entities.Anomalia;
-import org.itson.ReportesAnomalias.entities.ReporteAnomalia;
-import org.itson.ReportesAnomalias.excepciones.AnomaliasPersistenceException;
+import org.itson.ReportesAnomalias.collections.Anomalia;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -19,5 +16,5 @@ public interface IAnomaliasRepository extends MongoRepository<Anomalia, ObjectId
 
     public List<Anomalia> findAllBySensor(String id);
 
-    public List<Anomalia> findAllByMagn(String magnitud);
+    public List<Anomalia> findAllByMagnitud(String magnitud);
 }

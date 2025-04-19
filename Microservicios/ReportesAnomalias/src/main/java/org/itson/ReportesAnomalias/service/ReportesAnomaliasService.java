@@ -3,20 +3,15 @@ package org.itson.ReportesAnomalias.service;
 import org.bson.types.ObjectId;
 import org.itson.ReportesAnomalias.dtos.AnomaliaDTO;
 import org.itson.ReportesAnomalias.dtos.ReporteAnomaliaDTO;
-import org.itson.ReportesAnomalias.entities.Anomalia;
-import org.itson.ReportesAnomalias.entities.ReporteAnomalia;
-import org.itson.ReportesAnomalias.excepciones.AnomaliasPersistenceException;
-import org.itson.ReportesAnomalias.excepciones.ReportesAnomaliasPersistenceException;
+import org.itson.ReportesAnomalias.collections.Anomalia;
+import org.itson.ReportesAnomalias.collections.ReporteAnomalia;
 import org.itson.ReportesAnomalias.excepciones.ReportesAnomaliasServiceException;
 import org.itson.ReportesAnomalias.persistence.IAnomaliasRepository;
 import org.itson.ReportesAnomalias.persistence.IReportesAnomaliasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ReportesAnomaliasService {
@@ -31,81 +26,98 @@ public class ReportesAnomaliasService {
         Optional<Anomalia> anomaliaEncontrada = anomaliasRepository.findById(new ObjectId(id));
         if (anomaliaEncontrada.isPresent()) {
             // Si se obtuvo algo, se convierte a DTO y se regresa eso.
-            AnomaliaDTO anomaliaDTO = convertirAnomalia(anomaliaEncontrada.get());
-            return anomaliaDTO;
+            AnomaliaDTO anomalia = convertirAnomalia(anomaliaEncontrada.get());
+            return anomalia;
         } else {
             throw new ReportesAnomaliasServiceException("Anomalía con ID: " + id + " no encontrada.");
         }
     }
 
-    public List<AnomaliaDTO> obtenerAnomaliasPorPeriodo(Calendar fechaIncio, Calendar fechaFin) {
-        List<Anomalia> anomaliasEncontradas = anomaliasRepository.obtenerAnomaliasPorPeriodo(fechaIncio, fechaFin);
-        List<AnomaliaDTO> anomalias = new LinkedList<>();
-
-        for (Anomalia anomalia : anomaliasEncontradas) {
-            anomalias.add(convertirAnomalia(anomalia));
+    public List<AnomaliaDTO> obtenerAnomaliasPorPeriodo(Date fechaIncio, Date fechaFin) throws ReportesAnomaliasServiceException {
+        List<Anomalia> anomaliasEncontradas = anomaliasRepository.findAllByFechaHoraBetween(fechaIncio, fechaFin);
+        if (!anomaliasEncontradas.isEmpty()) {
+            // Si se obtuvo algo, se convierte a DTO y se regresa eso.
+            List<AnomaliaDTO> anomalias = new LinkedList<>();
+            for (Anomalia anomalia : anomaliasEncontradas) {
+                anomalias.add(convertirAnomalia(anomalia));
+            }
+            return anomalias;
+        } else {
+            throw new ReportesAnomaliasServiceException("Anomalias entre el periodo: " + fechaIncio + " - " + fechaFin + " no encontradas");
         }
-
-        return anomalias;
     }
 
-    public List<AnomaliaDTO> obtenerAnomaliasPorInvernadero(String idInvernadero) {
-        List<Anomalia> anomaliasEncontradas = anomaliasRepository.obtenerAnomaliasPorInvernadero(idInvernadero);
-        List<AnomaliaDTO> anomalias = new LinkedList<>();
-
-        for (Anomalia anomalia : anomaliasEncontradas) {
-            anomalias.add(convertirAnomalia(anomalia));
+    public List<AnomaliaDTO> obtenerAnomaliasPorInvernadero(String idInvernadero) throws ReportesAnomaliasServiceException {
+        List<Anomalia> anomaliasEncontradas = anomaliasRepository.findAllByInvernadero(idInvernadero);
+        if (!anomaliasEncontradas.isEmpty()) {
+            // Si se obtuvo algo, se convierte a DTO y se regresa eso.
+            List<AnomaliaDTO> anomalias = new LinkedList<>();
+            for (Anomalia anomalia : anomaliasEncontradas) {
+                anomalias.add(convertirAnomalia(anomalia));
+            }
+            return anomalias;
+        } else {
+            throw new ReportesAnomaliasServiceException("Anomalias del invernadero con ID: " + idInvernadero + " no encontradas");
         }
-
-        return anomalias;
     }
 
-    public List<AnomaliaDTO> obtenerAnomaliasPorSensor(String idSensor) {
-        List<Anomalia> anomaliasEncontradas = anomaliasRepository.obtenerAnomaliasPorSensor(idSensor);
-        List<AnomaliaDTO> anomalias = new LinkedList<>();
-
-        for (Anomalia anomalia : anomaliasEncontradas) {
-            anomalias.add(convertirAnomalia(anomalia));
+    public List<AnomaliaDTO> obtenerAnomaliasPorSensor(String idSensor) throws ReportesAnomaliasServiceException {
+        List<Anomalia> anomaliasEncontradas = anomaliasRepository.findAllBySensor(idSensor);
+        if (!anomaliasEncontradas.isEmpty()) {
+            // Si se obtuvo algo, se convierte a DTO y se regresa eso.
+            List<AnomaliaDTO> anomalias = new LinkedList<>();
+            for (Anomalia anomalia : anomaliasEncontradas) {
+                anomalias.add(convertirAnomalia(anomalia));
+            }
+            return anomalias;
+        } else {
+            throw new ReportesAnomaliasServiceException("Anomalias del sensor con ID: " + idSensor + " no encontradas");
         }
-
-        return anomalias;
     }
 
-    public List<AnomaliaDTO> obtenerAnomaliasPorMagnitud(String magnitud) {
-        List<Anomalia> anomaliasEncontradas = anomaliasRepository.obtenerAnomaliasPorMagnitud(magnitud);
-        List<AnomaliaDTO> anomalias = new LinkedList<>();
-
-        for (Anomalia anomalia : anomaliasEncontradas) {
-            anomalias.add(convertirAnomalia(anomalia));
+    public List<AnomaliaDTO> obtenerAnomaliasPorMagnitud(String magnitud) throws ReportesAnomaliasServiceException {
+        List<Anomalia> anomaliasEncontradas = anomaliasRepository.findAllByMagnitud(magnitud);
+        if (!anomaliasEncontradas.isEmpty()) {
+            // Si se obtuvo algo, se convierte a DTO y se regresa eso.
+            List<AnomaliaDTO> anomalias = new LinkedList<>();
+            for (Anomalia anomalia : anomaliasEncontradas) {
+                anomalias.add(convertirAnomalia(anomalia));
+            }
+            return anomalias;
+        } else {
+            throw new ReportesAnomaliasServiceException("Anomalias con la magnitud: " + magnitud + " no encontradas");
         }
-
-        return anomalias;
     }
 
     public AnomaliaDTO registrarAnomalia(AnomaliaDTO anomalia) throws ReportesAnomaliasServiceException {
-        try {
-            Anomalia anomaliaNueva = convertirAnomaliaDTO(anomalia);
-
-            return convertirAnomalia(anomaliasRepository.registrarAnomalia(anomaliaNueva));
-        } catch (AnomaliasPersistenceException e) {
-            throw new ReportesAnomaliasServiceException(e.getMessage());
+        if (obtenerAnomalia(anomalia.getId()) != null) {
+            throw new ReportesAnomaliasServiceException("Ya se ha registrado la anomalía anteriormente");
         }
+
+        Anomalia anomaliaNueva = convertirAnomaliaDTO(anomalia);
+        Anomalia resultado = anomaliasRepository.save(anomaliaNueva);
+        return convertirAnomalia(resultado);
     }
 
-    public ReporteAnomaliaDTO obtenerReporte(AnomaliaDTO anomalia) {
-        ReporteAnomalia reporteEncontrado = reportesAnomaliasRepository.obtenerReporte(convertirAnomaliaDTO(anomalia));
-
-        return convertirReporteAnomalia(reporteEncontrado);
+    public ReporteAnomaliaDTO obtenerReporte(AnomaliaDTO anomalia) throws ReportesAnomaliasServiceException {
+        ReporteAnomalia reporteEncontrado = reportesAnomaliasRepository.findByAnomalia(convertirAnomaliaDTO(anomalia));
+        if (reporteEncontrado != null) {
+            // Si se obtuvo algo, se convierte a DTO y se regresa eso.
+            ReporteAnomaliaDTO reporte = convertirReporteAnomalia(reporteEncontrado);
+            return reporte;
+        } else {
+            throw new ReportesAnomaliasServiceException("Reporte para la anomalía no encontrado.");
+        }
     }
 
     public ReporteAnomaliaDTO registrarReporte(ReporteAnomaliaDTO reporte) throws ReportesAnomaliasServiceException {
-        try {
-            ReporteAnomalia reporteNuevo = convertirReporteAnomaliaDTO(reporte);
-
-            return convertirReporteAnomalia(reportesAnomaliasRepository.registrarReporte(reporteNuevo));
-        } catch (ReportesAnomaliasPersistenceException e) {
-            throw new ReportesAnomaliasServiceException(e.getMessage());
+        if (obtenerReporte(reporte.getAnomalia()) != null) {
+            throw new ReportesAnomaliasServiceException("Ya se ha registrado el reporte anteriormente");
         }
+
+        ReporteAnomalia reporteNuevo = convertirReporteAnomaliaDTO(reporte);
+        ReporteAnomalia resultado = reportesAnomaliasRepository.save(reporteNuevo);
+        return convertirReporteAnomalia(resultado);
     }
 
     /**
@@ -118,7 +130,7 @@ public class ReportesAnomaliasService {
      */
 
     private Anomalia convertirAnomaliaDTO(AnomaliaDTO anomalia) {
-        Anomalia anomaliaCreada = new Anomalia(anomalia.getCodigo(), anomalia.getFechaHora(), anomalia.getCausa(), anomalia.getInvernadero(), anomalia.getSensor());
+        Anomalia anomaliaCreada = new Anomalia(anomalia.getFechaHora(), anomalia.getCausa(), anomalia.getInvernadero(), anomalia.getSensor());
 
         return anomaliaCreada;
     }
@@ -126,7 +138,7 @@ public class ReportesAnomaliasService {
     private AnomaliaDTO convertirAnomalia(Anomalia anomalia) {
         AnomaliaDTO anomaliaCreada = new AnomaliaDTO();
 
-        anomaliaCreada.setCodigo(anomalia.getId().toString());
+        anomaliaCreada.setId(anomalia.get_id().toString());
         anomaliaCreada.setFechaHora(anomalia.getFechaHora());
         anomaliaCreada.setCausa(anomalia.getCausa());
         anomaliaCreada.setInvernadero(anomalia.getInvernadero());
@@ -136,7 +148,7 @@ public class ReportesAnomaliasService {
     }
 
     private ReporteAnomalia convertirReporteAnomaliaDTO(ReporteAnomaliaDTO reporte) {
-        ReporteAnomalia reporteCreado = new ReporteAnomalia(reporte.getCodigo(), reporte.getFecha(), reporte.getDescripcion(), convertirAnomaliaDTO(reporte.getAnomalia()), reporte.getUsuario());
+        ReporteAnomalia reporteCreado = new ReporteAnomalia(reporte.getFecha(), reporte.getAcciones(), reporte.getComentarios(), convertirAnomaliaDTO(reporte.getAnomalia()), reporte.getUsuario());
 
         return reporteCreado;
     }
@@ -144,9 +156,10 @@ public class ReportesAnomaliasService {
     private ReporteAnomaliaDTO convertirReporteAnomalia(ReporteAnomalia reporte) {
         ReporteAnomaliaDTO reporteCreado = new ReporteAnomaliaDTO();
 
-        reporteCreado.setCodigo(reporte.getCodigo());
+        reporteCreado.setId(reporte.get_id().toString());
         reporteCreado.setFecha(reporte.getFecha());
-        reporteCreado.setDescripcion(reporte.getDescripcion());
+        reporteCreado.setAcciones(reporte.getAcciones());
+        reporteCreado.setComentarios(reporte.getComentarios());
         reporteCreado.setAnomalia(convertirAnomalia(reporte.getAnomalia()));
         reporteCreado.setUsuario(reporte.getUsuario());
 
