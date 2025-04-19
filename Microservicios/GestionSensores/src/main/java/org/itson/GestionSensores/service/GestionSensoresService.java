@@ -58,7 +58,6 @@ public class GestionSensoresService {
         } else {
             throw new GestionSensoresException("Sensor con ID " + id + " no encontrado.");
         }
-
     }
 
     /**

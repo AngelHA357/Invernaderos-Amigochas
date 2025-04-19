@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package gestion;
+
+option java_multiple_files = true;
+option java_package = "com.diego.sensores.grpc";
+option java_outer_classname = "SensorProto";
+
+// Servicio
+service SensorService {
+  rpc GetSensorByMac (SensorRequest) returns (SensorResponse);
+}
+
+// Mensaje de solicitud
+message SensorRequest {
+  string macAddress = 1;
+}
+
+// Mensaje de respuesta
+message SensorResponse {
+  string macAddress = 1;
+  string marca = 2;
+  string modelo = 3;
+  int64 idInvernadero = 4;
+  string nombreInvernadero = 5;
+  string sector = 6;
+  int32 fila = 7;
+}

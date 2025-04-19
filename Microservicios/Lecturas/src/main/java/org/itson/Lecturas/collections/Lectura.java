@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -27,6 +28,9 @@ public class Lectura {
     private String magnitud;
     private float valor;
     private Date fechaHora;
+    private String invernadero;
+    private String sector;
+    private String fila;
 
     public Lectura(String idSensor, String macAddress, String marca, String modelo, String tipoLectura, String magnitud, float valor, Date fechaHora) {
         this.idSensor = idSensor;

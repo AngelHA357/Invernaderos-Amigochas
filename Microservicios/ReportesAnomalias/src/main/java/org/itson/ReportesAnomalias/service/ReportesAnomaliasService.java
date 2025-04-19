@@ -1,5 +1,6 @@
 package org.itson.ReportesAnomalias.service;
 
+import org.bson.types.ObjectId;
 import org.itson.ReportesAnomalias.dtos.AnomaliaDTO;
 import org.itson.ReportesAnomalias.dtos.ReporteAnomaliaDTO;
 import org.itson.ReportesAnomalias.entities.Anomalia;
@@ -10,10 +11,14 @@ import org.itson.ReportesAnomalias.excepciones.ReportesAnomaliasServiceException
 import org.itson.ReportesAnomalias.persistence.IAnomaliasRepository;
 import org.itson.ReportesAnomalias.persistence.IReportesAnomaliasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
+@Service
 public class ReportesAnomaliasService {
 
     @Autowired
@@ -22,17 +27,22 @@ public class ReportesAnomaliasService {
     @Autowired
     private IReportesAnomaliasRepository reportesAnomaliasRepository;
 
-    public AnomaliaDTO obtenerAnomalia(AnomaliaDTO anomalia) {
-        Anomalia anomaliaEncontrada = anomaliasRepository.obtenerAnomalia(convertirAnomaliaDTO(anomalia));
-
-        return convertirAnomalia(anomaliaEncontrada);
+    public AnomaliaDTO obtenerAnomalia(String id) throws ReportesAnomaliasServiceException {
+        Optional<Anomalia> anomaliaEncontrada = anomaliasRepository.findById(new ObjectId(id));
+        if (anomaliaEncontrada.isPresent()) {
+            // Si se obtuvo algo, se convierte a DTO y se regresa eso.
+            AnomaliaDTO anomaliaDTO = convertirAnomalia(anomaliaEncontrada.get());
+            return anomaliaDTO;
+        } else {
+            throw new ReportesAnomaliasServiceException("Anomalía con ID: " + id + " no encontrada.");
+        }
     }
 
     public List<AnomaliaDTO> obtenerAnomaliasPorPeriodo(Calendar fechaIncio, Calendar fechaFin) {
         List<Anomalia> anomaliasEncontradas = anomaliasRepository.obtenerAnomaliasPorPeriodo(fechaIncio, fechaFin);
         List<AnomaliaDTO> anomalias = new LinkedList<>();
 
-        for(Anomalia anomalia: anomaliasEncontradas) {
+        for (Anomalia anomalia : anomaliasEncontradas) {
             anomalias.add(convertirAnomalia(anomalia));
         }
 
@@ -43,7 +53,7 @@ public class ReportesAnomaliasService {
         List<Anomalia> anomaliasEncontradas = anomaliasRepository.obtenerAnomaliasPorInvernadero(idInvernadero);
         List<AnomaliaDTO> anomalias = new LinkedList<>();
 
-        for(Anomalia anomalia: anomaliasEncontradas) {
+        for (Anomalia anomalia : anomaliasEncontradas) {
             anomalias.add(convertirAnomalia(anomalia));
         }
 
@@ -54,7 +64,7 @@ public class ReportesAnomaliasService {
         List<Anomalia> anomaliasEncontradas = anomaliasRepository.obtenerAnomaliasPorSensor(idSensor);
         List<AnomaliaDTO> anomalias = new LinkedList<>();
 
-        for(Anomalia anomalia: anomaliasEncontradas) {
+        for (Anomalia anomalia : anomaliasEncontradas) {
             anomalias.add(convertirAnomalia(anomalia));
         }
 
@@ -65,7 +75,7 @@ public class ReportesAnomaliasService {
         List<Anomalia> anomaliasEncontradas = anomaliasRepository.obtenerAnomaliasPorMagnitud(magnitud);
         List<AnomaliaDTO> anomalias = new LinkedList<>();
 
-        for(Anomalia anomalia: anomaliasEncontradas) {
+        for (Anomalia anomalia : anomaliasEncontradas) {
             anomalias.add(convertirAnomalia(anomalia));
         }
 
@@ -99,12 +109,12 @@ public class ReportesAnomaliasService {
     }
 
     /**
-     *    _____ ____  _   ___      ________ _____   _____  ____  _____  ______  _____
-     *   / ____/ __ \| \ | \ \    / /  ____|  __ \ / ____|/ __ \|  __ \|  ____|/ ____|
-     *  | |   | |  | |  \| |\ \  / /| |__  | |__) | (___ | |  | | |__) | |__  | (___
-     *  | |   | |  | | . ` | \ \/ / |  __| |  _  / \___ \| |  | |  _  /|  __|  \___ \
-     *  | |___| |__| | |\  |  \  /  | |____| | \ \ ____) | |__| | | \ \| |____ ____) |
-     *  \______\____/|_| \_|   \/   |______|_|  \_\_____/ \____/|_|  \_\______|_____/
+     * _____ ____  _   ___      ________ _____   _____  ____  _____  ______  _____
+     * / ____/ __ \| \ | \ \    / /  ____|  __ \ / ____|/ __ \|  __ \|  ____|/ ____|
+     * | |   | |  | |  \| |\ \  / /| |__  | |__) | (___ | |  | | |__) | |__  | (___
+     * | |   | |  | | . ` | \ \/ / |  __| |  _  / \___ \| |  | |  _  /|  __|  \___ \
+     * | |___| |__| | |\  |  \  /  | |____| | \ \ ____) | |__| | | \ \| |____ ____) |
+     * \______\____/|_| \_|   \/   |______|_|  \_\_____/ \____/|_|  \_\______|_____/
      */
 
     private Anomalia convertirAnomaliaDTO(AnomaliaDTO anomalia) {
