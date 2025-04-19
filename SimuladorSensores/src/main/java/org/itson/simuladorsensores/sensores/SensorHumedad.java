@@ -34,22 +34,18 @@ public class SensorHumedad extends Sensor implements Runnable {
     @Override
     public void run() {
         try {
-            if (contador <= 1000 || contador >= 1100) {
-                valor = random.nextFloat(78.0f, 82.0f);
-            } else {
-                valor = random.nextFloat(82.0f, 100.0f);
-            }
+            valor = random.nextFloat(78.0f, 100.0f);
 
             // Construimos el DTO
             LecturaDTO lectura = new LecturaDTO(
-                idSensor,
-                macAddress,
-                marca,
-                modelo,
-                "Humedad",
-                "%",
-                valor,
-                new Date()
+                    idSensor,
+                    macAddress,
+                    marca,
+                    modelo,
+                    "Humedad",
+                    "%",
+                    valor,
+                    new Date()
             );
 
             // Convertimos a JSON

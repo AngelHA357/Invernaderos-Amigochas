@@ -1,6 +1,8 @@
 package org.itson.Lecturas.service;
 
+import com.itson.grpc.SensorLectura;
 import com.itson.grpc.SensorRespuesta;
+import io.grpc.StatusRuntimeException;
 import org.itson.Lecturas.dtos.LecturaDTO;
 import org.itson.Lecturas.collections.Lectura;
 import org.itson.Lecturas.excepciones.LecturasException;
@@ -65,7 +67,7 @@ public class LecturaService {
      * @param lecturasColeccion Lista lecturas a convertir.
      * @return La lista de lecturas de tipo DTO.
      */
-    private List<LecturaDTO> conversorLecturasColeccionDTO(List<Lectura> lecturasColeccion) {
+    private List<LecturaDTO> conversorLecturasColeccionDTO(List<Lectura> lecturasColeccion) throws LecturasException {
         List<LecturaDTO> lecturasDTO = new ArrayList<>();
         for (Lectura lecturaColeccion : lecturasColeccion) {
             lecturasDTO.add(conversorLecturaColeccionDTO(lecturaColeccion));
@@ -79,7 +81,15 @@ public class LecturaService {
      * @param lecturaColeccion Lectura a convertir.
      * @return La lectura de tipo DTO.
      */
-    private LecturaDTO conversorLecturaColeccionDTO(Lectura lecturaColeccion) {
+    private LecturaDTO conversorLecturaColeccionDTO(Lectura lecturaColeccion) throws LecturasException {
+        SensorRespuesta sensorRespuestaGRPC = clienteGRPC.obtenerSensor(new SensorLectura(
+                lecturaColeccion.getIdSensor(),
+                lecturaColeccion.getMacAddress(),
+                lecturaColeccion.getMarca(),
+                lecturaColeccion.getModelo(),
+                lecturaColeccion.getTipoLectura(),
+                lecturaColeccion.getMagnitud()));
+
         return new LecturaDTO(
                 lecturaColeccion.get_id(),
                 lecturaColeccion.getIdSensor(),
@@ -90,9 +100,9 @@ public class LecturaService {
                 lecturaColeccion.getMagnitud(),
                 lecturaColeccion.getValor(),
                 lecturaColeccion.getFechaHora(),
-                clienteGRPC.obtenerSensor(lecturaColeccion.getMacAddress()).getNombreInvernadero(),
-                clienteGRPC.obtenerSensor(lecturaColeccion.getMacAddress()).getSector(),
-                clienteGRPC.obtenerSensor(lecturaColeccion.getMacAddress()).getFila()
+                sensorRespuestaGRPC.getNombreInvernadero(),
+                sensorRespuestaGRPC.getSector(),
+                sensorRespuestaGRPC.getFila()
         );
     }
 
@@ -103,6 +113,13 @@ public class LecturaService {
      * @return La lectura de tipo Colección.
      */
     private Lectura conversorLecturaDTOColeccion(LecturaDTO lecturaDTO) throws LecturasException {
+        SensorRespuesta sensorRespuestaGRPC = clienteGRPC.obtenerSensor(new SensorLectura(
+                lecturaDTO.getIdSensor(),
+                lecturaDTO.getMacAddress(),
+                lecturaDTO.getMarca(),
+                lecturaDTO.getModelo(),
+                lecturaDTO.getTipoLectura(),
+                lecturaDTO.getMagnitud()));
         return new Lectura(
                 lecturaDTO.getIdSensor(),
                 lecturaDTO.getMacAddress(),
@@ -112,9 +129,9 @@ public class LecturaService {
                 lecturaDTO.getMagnitud(),
                 lecturaDTO.getValor(),
                 lecturaDTO.getFechaHora(),
-                clienteGRPC.obtenerSensor(lecturaDTO.getMacAddress()).getNombreInvernadero(),
-                clienteGRPC.obtenerSensor(lecturaDTO.getMacAddress()).getSector(),
-                clienteGRPC.obtenerSensor(lecturaDTO.getMacAddress()).getFila()
+                sensorRespuestaGRPC.getNombreInvernadero(),
+                sensorRespuestaGRPC.getSector(),
+                sensorRespuestaGRPC.getFila()
         );
     }
 }

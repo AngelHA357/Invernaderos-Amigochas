@@ -14,5 +14,6 @@ import java.util.Optional;
  */
 @Repository
 public interface IGestionSensoresRepository extends MongoRepository<Sensor, ObjectId> {
+    Optional<Sensor> findByIdSensor(String idSensor);
     Optional<Sensor> findByMacAddress(String macAddress);
 }

@@ -9,12 +9,22 @@ option java_outer_classname = "GestionSensoresProto"; // Nombre de la clase exte
 
 // Servicio
 service GestionSensoresServicio {
-  rpc GetSensorByMac (SensorPeticion) returns (SensorRespuesta);
+  rpc GetSensor (SensorPeticion) returns (SensorRespuesta);
 }
 
 // Mensaje de solicitud
 message SensorPeticion {
-  string macAddress = 1;
+  SensorLectura sensorLectura = 1;
+}
+
+// Este es el objeto Sensor que está arriba
+message SensorLectura {
+  string idSensor = 1;
+  string macAddress = 2;
+  string marca = 3;
+  string modelo = 4;
+  string tipoSensor = 5;
+  string magnitud = 6;
 }
 
 // Mensaje de respuesta
@@ -23,8 +33,10 @@ message SensorRespuesta {
   string macAddress = 2;
   string marca = 3;
   string modelo = 4;
-  string idInvernadero = 5;
-  string nombreInvernadero = 6;
-  string sector = 7;
-  string fila = 8;
+  string tipoSensor = 5;
+  string magnitud = 6;
+  string idInvernadero = 7;
+  string nombreInvernadero = 8;
+  string sector = 9;
+  string fila = 10;
 }

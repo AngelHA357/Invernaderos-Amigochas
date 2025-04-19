@@ -59,9 +59,9 @@ public class Main {
             // Creamos un sensor dependiendo del seleccionado
             Sensor sensor = null;
             if (tipoSensor.equalsIgnoreCase("Humedad")) {
-                sensor = new SensorHumedad("SEN-0101", "AA:BB:CC:DD:EE:FF", "SensorTech", "S_MOIST-ST-100", client);
+                sensor = new SensorHumedad("AAAAAA", "AAAAAAAAA", "SensorTech", "AAAAAAAAAA", client);
             } else if (tipoSensor.equalsIgnoreCase("Temperatura")) {
-                sensor = new SensorTemperatura("SEN-0102", "AA:11:BB:22:CC:33", "TempTech", "T-300", magnitud, client);
+                sensor = new SensorTemperatura("SEN-0202", "OLA SOY UNA MAC ADDRESS", "TempTech", "T-300", magnitud, client);
             }
 
             // Creamos un servicio
@@ -70,7 +70,7 @@ public class Main {
             while (true) {
                 // Mandamos las lecturas del sensor infinitamente :D
                 service.execute(sensor);
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             }
         } catch (InterruptedException | MqttException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

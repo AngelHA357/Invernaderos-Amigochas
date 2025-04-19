@@ -12,4 +12,5 @@ import java.util.Optional;
  */
 @Repository
 public interface IInvernaderosRepository extends MongoRepository<Invernadero, ObjectId> {
+    Optional<Invernadero> findByNombre(String nombre);
 }

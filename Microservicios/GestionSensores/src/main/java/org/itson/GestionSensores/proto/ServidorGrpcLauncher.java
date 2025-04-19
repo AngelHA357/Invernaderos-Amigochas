@@ -10,21 +10,21 @@ import org.springframework.stereotype.Component;
 public class ServidorGrpcLauncher {
 
     @Autowired
-    private ServidorGestionSensoresGRPC gestionSensoresService;
+    private ServidorGestionSensoresGRPC servidorGestionSensoresGRPC;
 
     private Server server;
 
     @PostConstruct
     public void start() throws Exception {
         server = ServerBuilder.forPort(50051)
-                .addService(gestionSensoresService)
+                .addService(servidorGestionSensoresGRPC)
                 .build()
                 .start();
 
-        System.out.println("🚀 Servidor gRPC corriendo en el puerto 50051");
+        System.out.println("Servidor gRPC levantado en el puerto 50051");
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.out.println("🧹 Apagando servidor gRPC...");
+            System.out.println("Apagando servidor gRPC...");
             server.shutdown();
         }));
     }

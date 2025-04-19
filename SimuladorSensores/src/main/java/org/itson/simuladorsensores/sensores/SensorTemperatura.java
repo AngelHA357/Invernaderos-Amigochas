@@ -36,23 +36,18 @@ public class SensorTemperatura extends Sensor implements Runnable {
     @Override
     public void run() {
         try {
-            if (contador <= 1000 || contador >= 1100) {
-                valor = random.nextFloat(18.0f, 24.0f);
-            } else {
-                valor = random.nextFloat(24.0f, 35.0f);
-                contador = 0;
-            }
+            valor = random.nextFloat(18.0f, 35.0f);
 
             // Creamos el DTO
             LecturaDTO lectura = new LecturaDTO(
-                idSensor,
-                macAddress,
-                marca,
-                modelo,
-                "Temperatura",
-                magnitud,
-                valor,
-                new Date()
+                    idSensor,
+                    macAddress,
+                    marca,
+                    modelo,
+                    "Temperatura",
+                    magnitud,
+                    valor,
+                    new Date()
             );
 
             // Serializamos a JSON

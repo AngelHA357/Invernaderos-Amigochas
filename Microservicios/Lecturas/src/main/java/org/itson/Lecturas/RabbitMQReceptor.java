@@ -8,20 +8,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Component
 public class RabbitMQReceptor {
-    private static final String QUEUE_NAME = "lecturas";
-    private final AtomicReference<LecturaDTO> ultimaLectura = new AtomicReference<>();
 
     @Autowired
     private ProcesadorLecturas procesadorLecturas;
+    private static final String QUEUE_NAME = "lecturas";
+    private final AtomicReference<LecturaDTO> ultimaLectura = new AtomicReference<>();
+    private final ConcurrentHashMap<String, LecturaDTO> lecturasPorSensor = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void init() {
         // Iniciar el guardador de lecturas con nuestra referencia atómica
-        procesadorLecturas.iniciar(ultimaLectura);
+        procesadorLecturas.iniciar(lecturasPorSensor);
 
         // Thread para recibir mensajes de RabbitMQ
         new Thread(() -> {
@@ -37,11 +39,13 @@ public class RabbitMQReceptor {
                     String mensaje = new String(delivery.getBody(), StandardCharsets.UTF_8);
                     Gson gson = new Gson();
                     LecturaDTO lectura = gson.fromJson(mensaje, LecturaDTO.class);
-                    ultimaLectura.set(lectura); // Actualiza la última lectura recibida
+
+                    lecturasPorSensor.put(lectura.getIdSensor(), lectura);
                     System.out.println("Lectura recibida");
                 };
 
-                channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {});
+                channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {
+                });
 
                 // Esperar indefinidamente para mantener el hilo principal vivo
                 Thread.currentThread().join();

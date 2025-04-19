@@ -28,15 +28,19 @@ public class Sensor {
     private String macAddress;
     private String marca;
     private String modelo;
+    private String tipoSensor;
+    private String magnitud;
     private ObjectId idInvernadero;
     private String sector;
     private String fila;
 
-    public Sensor(String idSensor, String macAddress, String marca, String modelo, ObjectId idInvernadero, String sector, String fila) {
+    public Sensor(String idSensor, String macAddress, String marca, String modelo, String tipoSensor, String magnitud, ObjectId idInvernadero, String sector, String fila) {
         this.idSensor = idSensor;
         this.macAddress = macAddress;
         this.marca = marca;
         this.modelo = modelo;
+        this.tipoSensor = tipoSensor;
+        this.magnitud = magnitud;
         this.idInvernadero = idInvernadero;
         this.sector = sector;
         this.fila = fila;
