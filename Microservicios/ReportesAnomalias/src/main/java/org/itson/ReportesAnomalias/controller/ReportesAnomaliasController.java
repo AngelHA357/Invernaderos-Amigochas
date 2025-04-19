@@ -66,8 +66,8 @@ public class ReportesAnomaliasController {
         }
     }
 
-    @GetMapping("/{magnitud}")
-    public ResponseEntity<?> obtenerAnomaliasPorMagnitud(@RequestParam("magnitud") String magnitud) {
+    @GetMapping("/magnitud/{magnitud}")
+    public ResponseEntity<?> obtenerAnomaliasPorMagnitud(@PathVariable("magnitud") String magnitud) {
         try {
             List<AnomaliaDTO> anomalias = reportesAnomaliasService.obtenerAnomaliasPorMagnitud(magnitud);
             ResponseEntity<List<AnomaliaDTO>> response = new ResponseEntity<>(anomalias, HttpStatus.OK);
