@@ -5,7 +5,7 @@ import org.itson.Lecturas.collections.Lectura;
 import org.itson.Lecturas.dtos.LecturaDTO;
 import org.itson.Lecturas.excepciones.LecturasException;
 import org.itson.Lecturas.persistence.ILecturasRepository;
-import org.itson.Lecturas.proto.ClienteGestionSensoresGRPC;
+import org.itson.Lecturas.proto.ClienteGestionSensoresGrpc;
 import org.itson.grpc.SensorLectura;
 import org.itson.grpc.SensorRespuesta;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class LecturaService {
     private ILecturasRepository lecturasRepository;
 
     @Autowired
-    private ClienteGestionSensoresGRPC clienteGRPC;
+    private ClienteGestionSensoresGrpc clienteGRPC;
 
     /**
      * Método que obtiene todas las lecturas.
@@ -112,7 +112,8 @@ public class LecturaService {
                 lecturaColeccion.getFechaHora(),
                 sensorRespuestaGRPC.getNombreInvernadero(),
                 sensorRespuestaGRPC.getSector(),
-                sensorRespuestaGRPC.getFila()
+                sensorRespuestaGRPC.getFila(),
+                sensorRespuestaGRPC.getEstado()
         );
     }
 
@@ -133,6 +134,7 @@ public class LecturaService {
                             .setModelo(lecturaDTO.getModelo())
                             .setTipoSensor(lecturaDTO.getTipoLectura())
                             .setMagnitud(lecturaDTO.getMagnitud())
+                            .setEstado(lecturaDTO.isEstado())
                             .build());
         } catch (StatusRuntimeException sre) {
             System.err.println("No se pudo conectar al microservicio de gestión de sensores: " + sre.getMessage());
@@ -152,7 +154,8 @@ public class LecturaService {
                 lecturaDTO.getFechaHora(),
                 sensorRespuestaGRPC.getNombreInvernadero(),
                 sensorRespuestaGRPC.getSector(),
-                sensorRespuestaGRPC.getFila()
+                sensorRespuestaGRPC.getFila(),
+                sensorRespuestaGRPC.getEstado()
         );
     }
 }

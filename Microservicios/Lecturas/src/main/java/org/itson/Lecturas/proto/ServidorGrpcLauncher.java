@@ -1,4 +1,4 @@
-package org.itson.GestionSensores.proto;
+package org.itson.Lecturas.proto;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -10,18 +10,18 @@ import org.springframework.stereotype.Component;
 public class ServidorGrpcLauncher {
 
     @Autowired
-    private ServidorGestionSensoresGrpc servidorGestionSensoresGRPC;
+    private ServidorEstadoSensoresGrpc servidorEstadoSensoresGrpc;
 
     private Server server;
 
     @PostConstruct
     public void start() throws Exception {
-        server = ServerBuilder.forPort(50051)
-                .addService(servidorGestionSensoresGRPC)
+        server = ServerBuilder.forPort(50052)
+                .addService(servidorEstadoSensoresGrpc)
                 .build()
                 .start();
 
-        System.out.println("Servidor gRPC levantado en el puerto 50051");
+        System.out.println("Servidor gRPC levantado en el puerto 50052");
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Apagando servidor gRPC...");

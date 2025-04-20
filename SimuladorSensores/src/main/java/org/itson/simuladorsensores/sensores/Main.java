@@ -61,7 +61,7 @@ public class Main {
             if (tipoSensor.equalsIgnoreCase("Humedad")) {
                 sensor = new SensorHumedad("WachoSensor", "su ip", "Nueva Palmira", "NyE", client);
             } else if (tipoSensor.equalsIgnoreCase("Temperatura")) {
-                sensor = new SensorTemperatura("SEN-0202", "OLA SOY UNA MAC ADDRESS", "TempTech", "T-300", magnitud, client);
+                sensor = new SensorTemperatura("SEN-0101", "AA:BB:CC:DD:EE:FF", "TempTech", "T-300", magnitud, client);
             }
 
             // Creamos un servicio

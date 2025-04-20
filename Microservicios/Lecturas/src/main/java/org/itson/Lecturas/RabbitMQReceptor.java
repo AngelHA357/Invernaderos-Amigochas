@@ -1,15 +1,20 @@
 package org.itson.Lecturas;
 
 import com.google.gson.Gson;
-import com.rabbitmq.client.*;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.DeliverCallback;
 import jakarta.annotation.PostConstruct;
 import org.itson.Lecturas.dtos.LecturaDTO;
+import org.itson.Lecturas.proto.ClienteGestionSensoresGrpc;
+import org.itson.grpc.SensorRespuesta;
+import org.itson.grpc.SensoresRespuesta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Component
 public class RabbitMQReceptor {
@@ -18,10 +23,19 @@ public class RabbitMQReceptor {
     private ProcesadorLecturas procesadorLecturas;
     private static final String QUEUE_NAME = "lecturas_crudas";
     private final ConcurrentHashMap<String, LecturaDTO> lecturasPorSensor = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<String, Boolean> estadoSensores = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, Boolean> estadoSensores = new ConcurrentHashMap<>();
+
+    @Autowired
+    private ClienteGestionSensoresGrpc clienteGestionSensoresGrpc;
 
     @PostConstruct
     public void init() {
+        // Obtener todos los sensores al iniciar el receptor
+        SensoresRespuesta sensores = clienteGestionSensoresGrpc.obtenerTodosSensores();
+        for (SensorRespuesta sensor : sensores.getSensoresList()) {
+            actualizarEstado(sensor.getIdSensor(), sensor.getEstado());
+        }
+
         // Iniciar el guardador de lecturas con nuestra referencia atómica
         procesadorLecturas.iniciar(lecturasPorSensor);
 
@@ -40,10 +54,13 @@ public class RabbitMQReceptor {
                     Gson gson = new Gson();
                     LecturaDTO lectura = gson.fromJson(mensaje, LecturaDTO.class);
                     // Si el valor asociado al ID sensor es positivo, está activo, si no, está desactivado.
-                    //if (estadoSensores.get(lectura.getIdSensor())) {
+                    if (estadoSensores.containsKey(lectura.getIdSensor()) && estadoSensores.get(lectura.getIdSensor())) {
                         lecturasPorSensor.put(lectura.getIdSensor(), lectura);
                         System.out.println("Lectura recibida");
-                    //}
+                    } else if (!estadoSensores.containsKey(lectura.getIdSensor())) {
+                        lecturasPorSensor.put(lectura.getIdSensor(), lectura);
+                        System.out.println("Lectura anónima recibida");
+                    }
                 };
 
                 channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {
@@ -55,5 +72,9 @@ public class RabbitMQReceptor {
                 System.err.println("Error en el receptor: " + e.getMessage());
             }
         }).start();
+    }
+
+    public void actualizarEstado(String idSensor, boolean estado) {
+        estadoSensores.put(idSensor, estado);
     }
 }

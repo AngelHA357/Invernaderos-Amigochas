@@ -10,6 +10,8 @@ spring:
       uri: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
 
 grpc:
+  server:
+    port: 9091
   client:
     gestion-sensores:
       address: static://localhost:50051

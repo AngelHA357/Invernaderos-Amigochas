@@ -33,7 +33,7 @@ public class Lectura {
     private String fila;
     private boolean estado;
 
-    public Lectura(String idSensor, String macAddress, String marca, String modelo, String tipoLectura, String magnitud, float valor, Date fechaHora, String invernadero, String sector, String fila) {
+    public Lectura(String idSensor, String macAddress, String marca, String modelo, String tipoLectura, String magnitud, float valor, Date fechaHora, String invernadero, String sector, String fila, boolean estado) {
         this.idSensor = idSensor;
         this.macAddress = macAddress;
         this.marca = marca;
@@ -45,5 +45,6 @@ public class Lectura {
         this.invernadero = invernadero;
         this.sector = sector;
         this.fila = fila;
+        this.estado = estado;
     }
 }

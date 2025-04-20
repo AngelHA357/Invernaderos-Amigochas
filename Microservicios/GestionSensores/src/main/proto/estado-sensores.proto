@@ -8,7 +8,7 @@ option java_package = "org.itson.grpc"; // Paquete donde se generarán las clase
 option java_outer_classname = "EstadoSensoresProto"; // Nombre de la clase externa por default.
 
 // Servidor
-service EstadoSensorServidor {
+service EstadoSensoresServidor {
   rpc ActualizarEstado (EstadoPeticion) returns (EstadoRespuesta);
 }
 

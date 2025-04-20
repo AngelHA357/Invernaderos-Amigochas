@@ -4,10 +4,11 @@ import com.mongodb.MongoWriteException;
 import org.bson.types.ObjectId;
 import org.itson.GestionSensores.collections.Invernadero;
 import org.itson.GestionSensores.collections.Sensor;
-import org.itson.GestionSensores.excepciones.GestionSensoresException;
-import org.itson.GestionSensores.persistence.IInvernaderosRepository;
-import org.itson.GestionSensores.persistence.IGestionSensoresRepository;
 import org.itson.GestionSensores.dtos.SensorDTO;
+import org.itson.GestionSensores.excepciones.GestionSensoresException;
+import org.itson.GestionSensores.persistence.IGestionSensoresRepository;
+import org.itson.GestionSensores.persistence.IInvernaderosRepository;
+import org.itson.GestionSensores.proto.ClienteEstadoSensoresGrpc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,9 @@ public class GestionSensoresService {
 
     @Autowired
     private IInvernaderosRepository invernaderosRepository;
+
+    @Autowired
+    ClienteEstadoSensoresGrpc clienteEstadoSensoresGrpc;
 
     /**
      * Método que obtiene todos los sensores.
@@ -77,6 +81,7 @@ public class GestionSensoresService {
         }
         Sensor sensorEntidad = convertirSensorDTOEntidad(sensorDTO);
         Sensor resultado = gestionSensoresRepository.save(sensorEntidad);
+        clienteEstadoSensoresGrpc.actualizarEstado(resultado.getIdSensor(), resultado.isEstado());
         return convertirSensorEntidadDTO(resultado);
     }
 
@@ -108,6 +113,7 @@ public class GestionSensoresService {
             // Si llegamos a esta parte es porque sí existe el sensor.
             try {
                 resultado = gestionSensoresRepository.save(sensorEntidad);
+                clienteEstadoSensoresGrpc.actualizarEstado(resultado.getIdSensor(), resultado.isEstado());
             } catch (MongoWriteException mwe) {
                 throw new GestionSensoresException("Ya hay un sensor con la dirección MAC: " + sensorDTO.getMacAddress() + ".");
             }

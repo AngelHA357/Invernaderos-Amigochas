@@ -1,20 +1,20 @@
 package org.itson.GestionSensores.proto;
 
 
+import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import org.itson.GestionSensores.collections.Invernadero;
 import org.itson.GestionSensores.dtos.SensorDTO;
 import org.itson.GestionSensores.excepciones.GestionSensoresException;
 import org.itson.GestionSensores.service.GestionSensoresService;
-import org.itson.grpc.GestionSensoresServidorGrpc;
-import org.itson.grpc.SensorLectura;
-import org.itson.grpc.SensorPeticion;
-import org.itson.grpc.SensorRespuesta;
+import org.itson.grpc.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class ServidorGestionSensoresGRPC extends GestionSensoresServidorGrpc.GestionSensoresServidorImplBase {
+public class ServidorGestionSensoresGrpc extends GestionSensoresServidorGrpc.GestionSensoresServidorImplBase {
     @Autowired
     private GestionSensoresService gestionSensoresService;
 
@@ -63,5 +63,41 @@ public class ServidorGestionSensoresGRPC extends GestionSensoresServidorGrpc.Ges
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();
+    }
+
+    @Override
+    public void getTodosSensores(Empty request, StreamObserver<SensoresRespuesta> responseObserver) {
+        try {
+            // Obtiene la lista de sensores desde el servicio
+            List<SensorDTO> sensores = gestionSensoresService.obtenerTodosSensores();
+
+            // Construye la respuesta con la lista de sensores
+            SensoresRespuesta.Builder respuestaBuilder = SensoresRespuesta.newBuilder();
+            for (SensorDTO sensor : sensores) {
+                SensorRespuesta sensorRespuesta = SensorRespuesta.newBuilder()
+                        .setIdSensor(sensor.getIdSensor())
+                        .setMacAddress(sensor.getMacAddress())
+                        .setMarca(sensor.getMarca())
+                        .setModelo(sensor.getModelo())
+                        .setTipoSensor(sensor.getTipoSensor())
+                        .setMagnitud(sensor.getMagnitud())
+                        .setIdInvernadero(sensor.getIdInvernadero())
+                        .setNombreInvernadero(sensor.getNombreInvernadero())
+                        .setSector(sensor.getSector())
+                        .setFila(sensor.getFila())
+                        .setEstado(sensor.isEstado())
+                        .build();
+
+                // Agrega cada sensor a la lista de la respuesta
+                respuestaBuilder.addSensores(sensorRespuesta);
+            }
+
+            // Envía la respuesta completa y cierra el stream
+            responseObserver.onNext(respuestaBuilder.build());
+            responseObserver.onCompleted();
+        } catch (GestionSensoresException e) {
+            // Manejo de excepciones
+            responseObserver.onError(e);
+        }
     }
 }

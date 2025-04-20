@@ -7,9 +7,13 @@ option java_multiple_files = true; // Indica que habrá una clase por mensaje y 
 option java_package = "org.itson.grpc"; // Paquete donde se generarán las clases.
 option java_outer_classname = "GestionSensoresProto"; // Nombre de la clase externa por default.
 
+// Importar el tipo Empty para peticiones vacías
+import "google/protobuf/empty.proto";
+
 // Servidor
 service GestionSensoresServidor {
   rpc GetSensor (SensorPeticion) returns (SensorRespuesta);
+  rpc GetTodosSensores (google.protobuf.Empty) returns (SensoresRespuesta);
 }
 
 // Mensaje de solicitud
@@ -25,6 +29,7 @@ message SensorLectura {
   string modelo = 4;
   string tipoSensor = 5;
   string magnitud = 6;
+  bool estado = 7;
 }
 
 // Mensaje de respuesta
@@ -40,4 +45,9 @@ message SensorRespuesta {
   string sector = 9;
   string fila = 10;
   bool estado = 11;
+}
+
+// Lista de sensores
+message SensoresRespuesta {
+  repeated SensorRespuesta sensores = 1;
 }
