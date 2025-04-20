@@ -130,7 +130,7 @@ public class GestionSensoresController {
      *
      * @return La respuesta HTTP con el código 200. Se devuelve un error si no se encontró el sensor.
      */
-    @GetMapping("/invernaderos")
+    @GetMapping({"/invernaderos", "/invernaderos/"})
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> obtenerTodosInvernaderos() {
         try {
