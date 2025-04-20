@@ -1,20 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Alerta from './TarjetaAlerta';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
-import invernaderosMock from '../mocks/invernaderos.json';
-import sensoresMock from '../mocks/sensores.json';
 
 function AlertasRecientes() {
-  const [filtroActivo, setFiltroActivo] = useState('Todos');
-  const [invernaderoSeleccionado, setInvernaderoSeleccionado] = useState('');
-  const [sensorSeleccionado, setSensorSeleccionado] = useState('');
-  const [sensoresDisponibles, setSensoresDisponibles] = useState([]);
   const [fechaInicio, setFechaInicio] = useState('');
   const [fechaFin, setFechaFin] = useState('');
   const [alertasFiltradas, setAlertasFiltradas] = useState([]);
-
-  // Lista de tipos de magnitudes disponibles en el sistema
-  const magnitudes = ['Todos', 'Temperatura', 'Humedad', 'CO2'];
 
   const alertas = [
     {
@@ -127,69 +118,6 @@ function AlertasRecientes() {
     setFechaInicio(weekAgo.toISOString().slice(0, 10));
   }, []);
 
-  useEffect(() => {
-    filtrarAlertas();
-  }, [filtroActivo, invernaderoSeleccionado, sensorSeleccionado]);
-
-  const filtrarAlertas = () => {
-    let resultado = [...alertas];
-    
-    // Filtrar por tipo (Temperatura, Humedad, CO2, etc.)
-    if (filtroActivo !== 'Todos') {
-      resultado = resultado.filter(alerta => 
-        alerta.descripcion.toLowerCase().includes(filtroActivo.toLowerCase())
-      );
-    }
-    
-    // Filtrar por invernadero
-    if (invernaderoSeleccionado) {
-      const invernadero = invernaderosMock.find(inv => inv.id === invernaderoSeleccionado);
-      if (invernadero) {
-        resultado = resultado.filter(alerta => 
-          alerta.invernadero.toLowerCase() === invernadero.name.toLowerCase()
-        );
-      }
-    }
-    
-    // Filtrar por sensor
-    if (sensorSeleccionado && invernaderoSeleccionado) {
-      const sensor = sensoresMock.find(s => s.id === sensorSeleccionado);
-      if (sensor) {
-        // Filtrar alertas según el tipo de sensor seleccionado
-        resultado = resultado.filter(alerta => {
-          if (sensor.type === 'Temperatura') {
-            return alerta.descripcion.toLowerCase().includes('temperatura');
-          } else if (sensor.type === 'Humedad') {
-            return alerta.descripcion.toLowerCase().includes('humedad');
-          } else if (sensor.type === 'CO2') {
-            return alerta.descripcion.toLowerCase().includes('co2');
-          }
-          return false;
-        });
-      }
-    }
-    
-    setAlertasFiltradas(resultado);
-  };
-
-  const handleFiltroChange = (e) => {
-    setFiltroActivo(e.target.value);
-  };
-
-  const handleInvernaderoChange = (e) => {
-    const invId = e.target.value;
-    setInvernaderoSeleccionado(invId);
-    setSensorSeleccionado('');
-    
-    // Filtrar sensores según el invernadero seleccionado
-    if (invId) {
-      const sensoresFiltrados = sensoresMock.filter(sensor => sensor.invernaderoId === invId);
-      setSensoresDisponibles(sensoresFiltrados);
-    } else {
-      setSensoresDisponibles([]);
-    }
-  };
-
   return (
     <>
     <BarraNavegacion />
@@ -198,7 +126,7 @@ function AlertasRecientes() {
         <h1 className="text-2xl font-bold text-gray-800 mb-1">Alertas recientes</h1>
         <p className="text-sm text-gray-500 mb-6">Últimas alertas detectadas por el sistema</p>
 
-        {/* Barra de filtros */}
+        {/* Barra de fechas (sin funcionalidad de filtro por ahora) */}
         <div className="bg-white p-4 rounded-lg shadow-sm mb-6 border-l-4 border-green-500">
           {/* Selector de fechas */}
           <div className="flex flex-wrap gap-3 mb-4">
@@ -221,54 +149,6 @@ function AlertasRecientes() {
               />
             </div>
           </div>
-
-          {/* Combobox para filtrar por magnitudes */}
-          <div className="mb-4">
-            <label htmlFor="magnitud" className="block text-sm font-medium text-green-700 mb-1">Magnitud</label>
-            <select 
-              id="magnitud" 
-              className="w-full sm:w-64 px-3 py-2 border border-green-200 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300 focus:border-green-300"
-              value={filtroActivo}
-              onChange={handleFiltroChange}
-            >
-              {magnitudes.map((magnitud) => (
-                <option key={magnitud} value={magnitud}>{magnitud}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Combobox para invernaderos y sensores */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-              <label htmlFor="invernadero" className="block text-sm font-medium text-green-700 mb-1">Invernadero</label>
-              <select 
-                id="invernadero" 
-                className="w-full px-3 py-2 border border-green-200 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300 focus:border-green-300"
-                value={invernaderoSeleccionado}
-                onChange={handleInvernaderoChange}
-              >
-                <option value="">Todos los invernaderos</option>
-                {invernaderosMock.map(inv => (
-                  <option key={inv.id} value={inv.id}>{inv.name}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="sensor" className="block text-sm font-medium text-green-700 mb-1">Sensor</label>
-              <select 
-                id="sensor"
-                className="w-full px-3 py-2 border border-green-200 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300 focus:border-green-300 disabled:bg-gray-100 disabled:text-gray-500"
-                value={sensorSeleccionado}
-                onChange={(e) => setSensorSeleccionado(e.target.value)}
-                disabled={!invernaderoSeleccionado}
-              >
-                <option value="">Todos los sensores</option>
-                {sensoresDisponibles.map(sensor => (
-                  <option key={sensor.id} value={sensor.id}>{sensor.id} - {sensor.type}</option>
-                ))}
-              </select>
-            </div>
-          </div>
         </div>
 
         {/* Lista de alertas */}
@@ -285,7 +165,7 @@ function AlertasRecientes() {
             ))
           ) : (
             <div className="p-6 text-center text-gray-500">
-              No se encontraron alertas con los filtros seleccionados
+              No se encontraron alertas
             </div>
           )}
         </div>

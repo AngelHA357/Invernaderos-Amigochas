@@ -22,6 +22,7 @@ import java.util.Optional;
  */
 @Service
 public class GestionSensoresService {
+
     // Para la inyección de dependencias.
     @Autowired
     private IGestionSensoresRepository gestionSensoresRepository;
@@ -39,10 +40,9 @@ public class GestionSensoresService {
      * @throws GestionSensoresException en caso de que no se haya encontrado ningún sensor.
      */
     public List<SensorDTO> obtenerTodosSensores() throws GestionSensoresException {
-        List<Sensor> sensoresEntidad = gestionSensoresRepository.findAll(); // Se obtienen los sensores.
+        List<Sensor> sensoresEntidad = gestionSensoresRepository.findAll();
         if (!sensoresEntidad.isEmpty()) {
-            List<SensorDTO> sensoresDTO = convertirSensoresEntidadDTO(sensoresEntidad); // Se convierten a DTO.
-            return sensoresDTO; // Se devuelven.
+            return convertirSensoresEntidadDTO(sensoresEntidad);
         } else {
             throw new GestionSensoresException("No se encontró ningún sensor.");
         }
@@ -56,11 +56,9 @@ public class GestionSensoresService {
      * @throws GestionSensoresException En caso de que no se haya encontrado nada.
      */
     public SensorDTO obtenerSensorPorId(String idSensor) throws GestionSensoresException {
-        Optional<Sensor> sensorEntidad = gestionSensoresRepository.findByIdSensor(idSensor); // Se busca el sensor.
+        Optional<Sensor> sensorEntidad = gestionSensoresRepository.findByIdSensor(idSensor);
         if (sensorEntidad.isPresent()) {
-            // Si se obtuvo algo, se convierte a DTO y se regresa eso.
-            SensorDTO sensorDTO = convertirSensorEntidadDTO(sensorEntidad.get());
-            return sensorDTO;
+            return convertirSensorEntidadDTO(sensorEntidad.get());
         } else {
             throw new GestionSensoresException("Sensor con ID " + idSensor + " no encontrado.");
         }
@@ -74,15 +72,30 @@ public class GestionSensoresService {
      * @throws GestionSensoresException En caso de que ocurra un error durante el registro.
      */
     public SensorDTO registrarSensor(SensorDTO sensorDTO) throws GestionSensoresException {
+        // Validar unicidad de macAddress e idSensor
         if (gestionSensoresRepository.findByMacAddress(sensorDTO.getMacAddress()).isPresent()) {
             throw new GestionSensoresException("Ya hay un sensor con la dirección MAC: " + sensorDTO.getMacAddress() + ".");
         }
         if (gestionSensoresRepository.findByIdSensor(sensorDTO.getIdSensor()).isPresent()) {
             throw new GestionSensoresException("Ya hay un sensor con el ID: " + sensorDTO.getIdSensor() + ".");
         }
+        // Validar que el idInvernadero exista
+        obtenerInvernaderoPorId(new ObjectId(sensorDTO.getIdInvernadero()));
+        // Convertir DTO a entidad y guardar
         Sensor sensorEntidad = convertirSensorDTOEntidad(sensorDTO);
-        Sensor resultado = gestionSensoresRepository.save(sensorEntidad);
-        clienteEstadoSensoresGrpc.actualizarEstados();
+        Sensor resultado;
+        try {
+            resultado = gestionSensoresRepository.save(sensorEntidad);
+        } catch (MongoWriteException mwe) {
+            throw new GestionSensoresException("Error al guardar el sensor: " + mwe.getMessage());
+        }
+        // Actualizar estados gRPC
+        try {
+            clienteEstadoSensoresGrpc.actualizarEstados();
+        } catch (Exception e) {
+            System.err.println("Error al actualizar estados gRPC: " + e.getMessage());
+        }
+        // Convertir entidad a DTO y devolver
         return convertirSensorEntidadDTO(resultado);
     }
 
@@ -94,31 +107,36 @@ public class GestionSensoresService {
      * @throws GestionSensoresException En caso de que ocurra un error durante la edición.
      */
     public SensorDTO editarSensor(SensorDTO sensorDTO) throws GestionSensoresException {
-        Sensor resultado = null;
         Optional<Sensor> sensorObtenido = gestionSensoresRepository.findById(new ObjectId(sensorDTO.get_id()));
-
         if (sensorObtenido.isPresent()) {
-            // Si se encontró algo, se convierte a entidad.
+            // Actualizar campos del sensor
             Sensor sensorEntidad = sensorObtenido.get();
+            sensorEntidad.setIdSensor(sensorDTO.getIdSensor());
             sensorEntidad.setMacAddress(sensorDTO.getMacAddress());
             sensorEntidad.setMarca(sensorDTO.getMarca());
             sensorEntidad.setModelo(sensorDTO.getModelo());
             sensorEntidad.setTipoSensor(sensorDTO.getTipoSensor());
             sensorEntidad.setMagnitud(sensorDTO.getMagnitud());
-            // Si esto tira excepción es porque no existe el invernadero.
+            // Validar que el idInvernadero exista
             obtenerInvernaderoPorId(new ObjectId(sensorDTO.getIdInvernadero()));
             sensorEntidad.setIdInvernadero(new ObjectId(sensorDTO.getIdInvernadero()));
             sensorEntidad.setSector(sensorDTO.getSector());
             sensorEntidad.setFila(sensorDTO.getFila());
             sensorEntidad.setEstado(sensorDTO.isEstado());
-            // Si llegamos a esta parte es porque sí existe el sensor.
+            // Guardar sensor actualizado
+            Sensor resultado;
             try {
                 resultado = gestionSensoresRepository.save(sensorEntidad);
-                clienteEstadoSensoresGrpc.actualizarEstados();
             } catch (MongoWriteException mwe) {
                 throw new GestionSensoresException("Ya hay un sensor con la dirección MAC: " + sensorDTO.getMacAddress() + ".");
             }
-            // Lo enviamos convertido en DTO.
+            // Actualizar estados gRPC
+            try {
+                clienteEstadoSensoresGrpc.actualizarEstados();
+            } catch (Exception e) {
+                System.err.println("Error al actualizar estados gRPC: " + e.getMessage());
+            }
+            // Convertir entidad a DTO y devolver
             return convertirSensorEntidadDTO(resultado);
         } else {
             throw new GestionSensoresException("Sensor con ID " + sensorDTO.get_id() + " no encontrado.");
@@ -133,22 +151,12 @@ public class GestionSensoresService {
      */
     public void eliminarSensor(String id) throws GestionSensoresException {
         Optional<Sensor> sensorObtenido = gestionSensoresRepository.findById(new ObjectId(id));
-        System.out.println(sensorObtenido);
         if (sensorObtenido.isPresent()) {
-            gestionSensoresRepository.delete(sensorObtenido.get()); // Si llegamos a esta parte es porque sí existe el sensor.
+            gestionSensoresRepository.delete(sensorObtenido.get());
         } else {
             throw new GestionSensoresException("Sensor con ID " + id + " no encontrado.");
         }
     }
-
-    /**
-     *    _____ ____  _   ___      ________ _____   _____  ____  _____  ______  _____
-     *   / ____/ __ \| \ | \ \    / /  ____|  __ \ / ____|/ __ \|  __ \|  ____|/ ____|
-     *  | |   | |  | |  \| |\ \  / /| |__  | |__) | (___ | |  | | |__) | |__  | (___
-     *  | |   | |  | | . ` | \ \/ / |  __| |  _  / \___ \| |  | |  _  /|  __|  \___ \
-     *  | |___| |__| | |\  |  \  /  | |____| | \ \ ____) | |__| | | \ \| |____ ____) |
-     *   \_____\____/|_| \_|   \/   |______|_|  \_\_____/ \____/|_|  \_\______|_____/
-     */
 
     /**
      * Método que convierte una lista de sensores de tipo Entidad a tipo DTO.
@@ -156,7 +164,7 @@ public class GestionSensoresService {
      * @param sensoresEntidad Lista Entidad a convertir.
      * @return La lista de sensores de tipo DTO.
      */
-    private List<SensorDTO> convertirSensoresEntidadDTO(List<Sensor> sensoresEntidad) throws GestionSensoresException {
+    private List<SensorDTO> convertirSensoresEntidadDTO(List<Sensor> sensoresEntidad) {
         List<SensorDTO> sensoresDTO = new ArrayList<>();
         for (Sensor sensorEntidad : sensoresEntidad) {
             sensoresDTO.add(convertirSensorEntidadDTO(sensorEntidad));
@@ -170,7 +178,7 @@ public class GestionSensoresService {
      * @param sensorEntidad Sensor Entidad a convertir.
      * @return El sensor de tipo DTO.
      */
-    public SensorDTO convertirSensorEntidadDTO(Sensor sensorEntidad) throws GestionSensoresException {
+    public SensorDTO convertirSensorEntidadDTO(Sensor sensorEntidad) {
         return new SensorDTO(
                 sensorEntidad.get_id().toString(),
                 sensorEntidad.getIdSensor(),
@@ -180,7 +188,6 @@ public class GestionSensoresService {
                 sensorEntidad.getTipoSensor(),
                 sensorEntidad.getMagnitud(),
                 sensorEntidad.getIdInvernadero().toString(),
-                obtenerInvernaderoPorId(sensorEntidad.getIdInvernadero()).getNombre(),
                 sensorEntidad.getSector(),
                 sensorEntidad.getFila(),
                 sensorEntidad.isEstado()
@@ -193,7 +200,7 @@ public class GestionSensoresService {
      * @param sensorDTO Sensor DTO a convertir.
      * @return El sensor de tipo Entidad.
      */
-    public Sensor convertirSensorDTOEntidad(SensorDTO sensorDTO) throws GestionSensoresException {
+    public Sensor convertirSensorDTOEntidad(SensorDTO sensorDTO) {
         return new Sensor(
                 sensorDTO.getIdSensor(),
                 sensorDTO.getMacAddress(),
@@ -207,6 +214,12 @@ public class GestionSensoresService {
         );
     }
 
+    /**
+     * Método que convierte una lista de invernaderos de tipo Entidad a tipo DTO.
+     *
+     * @param invernaderosColeccion Lista Entidad a convertir.
+     * @return La lista de invernaderos de tipo DTO.
+     */
     public List<InvernaderoDTO> convertirInvernaderosColeccionDTO(List<Invernadero> invernaderosColeccion) {
         List<InvernaderoDTO> invernaderosDTO = new ArrayList<>();
         for (Invernadero invernaderoColeccion : invernaderosColeccion) {
@@ -215,6 +228,12 @@ public class GestionSensoresService {
         return invernaderosDTO;
     }
 
+    /**
+     * Método que convierte invernadero de tipo Entidad a tipo DTO.
+     *
+     * @param invernaderoEntidad Invernadero Entidad a convertir.
+     * @return El invernadero de tipo DTO.
+     */
     public InvernaderoDTO convertirInvernaderoColeccionDTO(Invernadero invernaderoEntidad) {
         return new InvernaderoDTO(
                 invernaderoEntidad.get_id().toString(),
@@ -225,15 +244,6 @@ public class GestionSensoresService {
     }
 
     /**
-     *   _____ _   ___      ________ _____  _   _          _____  ______ _____   ____   _____
-     *  |_   _| \ | \ \    / /  ____|  __ \| \ | |   /\   |  __ \|  ____|  __ \ / __ \ / ____|
-     *    | | |  \| |\ \  / /| |__  | |__) |  \| |  /  \  | |  | | |__  | |__) | |  | | (___
-     *    | | | . ` | \ \/ / |  __| |  _  /| . ` | / /\ \ | |  | |  __| |  _  /| |  | |\___ \
-     *   _| |_| |\  |  \  /  | |____| | \ \| |\  |/ ____ \| |__| | |____| | \ \| |__| |____) |
-     *  |_____|_| \_|   \/   |______|_|  \_\_| \_/_/    \_\_____/|______|_|  \_\\____/|_____/
-     */
-
-    /**
      * Método para obtener un invernadero dado su nombre.
      *
      * @param nombreInvernadero El nombre del invernadero a buscar.
@@ -242,7 +252,7 @@ public class GestionSensoresService {
      */
     public Invernadero obtenerInvernaderoPorNombre(String nombreInvernadero) throws GestionSensoresException {
         Optional<Invernadero> invernadero = invernaderosRepository.findByNombre(nombreInvernadero);
-        if (invernadero.isPresent()) { // Si se obtuvo algo, se regresa.
+        if (invernadero.isPresent()) {
             return invernadero.get();
         } else {
             throw new GestionSensoresException("No se encontró el invernadero.");
@@ -258,18 +268,23 @@ public class GestionSensoresService {
      */
     private Invernadero obtenerInvernaderoPorId(ObjectId idInvernadero) throws GestionSensoresException {
         Optional<Invernadero> invernadero = invernaderosRepository.findById(idInvernadero);
-        if (invernadero.isPresent()) { // Si se obtuvo algo, se regresa.
+        if (invernadero.isPresent()) {
             return invernadero.get();
         } else {
-            throw new GestionSensoresException("No se encontró el invernadero.");
+            throw new GestionSensoresException("No se encontró el invernadero con ID: " + idInvernadero.toString());
         }
     }
 
+    /**
+     * Método que obtiene todos los invernaderos.
+     *
+     * @return Una lista con todos los invernaderos encontrados.
+     * @throws GestionSensoresException En caso de que no se haya encontrado ningún invernadero.
+     */
     public List<InvernaderoDTO> obtenerTodosInvernaderos() throws GestionSensoresException {
-        List<Invernadero> invernaderosColeccion = invernaderosRepository.findAll(); // Se obtienen los invernaderos.
+        List<Invernadero> invernaderosColeccion = invernaderosRepository.findAll();
         if (!invernaderosColeccion.isEmpty()) {
-            List<InvernaderoDTO> invernaderosDTO = convertirInvernaderosColeccionDTO(invernaderosColeccion); // Se convierten a DTO.
-            return invernaderosDTO; // Se devuelven.
+            return convertirInvernaderosColeccionDTO(invernaderosColeccion);
         } else {
             throw new GestionSensoresException("No se encontró ningún invernadero.");
         }
@@ -283,17 +298,12 @@ public class GestionSensoresService {
      * @throws GestionSensoresException si no se encuentra el invernadero o no hay sensores asociados.
      */
     public List<SensorDTO> obtenerSensoresPorInvernadero(String idInvernadero) throws GestionSensoresException {
-        // Validar que el invernadero existe
         obtenerInvernaderoPorId(new ObjectId(idInvernadero));
-
-        // Buscar sensores asociados al invernadero
         List<Sensor> sensoresEntidad = gestionSensoresRepository.findByIdInvernadero(new ObjectId(idInvernadero));
-
         if (!sensoresEntidad.isEmpty()) {
             return convertirSensoresEntidadDTO(sensoresEntidad);
         } else {
             throw new GestionSensoresException("No se encontraron sensores para el invernadero con ID " + idInvernadero + ".");
         }
     }
-
 }

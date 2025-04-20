@@ -22,12 +22,11 @@ public class SensorDTO {
     private String tipoSensor;
     private String magnitud;
     private String idInvernadero;
-    private String nombreInvernadero;
     private String sector;
     private String fila;
     private boolean estado;
 
-    public SensorDTO(String idSensor, String macAddress, String marca, String modelo, String tipoSensor, String magnitud, String idInvernadero, String nombreInvernadero, String sector, String fila) {
+    public SensorDTO(String idSensor, String macAddress, String marca, String modelo, String tipoSensor, String magnitud, String idInvernadero, String sector, String fila) {
         this.idSensor = idSensor;
         this.macAddress = macAddress;
         this.marca = marca;
@@ -40,7 +39,7 @@ public class SensorDTO {
         this.estado = true;
     }
 
-    public SensorDTO(String idSensor, String macAddress, String marca, String modelo, String tipoSensor, String magnitud, String idInvernadero, String nombreInvernadero, String sector, String fila, boolean estado) {
+    public SensorDTO(String idSensor, String macAddress, String marca, String modelo, String tipoSensor, String magnitud, String idInvernadero, String sector, String fila, boolean estado) {
         this.idSensor = idSensor;
         this.macAddress = macAddress;
         this.marca = marca;
@@ -48,7 +47,6 @@ public class SensorDTO {
         this.tipoSensor = tipoSensor;
         this.magnitud = magnitud;
         this.idInvernadero = idInvernadero;
-        this.nombreInvernadero = nombreInvernadero;
         this.sector = sector;
         this.fila = fila;
         this.estado = estado;

@@ -36,7 +36,6 @@ public class ServidorGestionSensoresGrpc extends GestionSensoresServidorGrpc.Ges
                         sensorLectura.getTipoSensor(),
                         sensorLectura.getMagnitud(),
                         invernadero.get_id(),
-                        invernadero.getNombre(),
                         invernadero.getSectores().getFirst(),
                         invernadero.getFilas().getFirst()
                 );
@@ -55,7 +54,6 @@ public class ServidorGestionSensoresGrpc extends GestionSensoresServidorGrpc.Ges
                 .setTipoSensor(sensor.getTipoSensor())
                 .setMagnitud(sensor.getMagnitud())
                 .setIdInvernadero(sensor.getIdInvernadero())
-                .setNombreInvernadero(sensor.getNombreInvernadero())
                 .setSector(sensor.getSector())
                 .setFila(sensor.getFila())
                 .setEstado(sensor.isEstado())
@@ -82,7 +80,6 @@ public class ServidorGestionSensoresGrpc extends GestionSensoresServidorGrpc.Ges
                         .setTipoSensor(sensor.getTipoSensor())
                         .setMagnitud(sensor.getMagnitud())
                         .setIdInvernadero(sensor.getIdInvernadero())
-                        .setNombreInvernadero(sensor.getNombreInvernadero())
                         .setSector(sensor.getSector())
                         .setFila(sensor.getFila())
                         .setEstado(sensor.isEstado())

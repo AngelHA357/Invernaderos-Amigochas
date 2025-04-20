@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import logo from '../recursos/logo.png'; 
+import { FaLeaf } from 'react-icons/fa'; 
 
 function BarraNavegacion() {
   const location = useLocation();
@@ -30,11 +30,8 @@ function BarraNavegacion() {
     <nav className="bg-zinc-800 text-white flex items-center justify-between p-4 shadow-lg">
       <div className="flex items-center">
         <Link to="/invernaderos" className="flex items-center">
-          <img
-            src={logo}
-            alt="Logo Invernaderos Amigochas"
-            className="h-12 w-auto mr-3"
-          />
+          <FaLeaf className="h-12 w-12 mr-3 text-green-400" />
+          <span className="text-xl font-semibold">Invernaderos Amigochas</span>
         </Link>
       </div>
       

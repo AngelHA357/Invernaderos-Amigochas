@@ -151,7 +151,7 @@ public class GestionSensoresController {
      * @param idInvernadero ID del invernadero cuyos sensores se desean obtener.
      * @return La respuesta HTTP con la lista de sensores encontrados y el código 200. Se devuelve un error si no se encontró el invernadero o sensores.
      */
-    @GetMapping("/invernadero/{idInvernadero}/sensores")
+        @GetMapping("/invernadero/{idInvernadero}/sensores")
     public ResponseEntity<?> obtenerSensoresPorInvernadero(@PathVariable String idInvernadero) {
         try {
             List<SensorDTO> sensores = gestionSensoresService.obtenerSensoresPorInvernadero(idInvernadero);

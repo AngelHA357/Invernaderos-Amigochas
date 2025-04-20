@@ -1,136 +1,267 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { registrarSensor, obtenerInvernaderos } from '../services/sensorService';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
-import { registrarSensor, getAllInvernaderos } from '../services/sensorService';
 
 function AgregarSensor() {
+    const { invernaderoId } = useParams(); // Capturar el ID del invernadero desde la URL
     const navigate = useNavigate();
-    const { idInvernadero } = useParams(); // Capturar el ID del invernadero de la URL
-    
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [validationErrors, setValidationErrors] = useState({});
+    const [success, setSuccess] = useState(false);
     const [invernaderos, setInvernaderos] = useState([]);
     const [invernaderoSeleccionado, setInvernaderoSeleccionado] = useState(null);
+    const [sectores, setSectores] = useState([]);
+    const [filas, setFilas] = useState([]);
     
+    // Estado para el formulario
     const [formData, setFormData] = useState({
-        idSensor: '',
-        macAddress: '',
-        marca: '',
-        modelo: '',
-        tipoSensor: '',
-        magnitud: '%',
-        sector: '',
-        fila: '',
-        estado: true
+        idSensor: '',          // ID del sensor (String)
+        macAddress: '',        // Dirección MAC (String)
+        marca: '',             // Marca del sensor (String)
+        modelo: '',            // Modelo del sensor (String)
+        tipoSensor: '',        // Tipo de sensor (String)
+        magnitud: '',          // Unidad de medida (String)
+        idInvernadero: '',     // ID del invernadero (ObjectId)
+        sector: '',            // Sector del invernadero (String)
+        fila: '',              // Fila del invernadero (String)
+        estado: true           // Estado del sensor (Boolean)
     });
 
-    const [errors, setErrors] = useState({});
-    const [showModal, setShowModal] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [apiError, setApiError] = useState('');
+    // Opciones para los tipos de sensores (limitados a Temperatura, Humedad y CO2)
+    const tiposSensor = [
+        { value: 'Temperatura', label: 'Temperatura' },
+        { value: 'Humedad', label: 'Humedad' },
+        { value: 'CO2', label: 'CO2' }
+    ];
 
+    // Opciones para las magnitudes/unidades según el tipo seleccionado
+    const magnitudesPorTipo = {
+        'Temperatura': ['°C', '°F', 'K'],
+        'Humedad': ['%', 'g/m³'],
+        'CO2': ['ppm', 'mg/m³']
+    };
+
+    // Al iniciar, verificar si hay un invernaderoId en la URL o en sessionStorage
+    useEffect(() => {
+        // Verificar si hay un ID de invernadero en la URL
+        if (invernaderoId) {
+            setFormData(prev => ({
+                ...prev,
+                idInvernadero: invernaderoId
+            }));
+        } else {
+            // Intentar obtener el invernadero seleccionado del sessionStorage
+            const invernaderoData = sessionStorage.getItem('invernaderoSeleccionado');
+            if (invernaderoData) {
+                const invData = JSON.parse(invernaderoData);
+                setFormData(prev => ({
+                    ...prev,
+                    idInvernadero: invData.id
+                }));
+            }
+        }
+    }, [invernaderoId]);
+
+    // Cargar lista de invernaderos
     useEffect(() => {
         const cargarInvernaderos = async () => {
             try {
-                setIsLoading(true);
-                const data = await getAllInvernaderos();
+                setLoading(true);
+                const data = await obtenerInvernaderos();
                 setInvernaderos(data);
                 
-                // Si hay un ID de invernadero en la URL, seleccionarlo
-                if (idInvernadero) {
-                    const invSeleccionado = data.find(inv => inv.id === idInvernadero);
+                // Si ya tenemos un ID de invernadero preseleccionado
+                if (formData.idInvernadero) {
+                    const invSeleccionado = data.find(inv => inv.id === formData.idInvernadero);
                     if (invSeleccionado) {
                         setInvernaderoSeleccionado(invSeleccionado);
-                    } else {
-                        setApiError('No se encontró el invernadero especificado.');
+                        setSectores(invSeleccionado.sectores || []);
+                        setFilas(invSeleccionado.filas || []);
                     }
+                } 
+                // Sino, seleccionar el primero por defecto
+                else if (data.length > 0) {
+                    const primerInv = data[0];
+                    setInvernaderoSeleccionado(primerInv);
+                    setFormData(prev => ({
+                        ...prev,
+                        idInvernadero: primerInv.id
+                    }));
+                    
+                    // Cargar sectores y filas del primer invernadero
+                    setSectores(primerInv.sectores || []);
+                    setFilas(primerInv.filas || []);
                 }
-            } catch (error) {
-                console.error('Error al cargar invernaderos:', error);
-                setApiError('No se pudieron cargar los invernaderos.');
+            } catch (err) {
+                console.error('Error al cargar invernaderos:', err);
+                setError('No se pudieron cargar los invernaderos. Por favor, intente nuevamente.');
             } finally {
-                setIsLoading(false);
+                setLoading(false);
             }
         };
         
         cargarInvernaderos();
-    }, [idInvernadero]);
+    }, [formData.idInvernadero]);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+    // Manejar cambio de invernadero seleccionado
+    const handleInvernaderoChange = (e) => {
+        const idInvernaderoSeleccionado = e.target.value;
+        const invSeleccionado = invernaderos.find(inv => inv.id === idInvernaderoSeleccionado);
         
-        // Actualizar magnitud automáticamente según el tipo de sensor
-        if (name === 'tipoSensor') {
-            let magnitud = '%';
-            switch(value) {
-                case 'Humedad':
-                    magnitud = '%';
-                    break;
-                case 'Temperatura':
-                    magnitud = '°C';
-                    break;
-                case 'CO2':
-                    magnitud = 'ppm';
-                    break;
-                case 'Luz':
-                    magnitud = 'lux';
-                    break;
-                default:
-                    magnitud = '';
-            }
-            setFormData(prev => ({ ...prev, magnitud }));
+        if (invSeleccionado) {
+            setInvernaderoSeleccionado(invSeleccionado);
+            setSectores(invSeleccionado.sectores || []);
+            setFilas(invSeleccionado.filas || []);
+            
+            setFormData(prev => ({
+                ...prev,
+                idInvernadero: idInvernaderoSeleccionado,
+                sector: '', // Reset sector
+                fila: ''    // Reset fila
+            }));
         }
     };
 
-    const validateForm = () => {
-        const newErrors = {};
-        if (!formData.idSensor) newErrors.idSensor = 'El ID del sensor es obligatorio.';
-        if (!formData.macAddress) newErrors.macAddress = 'La dirección MAC es obligatoria.';
-        if (!formData.sector) newErrors.sector = 'Debe seleccionar un sector.';
-        if (!formData.fila) newErrors.fila = 'Debe seleccionar una fila.';
-        if (!formData.tipoSensor) newErrors.tipoSensor = 'Debe seleccionar un tipo de sensor.';
-        if (!formData.marca) newErrors.marca = 'Debe seleccionar una marca.';
-        if (!formData.modelo) newErrors.modelo = 'Debe seleccionar un modelo.';
-        if (!invernaderoSeleccionado) newErrors.invernadero = 'Debe seleccionar un invernadero.';
-        
-        // Validar formato de MAC address (XX:XX:XX:XX:XX:XX)
+    // Validar formato de MAC Address
+    const isValidMACAddress = (mac) => {
+        // Formato XX:XX:XX:XX:XX:XX o XX-XX-XX-XX-XX-XX
         const macRegex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
-        if (formData.macAddress && !macRegex.test(formData.macAddress)) {
-            newErrors.macAddress = 'La dirección MAC debe tener el formato XX:XX:XX:XX:XX:XX';
-        }
-        
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+        return macRegex.test(mac);
     };
 
+    // Validar ID de sensor (alfanumérico, guiones y guiones bajos permitidos)
+    const isValidSensorId = (id) => {
+        const idRegex = /^[a-zA-Z0-9-_]+$/;
+        return idRegex.test(id);
+    };
+
+    // Validar campos del formulario
+    const validateForm = () => {
+        const errors = {};
+        
+        if (!formData.idSensor) {
+            errors.idSensor = 'El ID del sensor es obligatorio';
+        } else if (!isValidSensorId(formData.idSensor)) {
+            errors.idSensor = 'El ID solo puede contener letras, números, guiones y guiones bajos';
+        }
+        
+        if (!formData.macAddress) {
+            errors.macAddress = 'La dirección MAC es obligatoria';
+        } else if (!isValidMACAddress(formData.macAddress)) {
+            errors.macAddress = 'El formato de MAC Address debe ser XX:XX:XX:XX:XX:XX o XX-XX-XX-XX-XX-XX';
+        }
+        
+        if (!formData.marca) {
+            errors.marca = 'La marca es obligatoria';
+        } else if (formData.marca.length < 2) {
+            errors.marca = 'La marca debe tener al menos 2 caracteres';
+        }
+        
+        if (!formData.modelo) {
+            errors.modelo = 'El modelo es obligatorio';
+        }
+        
+        if (!formData.tipoSensor) {
+            errors.tipoSensor = 'El tipo de sensor es obligatorio';
+        }
+        
+        if (!formData.magnitud) {
+            errors.magnitud = 'La magnitud es obligatoria';
+        }
+        
+        if (!formData.idInvernadero) {
+            errors.idInvernadero = 'Debe seleccionar un invernadero';
+        }
+        
+        if (!formData.sector) {
+            errors.sector = 'Debe seleccionar un sector';
+        }
+        
+        if (!formData.fila) {
+            errors.fila = 'Debe seleccionar una fila';
+        }
+        
+        return errors;
+    };
+
+    // Maneja cambios en el formulario
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        
+        // Para campos checkbox usamos 'checked', para el resto 'value'
+        const fieldValue = type === 'checkbox' ? checked : value;
+        
+        // Actualiza el estado del formulario
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: fieldValue
+        }));
+        
+        // Limpiar errores de validación cuando el usuario corrige los campos
+        if (validationErrors[name]) {
+            setValidationErrors(prev => ({
+                ...prev,
+                [name]: ''
+            }));
+        }
+    };
+
+    // Maneja la selección de tipo de sensor para actualizar opciones de magnitud
+    const handleTipoChange = (e) => {
+        const tipo = e.target.value;
+        setFormData(prevData => ({
+            ...prevData,
+            tipoSensor: tipo,
+            // Reseteamos la magnitud o seleccionamos la primera disponible
+            magnitud: magnitudesPorTipo[tipo] ? magnitudesPorTipo[tipo][0] : ''
+        }));
+        
+        // Limpiar errores de validación
+        if (validationErrors.tipoSensor) {
+            setValidationErrors(prev => ({
+                ...prev,
+                tipoSensor: '',
+                magnitud: ''
+            }));
+        }
+    };
+
+    // Envía el formulario
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (validateForm()) {
-            setIsLoading(true);
-            setApiError('');
+        
+        // Validar formulario
+        const errors = validateForm();
+        if (Object.keys(errors).length > 0) {
+            setValidationErrors(errors);
+            setError('Por favor, corrija los errores en el formulario antes de continuar.');
+            return;
+        }
+        
+        try {
+            setLoading(true);
+            setError('');
             
-            try {
-                const sensorData = {
-                    idSensor: formData.idSensor,
-                    macAddress: formData.macAddress,
-                    marca: formData.marca,
-                    modelo: formData.modelo,
-                    tipoSensor: formData.tipoSensor,
-                    magnitud: formData.magnitud,
-                    idInvernadero: invernaderoSeleccionado.id,
-                    sector: formData.sector,
-                    fila: formData.fila,
-                    estado: formData.estado
-                };
-                
-                const response = await registrarSensor(sensorData);
-                console.log('Sensor registrado:', response);
-                setShowModal(true);
-            } catch (error) {
-                console.error('Error al registrar el sensor:', error);
-                setApiError('No se pudo registrar el sensor. Por favor, inténtelo de nuevo.');
-            } finally {
-                setIsLoading(false);
-            }
+            console.log('Enviando datos:', formData);
+            
+            // Enviar datos al backend
+            const response = await registrarSensor(formData);
+            console.log('Respuesta del servidor:', response);
+            
+            setSuccess(true);
+            
+            // Redirigir después de un breve retraso
+            setTimeout(() => {
+                navigate(`/sensores/${formData.idInvernadero}`);
+            }, 2000);
+            
+        } catch (error) {
+            console.error('Error al registrar sensor:', error);
+            setError('Ocurrió un error al registrar el sensor. Por favor, intente nuevamente.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -138,192 +269,332 @@ function AgregarSensor() {
         <>
             <BarraNavegacion />
             <div className="min-h-screen bg-gradient-to-b from-green-50 to-white p-6">
-                <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg border border-green-200">
-                    {/* Título con icono */}
-                    <div className="flex items-center mb-6">
-                        <div className="bg-green-100 p-3 rounded-full mr-4">
-                            <span className="text-2xl" role="img" aria-label="sensor">📡</span>
-                        </div>
-                        <div>
-                            <h1 className="text-2xl font-bold text-gray-800">Agregar Sensor</h1>
-                            <p className="text-sm text-green-600">Configura un nuevo sensor para tu sistema</p>
-                        </div>
-                    </div>
-
-                    <form onSubmit={handleSubmit}>
-                        {/* Sección 1: Información básica */}
-                        <div className="grid grid-cols-2 gap-4 mb-6">
-                            <div>
-                                <label className="block text-gray-700 font-medium mb-2">ID Sensor</label>
-                                <input
-                                    type="text"
-                                    name="idSensor"
-                                    value={formData.idSensor}
-                                    onChange={handleChange}
-                                    className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                                />
-                                {errors.idSensor && <p className="text-red-500 text-xs mt-1">{errors.idSensor}</p>}
+                <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-lg border border-green-200">
+                    {/* Encabezado */}
+                    <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center">
+                            <div className="bg-green-100 p-3 rounded-full mr-4">
+                                <span className="text-2xl" role="img" aria-label="sensor">📡</span>
                             </div>
                             <div>
-                                <label className="block text-gray-700 font-medium mb-2">Invernadero</label>
+                                <h1 className="text-2xl font-bold text-gray-800">Agregar Sensor</h1>
+                            </div>
+                        </div>
+                        <button 
+                            onClick={() => {
+                                // Asegurarnos de tener el invernadero en sessionStorage
+                                if (invernaderoSeleccionado) {
+                                    sessionStorage.setItem('invernaderoSeleccionado', JSON.stringify(invernaderoSeleccionado));
+                                }
+                                navigate(formData.idInvernadero ? `/sensores/${formData.idInvernadero}` : '/invernaderos');
+                            }} 
+                            className="px-4 py-2 bg-green-100 rounded-md text-green-700 hover:bg-green-200 transition-colors duration-300 flex items-center shadow-sm">
+                            <span className="mr-1">←</span> Volver a Sensores
+                        </button>
+                    </div>
+
+                    {/* Mensaje de éxito */}
+                    {success && (
+                        <div className="bg-green-100 text-green-700 p-4 rounded-md mb-6">
+                            <p className="font-bold">¡Éxito!</p>
+                            <p>El sensor se ha registrado correctamente. Redirigiendo...</p>
+                        </div>
+                    )}
+
+                    {/* Mensaje de error general */}
+                    {error && (
+                        <div className="bg-red-100 text-red-700 p-4 rounded-md mb-6">
+                            <p className="font-bold">Error</p>
+                            <p>{error}</p>
+                        </div>
+                    )}
+
+                    {/* Formulario */}
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        {/* Selección de invernadero */}
+                        <div className="bg-green-50 p-4 rounded-md border border-green-200">
+                            <h2 className="text-lg font-semibold text-gray-700 mb-3">Selección de Invernadero</h2>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="idInvernadero">
+                                    Invernadero *
+                                </label>
                                 <select
-                                    name="invernaderoId"
-                                    value={invernaderoSeleccionado ? invernaderoSeleccionado.id : ''}
-                                    onChange={(e) => {
-                                        const inv = invernaderos.find(inv => inv.id === e.target.value);
-                                        setInvernaderoSeleccionado(inv);
-                                    }}
-                                    className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
+                                    id="idInvernadero"
+                                    name="idInvernadero"
+                                    value={formData.idInvernadero}
+                                    onChange={handleInvernaderoChange}
+                                    required
+                                    className={`w-full border ${validationErrors.idInvernadero ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500`}
                                 >
-                                    <option value="">Seleccionar Invernadero</option>
-                                    {invernaderos.map((inv) => (
+                                    <option value="">Seleccionar invernadero</option>
+                                    {invernaderos.map(inv => (
                                         <option key={inv.id} value={inv.id}>
                                             {inv.name}
                                         </option>
                                     ))}
                                 </select>
-                                {errors.invernadero && <p className="text-red-500 text-xs mt-1">{errors.invernadero}</p>}
+                                {validationErrors.idInvernadero && (
+                                    <p className="text-red-500 text-xs mt-1">{validationErrors.idInvernadero}</p>
+                                )}
                             </div>
                         </div>
 
-                        {/* Sección 2: Ubicación */}
-                        <div className="grid grid-cols-2 gap-4 mb-6">
-                            <div>
-                                <label className="block text-gray-700 font-medium mb-2">Sector</label>
-                                <select
-                                    name="sector"
-                                    value={formData.sector}
-                                    onChange={handleChange}
-                                    className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
-                                >
-                                    <option value="">Seleccionar Sector</option>
-                                    {invernaderoSeleccionado &&
-                                        invernaderoSeleccionado.sectors.map((sector, index) => (
-                                            <option key={index} value={sector.sector}>
-                                                {sector.sector}
+                        {/* Identificación del sensor */}
+                        <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
+                            <h2 className="text-lg font-semibold text-gray-700 mb-3">Identificación del Sensor</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="idSensor">
+                                        ID del Sensor *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="idSensor"
+                                        name="idSensor"
+                                        value={formData.idSensor}
+                                        onChange={handleChange}
+                                        required
+                                        className={`w-full border ${validationErrors.idSensor ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500`}
+                                        placeholder="Ej: SEN-TEMP-01"
+                                    />
+                                    {validationErrors.idSensor && (
+                                        <p className="text-red-500 text-xs mt-1">{validationErrors.idSensor}</p>
+                                    )}
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="macAddress">
+                                        Dirección MAC *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="macAddress"
+                                        name="macAddress"
+                                        value={formData.macAddress}
+                                        onChange={handleChange}
+                                        required
+                                        className={`w-full border ${validationErrors.macAddress ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500`}
+                                        placeholder="Ej: 00:1A:2B:3C:4D:5E"
+                                    />
+                                    {validationErrors.macAddress && (
+                                        <p className="text-red-500 text-xs mt-1">{validationErrors.macAddress}</p>
+                                    )}
+                                    <p className="text-xs text-gray-500 mt-1">
+                                        Formato: XX:XX:XX:XX:XX:XX ó XX-XX-XX-XX-XX-XX
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Características del sensor */}
+                        <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
+                            <h2 className="text-lg font-semibold text-gray-700 mb-3">Características del Sensor</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="marca">
+                                        Marca *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="marca"
+                                        name="marca"
+                                        value={formData.marca}
+                                        onChange={handleChange}
+                                        required
+                                        className={`w-full border ${validationErrors.marca ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500`}
+                                        placeholder="Ej: AgroSense"
+                                    />
+                                    {validationErrors.marca && (
+                                        <p className="text-red-500 text-xs mt-1">{validationErrors.marca}</p>
+                                    )}
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="modelo">
+                                        Modelo *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="modelo"
+                                        name="modelo"
+                                        value={formData.modelo}
+                                        onChange={handleChange}
+                                        required
+                                        className={`w-full border ${validationErrors.modelo ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500`}
+                                        placeholder="Ej: AS-200"
+                                    />
+                                    {validationErrors.modelo && (
+                                        <p className="text-red-500 text-xs mt-1">{validationErrors.modelo}</p>
+                                    )}
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="tipoSensor">
+                                        Tipo de Sensor *
+                                    </label>
+                                    <select
+                                        id="tipoSensor"
+                                        name="tipoSensor"
+                                        value={formData.tipoSensor}
+                                        onChange={handleTipoChange}
+                                        required
+                                        className={`w-full border ${validationErrors.tipoSensor ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500`}
+                                    >
+                                        <option value="">Seleccionar tipo</option>
+                                        {tiposSensor.map(tipo => (
+                                            <option key={tipo.value} value={tipo.value}>
+                                                {tipo.label}
                                             </option>
                                         ))}
-                                </select>
-                                {errors.sector && <p className="text-red-500 text-xs mt-1">{errors.sector}</p>}
-                            </div>
-                            <div>
-                                <label className="block text-gray-700 font-medium mb-2">Fila</label>
-                                <select
-                                    name="fila"
-                                    value={formData.fila}
-                                    onChange={handleChange}
-                                    className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
-                                >
-                                    <option value="">Seleccionar Fila</option>
-                                    {invernaderoSeleccionado &&
-                                        formData.sector &&
-                                        invernaderoSeleccionado.sectors
-                                            .find((sec) => sec.sector === formData.sector)
-                                            ?.rows.map((fila, index) => (
-                                                <option key={index} value={fila}>
-                                                    {fila}
-                                                </option>
-                                            ))}
-                                </select>
-                                {errors.fila && <p className="text-red-500 text-xs mt-1">{errors.fila}</p>}
-                            </div>
-                        </div>
-
-                        {/* Sección 3: Configuración del sensor */}
-                        <div className="grid grid-cols-2 gap-4 mb-6">
-                            <div>
-                                <label className="block text-gray-700 font-medium mb-2">Tipo de Sensor</label>
-                                <select
-                                    name="tipoSensor"
-                                    value={formData.tipoSensor}
-                                    onChange={handleChange}
-                                    className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
-                                >
-                                    <option value="">Seleccionar Tipo de Sensor</option>
-                                    {tipo.map((t) => (
-                                        <option key={t.id} value={t.id}>
-                                            {t.name}
-                                        </option>
-                                    ))}
-                                </select>
-                                {errors.tipoSensor && <p className="text-red-500 text-xs mt-1">{errors.tipoSensor}</p>}
-                            </div>
-                            <div>
-                                <label className="block text-gray-700 font-medium mb-2">Marca</label>
-                                <select
-                                    name="marca"
-                                    value={formData.marca}
-                                    onChange={handleChange}
-                                    className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
-                                >
-                                    <option value="">Seleccionar Marca</option>
-                                    {marcas.map((marca) => (
-                                        <option key={marca.id} value={marca.id}>
-                                            {marca.nombre}
-                                        </option>
-                                    ))}
-                                </select>
-                                {errors.marca && <p className="text-red-500 text-xs mt-1">{errors.marca}</p>}
+                                    </select>
+                                    {validationErrors.tipoSensor && (
+                                        <p className="text-red-500 text-xs mt-1">{validationErrors.tipoSensor}</p>
+                                    )}
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="magnitud">
+                                        Magnitud/Unidad *
+                                    </label>
+                                    <select
+                                        id="magnitud"
+                                        name="magnitud"
+                                        value={formData.magnitud}
+                                        onChange={handleChange}
+                                        required
+                                        disabled={!formData.tipoSensor}
+                                        className={`w-full border ${validationErrors.magnitud ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-100 disabled:text-gray-500`}
+                                    >
+                                        <option value="">Seleccionar magnitud</option>
+                                        {formData.tipoSensor && magnitudesPorTipo[formData.tipoSensor]?.map(mag => (
+                                            <option key={mag} value={mag}>
+                                                {mag}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {validationErrors.magnitud && (
+                                        <p className="text-red-500 text-xs mt-1">{validationErrors.magnitud}</p>
+                                    )}
+                                </div>
                             </div>
                         </div>
 
-                        {/* Sección 4: Modelo */}
-                        <div className="mb-6">
-                            <label className="block text-gray-700 font-medium mb-2">Modelo</label>
-                            <select
-                                name="modelo"
-                                value={formData.modelo}
-                                onChange={handleChange}
-                                className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
+                        {/* Ubicación dentro del invernadero */}
+                        <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
+                            <h2 className="text-lg font-semibold text-gray-700 mb-3">Ubicación en el Invernadero</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="sector">
+                                        Sector *
+                                    </label>
+                                    <select
+                                        id="sector"
+                                        name="sector"
+                                        value={formData.sector}
+                                        onChange={handleChange}
+                                        required
+                                        className={`w-full border ${validationErrors.sector ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500`}
+                                        disabled={!invernaderoSeleccionado || sectores.length === 0}
+                                    >
+                                        <option value="">Seleccionar sector</option>
+                                        {sectores.map((sector, idx) => (
+                                            <option key={idx} value={sector}>
+                                                {sector}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {validationErrors.sector && (
+                                        <p className="text-red-500 text-xs mt-1">{validationErrors.sector}</p>
+                                    )}
+                                    {sectores.length === 0 && invernaderoSeleccionado && (
+                                        <p className="text-xs text-orange-500 mt-1">
+                                            Este invernadero no tiene sectores definidos
+                                        </p>
+                                    )}
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="fila">
+                                        Fila *
+                                    </label>
+                                    <select
+                                        id="fila"
+                                        name="fila"
+                                        value={formData.fila}
+                                        onChange={handleChange}
+                                        required
+                                        className={`w-full border ${validationErrors.fila ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500`}
+                                        disabled={!invernaderoSeleccionado || filas.length === 0}
+                                    >
+                                        <option value="">Seleccionar fila</option>
+                                        {filas.map((fila, idx) => (
+                                            <option key={idx} value={fila}>
+                                                {fila}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {validationErrors.fila && (
+                                        <p className="text-red-500 text-xs mt-1">{validationErrors.fila}</p>
+                                    )}
+                                    {filas.length === 0 && invernaderoSeleccionado && (
+                                        <p className="text-xs text-orange-500 mt-1">
+                                            Este invernadero no tiene filas definidas
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Estado */}
+                        <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
+                            <h2 className="text-lg font-semibold text-gray-700 mb-3">Estado</h2>
+                            <div className="flex items-center">
+                                <input
+                                    type="checkbox"
+                                    id="estado"
+                                    name="estado"
+                                    checked={formData.estado}
+                                    onChange={handleChange}
+                                    className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                                />
+                                <label htmlFor="estado" className="ml-2 block text-sm text-gray-700">
+                                    Activo
+                                </label>
+                            </div>
+                            <p className="text-xs text-gray-500 mt-1">
+                                Un sensor inactivo no procesará lecturas en el sistema
+                            </p>
+                        </div>
+
+                        {/* Botones de acción */}
+                        <div className="flex justify-end space-x-4 pt-4">
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    // Asegurarnos de tener el invernadero en sessionStorage
+                                    if (invernaderoSeleccionado) {
+                                        sessionStorage.setItem('invernaderoSeleccionado', JSON.stringify(invernaderoSeleccionado));
+                                    }
+                                    navigate(formData.idInvernadero ? `/sensores/${formData.idInvernadero}` : '/invernaderos')
+                                }}
+                                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors duration-300"
                             >
-                                <option value="">Seleccionar Modelo</option>
-                                {formData.marca &&
-                                    marcas
-                                        .find((marca) => marca.id === parseInt(formData.marca))
-                                        ?.modelos.map((modelo, index) => (
-                                            <option key={index} value={modelo}>
-                                                {modelo}
-                                            </option>
-                                        ))}
-                            </select>
-                            {errors.modelo && <p className="text-red-500 text-xs mt-1">{errors.modelo}</p>}
-                        </div>
-
-                        <div className="flex justify-center mt-6">
-                            {/* Botón Agregar */}
+                                Cancelar
+                            </button>
                             <button
                                 type="submit"
-                                className="px-6 py-3 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors duration-300 shadow-sm flex items-center justify-center"
-                                disabled={isLoading}
+                                disabled={loading || success}
+                                className={`px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-300 flex items-center ${(loading || success) ? 'opacity-70 cursor-not-allowed' : ''}`}
                             >
-                                {isLoading ? 'Agregando...' : <><span className="mr-2">+</span> Agregar Sensor</>}
+                                {loading ? (
+                                    <>
+                                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        Guardando...
+                                    </>
+                                ) : success ? 'Guardado' : 'Guardar Sensor'}
                             </button>
                         </div>
-                        {apiError && <p className="text-red-500 text-center mt-4">{apiError}</p>}
                     </form>
                 </div>
             </div>
-
-            {/* Modal de éxito */}
-            {showModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-                        <h3 className="text-xl font-bold text-gray-800 mb-4">¡Éxito!</h3>
-                        <p className="text-gray-600 mb-6">El sensor se ha creado correctamente.</p>
-                        <div className="flex justify-center">
-                            <button
-                                onClick={() => {
-                                    setShowModal(false);
-                                    navigate(-1);
-                                }}
-                                className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 font-bold"
-                            >
-                                Confirmar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </>
     );
 }
