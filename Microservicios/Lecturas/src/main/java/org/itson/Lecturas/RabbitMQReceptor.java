@@ -30,11 +30,7 @@ public class RabbitMQReceptor {
 
     @PostConstruct
     public void init() {
-        // Obtener todos los sensores al iniciar el receptor
-        SensoresRespuesta sensores = clienteGestionSensoresGrpc.obtenerTodosSensores();
-        for (SensorRespuesta sensor : sensores.getSensoresList()) {
-            actualizarEstado(sensor.getIdSensor(), sensor.getEstado());
-        }
+        actualizarEstados();
 
         // Iniciar el guardador de lecturas con nuestra referencia atómica
         procesadorLecturas.iniciar(lecturasPorSensor);
@@ -74,7 +70,15 @@ public class RabbitMQReceptor {
         }).start();
     }
 
-    public void actualizarEstado(String idSensor, boolean estado) {
-        estadoSensores.put(idSensor, estado);
+    /**
+     * Método para actualizar los estados de los sensores al iniciar el receptor.
+     * Se obtienen todos los sensores y se almacenan en un mapa concurrente.
+     */
+    public void actualizarEstados() {
+        // Obtener todos los sensores al iniciar el receptor
+        SensoresRespuesta sensores = clienteGestionSensoresGrpc.obtenerTodosSensores();
+        for (SensorRespuesta sensor : sensores.getSensoresList()) {
+            estadoSensores.put(sensor.getIdSensor(), sensor.getEstado());
+        }
     }
 }

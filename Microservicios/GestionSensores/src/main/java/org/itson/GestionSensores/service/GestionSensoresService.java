@@ -4,6 +4,7 @@ import com.mongodb.MongoWriteException;
 import org.bson.types.ObjectId;
 import org.itson.GestionSensores.collections.Invernadero;
 import org.itson.GestionSensores.collections.Sensor;
+import org.itson.GestionSensores.dtos.InvernaderoDTO;
 import org.itson.GestionSensores.dtos.SensorDTO;
 import org.itson.GestionSensores.excepciones.GestionSensoresException;
 import org.itson.GestionSensores.persistence.IGestionSensoresRepository;
@@ -81,7 +82,7 @@ public class GestionSensoresService {
         }
         Sensor sensorEntidad = convertirSensorDTOEntidad(sensorDTO);
         Sensor resultado = gestionSensoresRepository.save(sensorEntidad);
-        clienteEstadoSensoresGrpc.actualizarEstado(resultado.getIdSensor(), resultado.isEstado());
+        clienteEstadoSensoresGrpc.actualizarEstados();
         return convertirSensorEntidadDTO(resultado);
     }
 
@@ -113,7 +114,7 @@ public class GestionSensoresService {
             // Si llegamos a esta parte es porque sí existe el sensor.
             try {
                 resultado = gestionSensoresRepository.save(sensorEntidad);
-                clienteEstadoSensoresGrpc.actualizarEstado(resultado.getIdSensor(), resultado.isEstado());
+                clienteEstadoSensoresGrpc.actualizarEstados();
             } catch (MongoWriteException mwe) {
                 throw new GestionSensoresException("Ya hay un sensor con la dirección MAC: " + sensorDTO.getMacAddress() + ".");
             }
@@ -206,6 +207,23 @@ public class GestionSensoresService {
         );
     }
 
+    public List<InvernaderoDTO> convertirInvernaderosColeccionDTO(List<Invernadero> invernaderosColeccion) {
+        List<InvernaderoDTO> invernaderosDTO = new ArrayList<>();
+        for (Invernadero invernaderoColeccion : invernaderosColeccion) {
+            invernaderosDTO.add(convertirInvernaderoColeccionDTO(invernaderoColeccion));
+        }
+        return invernaderosDTO;
+    }
+
+    public InvernaderoDTO convertirInvernaderoColeccionDTO(Invernadero invernaderoEntidad) {
+        return new InvernaderoDTO(
+                invernaderoEntidad.get_id().toString(),
+                invernaderoEntidad.getNombre(),
+                invernaderoEntidad.getSectores(),
+                invernaderoEntidad.getFilas()
+        );
+    }
+
     /**
      *   _____ _   ___      ________ _____  _   _          _____  ______ _____   ____   _____
      *  |_   _| \ | \ \    / /  ____|  __ \| \ | |   /\   |  __ \|  ____|  __ \ / __ \ / ____|
@@ -244,6 +262,16 @@ public class GestionSensoresService {
             return invernadero.get();
         } else {
             throw new GestionSensoresException("No se encontró el invernadero.");
+        }
+    }
+
+    public List<InvernaderoDTO> obtenerTodosInvernaderos() throws GestionSensoresException {
+        List<Invernadero> invernaderosColeccion = invernaderosRepository.findAll(); // Se obtienen los invernaderos.
+        if (!invernaderosColeccion.isEmpty()) {
+            List<InvernaderoDTO> invernaderosDTO = convertirInvernaderosColeccionDTO(invernaderosColeccion); // Se convierten a DTO.
+            return invernaderosDTO; // Se devuelven.
+        } else {
+            throw new GestionSensoresException("No se encontró ningún invernadero.");
         }
     }
 }

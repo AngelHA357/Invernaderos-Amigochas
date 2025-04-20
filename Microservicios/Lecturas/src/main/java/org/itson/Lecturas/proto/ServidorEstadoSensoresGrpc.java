@@ -1,6 +1,7 @@
 package org.itson.Lecturas.proto;
 
 
+import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import org.itson.Lecturas.RabbitMQReceptor;
 import org.itson.grpc.EstadoPeticion;
@@ -15,19 +16,10 @@ public class ServidorEstadoSensoresGrpc extends EstadoSensoresServidorGrpc.Estad
     private RabbitMQReceptor receptor;
 
     @Override
-    public void actualizarEstado(EstadoPeticion request, StreamObserver<EstadoRespuesta> responseObserver) {
-        receptor.actualizarEstado(request.getIdSensor(), request.getEstado());
+    public void actualizarEstados(Empty request, StreamObserver<Empty> responseObserver) {
+        receptor.actualizarEstados();
 
-        String resultado = request.getEstado() ? "Activo" : "Apagado";
-        String idSensor = request.getIdSensor();
-
-        EstadoRespuesta respuesta =
-                EstadoRespuesta
-                        .newBuilder()
-                        .setRespuesta("Estado de " +idSensor + " ha sido actualizado a: " + resultado)
-                        .build();
-
-        responseObserver.onNext(respuesta);
+        responseObserver.onNext(Empty.newBuilder().build());
         responseObserver.onCompleted();
     }
 }

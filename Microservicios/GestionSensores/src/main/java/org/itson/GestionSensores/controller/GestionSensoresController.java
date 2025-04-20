@@ -1,5 +1,6 @@
 package org.itson.GestionSensores.controller;
 
+import org.itson.GestionSensores.dtos.InvernaderoDTO;
 import org.itson.GestionSensores.excepciones.GestionSensoresException;
 import org.itson.GestionSensores.dtos.SensorDTO;
 import org.itson.GestionSensores.service.GestionSensoresService;
@@ -115,6 +116,26 @@ public class GestionSensoresController {
         try {
             gestionSensoresService.eliminarSensor(id);
             ResponseEntity<Void> respuesta = new ResponseEntity<>(HttpStatus.OK); // Se crea la respuesta. Void indica que el body está vacío.
+            return respuesta;
+        } catch (GestionSensoresException gse) {
+            Map<String, String> error = new HashMap<>();
+            error.put("mensaje", gse.getMessage()); // Se mapea el error del mensaje.
+            ResponseEntity<Map<String, String>> respuesta = new ResponseEntity<>(error, HttpStatus.NOT_FOUND); // Creamos la respuesta.
+            return respuesta;
+        }
+    }
+
+    /**
+     * Método que maneja las peticiones HTTP DELETE.
+     *
+     * @return La respuesta HTTP con el código 200. Se devuelve un error si no se encontró el sensor.
+     */
+    @GetMapping("/invernaderos")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<?> obtenerTodosInvernaderos() {
+        try {
+            List<InvernaderoDTO> invernaderos = gestionSensoresService.obtenerTodosInvernaderos();
+            ResponseEntity<List<InvernaderoDTO>> respuesta = new ResponseEntity<>(invernaderos, HttpStatus.OK); // Se crea la respuesta. Void indica que el body está vacío.
             return respuesta;
         } catch (GestionSensoresException gse) {
             Map<String, String> error = new HashMap<>();

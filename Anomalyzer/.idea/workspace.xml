@@ -5,25 +5,86 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f570ec34-8065-430a-bc74-73d9f848a122" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Broker/src/main/java/org/itson/Broker/RabbitMQEmisor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Broker/src/main/java/org/itson/Broker/RabbitMQReceptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Broker/src/main/java/org/itson/Broker/dtos/LecturaDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/dtos/InvernaderoDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/src/main/resources/banner.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/APIGateway/src/main/resources/banner.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/banner.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/banner.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/src/main/resources/banner.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Eureka/src/main/resources/banner.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/DataLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/DataLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/collections/Sensor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/collections/Sensor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/dtos/SensorDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/dtos/SensorDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Broker/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Broker/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Broker/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Broker/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Broker/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Broker/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Broker/src/main/java/org/itson/Broker/BrokerApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Broker/src/main/java/org/itson/Broker/RabbitMQEmisor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Broker/src/main/java/org/itson/Broker/RabbitMQReceptor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Broker/src/main/java/org/itson/Broker/dtos/LecturaDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Broker/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Broker/src/test/java/org/itson/Broker/BrokerApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MicroservicioGestionSensores/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/controller/GestionSensoresController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/controller/GestionSensoresController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/proto/ClienteEstadoSensoresGrpc.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/proto/ClienteEstadoSensoresGrpc.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/service/GestionSensoresService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/service/GestionSensoresService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/resources/banner.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/resources/banner.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/ProcesadorLecturas.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/ProcesadorLecturas.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/proto/estado-sensores.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/proto/estado-sensores.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/RabbitMQReceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/RabbitMQReceptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/resources/banner.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/resources/banner.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/resources/banner.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/resources/banner.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/proto/ServidorEstadoSensoresGrpc.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/proto/ServidorEstadoSensoresGrpc.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/proto/estado-sensores.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/proto/estado-sensores.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho10870487104600-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho10891721828700-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho11259905079000-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho11273471052200-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho11894349134000-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho11923341751900-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho11943198500300-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho1310420409800-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho13630552631800-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho14001037912400-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho14619559704200-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho15148244281600-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho15313404546200-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho15618384854900-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho15689765037200-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho15758081516100-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho15770493983200-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho15867008644100-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho16448660794700-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho16465858299700-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho16599362279000-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho17864938643800-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho18042726183700-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho18594442024300-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho18618597607500-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho18751487870900-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho19371603226500-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho19374130145500-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho19421118855200-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho19884969743500-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho19945448706300-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho19984504103200-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho20538631261300-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho2454409949700-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho2521934311200-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho26837111907100-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho27132681993000-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho2777969490400-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho28413946446200-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho28638342028200-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho28826337841700-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho2889549101700-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho29113841211600-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho29541446335900-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho3434990852700-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho3458024118900-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho3477787642500-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho3479497908500-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho43952871630000-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho44114262616100-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho44495611683100-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho45664238753500-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho8939306306900-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho9045213672100-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho9160818856100-tcplocalhost1883/.lck" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/paho9973554247600-tcplocalhost1883/.lck" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,30 +94,30 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2vxmDchMmsNy6740ZF4RjfPkLuy" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Familia/Documents/GitHub/Invernaderos-Amigochas/Anomalyzer",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "application.passwordSafe",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Familia/Documents/GitHub/Invernaderos-Amigochas/Anomalyzer&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;application.passwordSafe&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -75,6 +136,7 @@
       <updated>1730182693366</updated>
       <workItem from="1730182694407" duration="403000" />
       <workItem from="1745094982989" duration="619000" />
+      <workItem from="1745108621988" duration="1190000" />
     </task>
     <servers />
   </component>

@@ -6,3 +6,4 @@
 /Entidades/target/
 /Anomalyzer/target/
 /DTOs/target/
+**/paho*/
