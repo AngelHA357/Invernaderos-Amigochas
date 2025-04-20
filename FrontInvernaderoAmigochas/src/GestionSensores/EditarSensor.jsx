@@ -1,81 +1,151 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
+import { getSensorById, editarSensor, getAllInvernaderos } from '../services/sensorService';
 
 function EditarSensor() {
     const navigate = useNavigate();
-    const sensorSeleccionado = JSON.parse(sessionStorage.getItem('sensorSeleccionado')) || {};
-
-    const marcas = [
-        { id: '1', nombre: 'Bosch', modelos: ['Bosch TE 2373', 'Bosch CO 7362', 'Bosch HU 2327'] },
-        { id: '2', nombre: 'Banner', modelos: ['Banner 3000', 'Banner X1300'] },
-        { id: '3', nombre: 'Cognex', modelos: ['COGX4000', 'COGY1000', 'COGZ9000', 'COGW8000'] },
-        { id: '4', nombre: 'Steren', modelos: ['Steren Sen 1234', 'Steren Sen 4382'] },
-        { id: '5', nombre: 'Omron', modelos: ['Omron Pro', 'Omron Lite', 'Omron Ultra'] },
-    ];
-
-    const tipos = [
-        { id: 'HUM', name: 'Humedad' },
-        { id: 'TEMC', name: 'Temperatura (C°)' },
-        { id: 'TEMF', name: 'Temperatura (F°)' },
-        { id: 'CO2', name: 'CO2' },
-    ];
-
-    const invernaderos = [
-        {
-            id: 'INV-0101',
-            name: 'Invernadero 1',
-            sectors: [
-                { sector: 'Sector 1', rows: ['Fila 1', 'Fila 2', 'Fila 3'] },
-                { sector: 'Sector 2', rows: ['Fila 1', 'Fila 2'] },
-            ],
-        },
-        {
-            id: 'INV-0201',
-            name: 'Invernadero 2',
-            sectors: [
-                { sector: 'Sector 1', rows: ['Fila 1', 'Fila 2'] },
-                { sector: 'Sector 3', rows: ['Fila 1', 'Fila 2', 'Fila 3', 'Fila 4'] },
-            ],
-        },
-    ];
-
+    const { id } = useParams();
+    
+    const [invernaderos, setInvernaderos] = useState([]);
+    const [invernaderoSeleccionado, setInvernaderoSeleccionado] = useState(null);
+    
     const [formData, setFormData] = useState({
-        id: sensorSeleccionado.id || '',
-        invernaderoId: sensorSeleccionado.invernaderoId || '',
-        sector: sensorSeleccionado.sector || '',
-        fila: sensorSeleccionado.fila || '',
-        tipo: tipos.find((t) => t.name === sensorSeleccionado.type)?.id || '',
-        marca: marcas.find((m) => m.nombre === sensorSeleccionado.marca)?.id || '',
-        modelo: sensorSeleccionado.modelo || '',
+        idSensor: '',
+        macAddress: '',
+        marca: '',
+        modelo: '',
+        tipoSensor: '',
+        magnitud: '',
+        sector: '',
+        fila: '',
+        estado: true
     });
 
     const [errors, setErrors] = useState({});
     const [showModal, setShowModal] = useState(false);
-
+    const [loading, setLoading] = useState(true);
+    const [apiError, setApiError] = useState('');
+    
+    useEffect(() => {
+        const cargarDatos = async () => {
+            try {
+                setLoading(true);
+                
+                // Cargar invernaderos
+                const invernaderosList = await getAllInvernaderos();
+                setInvernaderos(invernaderosList);
+                
+                // Cargar datos del sensor
+                if (id) {
+                    const sensorData = await getSensorById(id);
+                    
+                    setFormData({
+                        idSensor: sensorData.idSensor,
+                        macAddress: sensorData.macAddress || '',
+                        marca: sensorData.marca,
+                        modelo: sensorData.modelo,
+                        tipoSensor: sensorData.tipoSensor,
+                        magnitud: sensorData.magnitud,
+                        sector: sensorData.sector,
+                        fila: sensorData.fila,
+                        estado: sensorData.estado
+                    });
+                    
+                    // Buscar el invernadero al que pertenece el sensor
+                    const inv = invernaderosList.find(inv => inv.id === sensorData.idInvernadero);
+                    if (inv) {
+                        setInvernaderoSeleccionado(inv);
+                    }
+                }
+            } catch (error) {
+                console.error('Error al cargar datos:', error);
+                setApiError('No se pudieron cargar los datos. Por favor, intente nuevamente.');
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+        cargarDatos();
+    }, [id]);
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+        
+        // Actualizar magnitud automáticamente según el tipo de sensor
+        if (name === 'tipoSensor') {
+            let magnitud = '%';
+            switch(value) {
+                case 'Humedad':
+                    magnitud = '%';
+                    break;
+                case 'Temperatura':
+                    magnitud = '°C';
+                    break;
+                case 'CO2':
+                    magnitud = 'ppm';
+                    break;
+                case 'Luz':
+                    magnitud = 'lux';
+                    break;
+                default:
+                    magnitud = '';
+            }
+            setFormData(prev => ({ ...prev, magnitud }));
+        }
     };
-
+    
     const validateForm = () => {
         const newErrors = {};
-        if (!formData.id) newErrors.id = 'El ID del sensor es obligatorio.';
-        if (!formData.invernaderoId) newErrors.invernaderoId = 'Debe seleccionar un invernadero.';
+        if (!formData.idSensor) newErrors.idSensor = 'El ID del sensor es obligatorio.';
+        if (!formData.macAddress) newErrors.macAddress = 'La dirección MAC es obligatoria.';
         if (!formData.sector) newErrors.sector = 'Debe seleccionar un sector.';
         if (!formData.fila) newErrors.fila = 'Debe seleccionar una fila.';
-        if (!formData.tipo) newErrors.tipo = 'Debe seleccionar un tipo de sensor.';
+        if (!formData.tipoSensor) newErrors.tipoSensor = 'Debe seleccionar un tipo de sensor.';
         if (!formData.marca) newErrors.marca = 'Debe seleccionar una marca.';
         if (!formData.modelo) newErrors.modelo = 'Debe seleccionar un modelo.';
+        if (!invernaderoSeleccionado) newErrors.invernadero = 'Debe seleccionar un invernadero.';
+        
+        // Validar formato de MAC address (XX:XX:XX:XX:XX:XX)
+        const macRegex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
+        if (formData.macAddress && !macRegex.test(formData.macAddress)) {
+            newErrors.macAddress = 'La dirección MAC debe tener el formato XX:XX:XX:XX:XX:XX';
+        }
+        
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (validateForm()) {
-            console.log('Datos actualizados:', formData);
-            setShowModal(true);
+            setLoading(true);
+            setApiError('');
+            
+            try {
+                const sensorData = {
+                    idSensor: formData.idSensor,
+                    macAddress: formData.macAddress,
+                    marca: formData.marca,
+                    modelo: formData.modelo,
+                    tipoSensor: formData.tipoSensor,
+                    magnitud: formData.magnitud,
+                    idInvernadero: invernaderoSeleccionado.id,
+                    sector: formData.sector,
+                    fila: formData.fila,
+                    estado: formData.estado
+                };
+                
+                const response = await editarSensor(sensorData);
+                console.log('Sensor actualizado:', response);
+                setShowModal(true);
+            } catch (error) {
+                console.error('Error al actualizar el sensor:', error);
+                setApiError('No se pudo actualizar el sensor. Por favor, inténtelo de nuevo.');
+            } finally {
+                setLoading(false);
+            }
         }
     };
 
@@ -102,19 +172,22 @@ function EditarSensor() {
                                 <label className="block text-gray-700 font-medium mb-2">ID Sensor</label>
                                 <input
                                     type="text"
-                                    name="id"
-                                    value={formData.id}
+                                    name="idSensor"
+                                    value={formData.idSensor}
                                     onChange={handleChange}
                                     className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
                                 />
-                                {errors.id && <p className="text-red-500 text-xs mt-1">{errors.id}</p>}
+                                {errors.idSensor && <p className="text-red-500 text-xs mt-1">{errors.idSensor}</p>}
                             </div>
                             <div>
                                 <label className="block text-gray-700 font-medium mb-2">Invernadero</label>
                                 <select
-                                    name="invernaderoId"
-                                    value={formData.invernaderoId}
-                                    onChange={handleChange}
+                                    name="idInvernadero"
+                                    value={invernaderoSeleccionado ? invernaderoSeleccionado.id : ''}
+                                    onChange={(e) => {
+                                        const inv = invernaderos.find(inv => inv.id === e.target.value);
+                                        setInvernaderoSeleccionado(inv);
+                                    }}
                                     className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
                                 >
                                     <option value="">Seleccionar Invernadero</option>
@@ -124,7 +197,7 @@ function EditarSensor() {
                                         </option>
                                     ))}
                                 </select>
-                                {errors.invernaderoId && <p className="text-red-500 text-xs mt-1">{errors.invernaderoId}</p>}
+                                {errors.invernadero && <p className="text-red-500 text-xs mt-1">{errors.invernadero}</p>}
                             </div>
                         </div>
 
@@ -139,14 +212,12 @@ function EditarSensor() {
                                     className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
                                 >
                                     <option value="">Seleccionar Sector</option>
-                                    {formData.invernaderoId &&
-                                        invernaderos
-                                            .find((inv) => inv.id === formData.invernaderoId)
-                                            ?.sectors.map((sector, index) => (
-                                                <option key={index} value={sector.sector}>
-                                                    {sector.sector}
-                                                </option>
-                                            ))}
+                                    {invernaderoSeleccionado &&
+                                        invernaderoSeleccionado.sectors.map((sector, index) => (
+                                            <option key={index} value={sector.sector}>
+                                                {sector.sector}
+                                            </option>
+                                        ))}
                                 </select>
                                 {errors.sector && <p className="text-red-500 text-xs mt-1">{errors.sector}</p>}
                             </div>
@@ -159,11 +230,9 @@ function EditarSensor() {
                                     className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
                                 >
                                     <option value="">Seleccionar Fila</option>
-                                    {formData.invernaderoId &&
+                                    {invernaderoSeleccionado &&
                                         formData.sector &&
-                                        invernaderos
-                                            .find((inv) => inv.id === formData.invernaderoId)
-                                            ?.sectors.find((sec) => sec.sector === formData.sector)
+                                        invernaderoSeleccionado.sectors.find((sec) => sec.sector === formData.sector)
                                             ?.rows.map((fila, index) => (
                                                 <option key={index} value={fila}>
                                                     {fila}
@@ -179,8 +248,8 @@ function EditarSensor() {
                             <div>
                                 <label className="block text-gray-700 font-medium mb-2">Tipo de Sensor</label>
                                 <select
-                                    name="tipo"
-                                    value={formData.tipo}
+                                    name="tipoSensor"
+                                    value={formData.tipoSensor}
                                     onChange={handleChange}
                                     className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
                                 >
@@ -191,7 +260,7 @@ function EditarSensor() {
                                         </option>
                                     ))}
                                 </select>
-                                {errors.tipo && <p className="text-red-500 text-xs mt-1">{errors.tipo}</p>}
+                                {errors.tipoSensor && <p className="text-red-500 text-xs mt-1">{errors.tipoSensor}</p>}
                             </div>
                             <div>
                                 <label className="block text-gray-700 font-medium mb-2">Marca</label>
@@ -232,6 +301,18 @@ function EditarSensor() {
                                         ))}
                             </select>
                             {errors.modelo && <p className="text-red-500 text-xs mt-1">{errors.modelo}</p>}
+                        </div>
+
+                        <div className="mb-6">
+                            <label className="block text-gray-700 font-medium mb-2">MAC Address</label>
+                            <input
+                                type="text"
+                                name="macAddress"
+                                value={formData.macAddress}
+                                onChange={handleChange}
+                                className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                            />
+                            {errors.macAddress && <p className="text-red-500 text-xs mt-1">{errors.macAddress}</p>}
                         </div>
 
                         <div className="flex justify-center mt-6">

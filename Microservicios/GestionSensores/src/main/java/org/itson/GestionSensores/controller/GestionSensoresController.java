@@ -144,4 +144,24 @@ public class GestionSensoresController {
             return respuesta;
         }
     }
+
+    /**
+     * Método que maneja las peticiones GET para obtener todos los sensores de un invernadero dado su ID.
+     *
+     * @param idInvernadero ID del invernadero cuyos sensores se desean obtener.
+     * @return La respuesta HTTP con la lista de sensores encontrados y el código 200. Se devuelve un error si no se encontró el invernadero o sensores.
+     */
+    @GetMapping("/invernadero/{idInvernadero}/sensores")
+    public ResponseEntity<?> obtenerSensoresPorInvernadero(@PathVariable String idInvernadero) {
+        try {
+            List<SensorDTO> sensores = gestionSensoresService.obtenerSensoresPorInvernadero(idInvernadero);
+            ResponseEntity<List<SensorDTO>> respuesta = new ResponseEntity<>(sensores, HttpStatus.OK);
+            return respuesta;
+        } catch (GestionSensoresException gse) {
+            Map<String, String> error = new HashMap<>();
+            error.put("mensaje", gse.getMessage());
+            ResponseEntity<Map<String, String>> respuesta = new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+            return respuesta;
+        }
+    }
 }

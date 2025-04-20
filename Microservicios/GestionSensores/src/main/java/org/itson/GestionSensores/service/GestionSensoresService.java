@@ -274,4 +274,26 @@ public class GestionSensoresService {
             throw new GestionSensoresException("No se encontró ningún invernadero.");
         }
     }
+
+    /**
+     * Método que obtiene todos los sensores asociados a un invernadero dado su ID.
+     *
+     * @param idInvernadero ID del invernadero cuyos sensores se desean obtener.
+     * @return Una lista con los sensores encontrados.
+     * @throws GestionSensoresException si no se encuentra el invernadero o no hay sensores asociados.
+     */
+    public List<SensorDTO> obtenerSensoresPorInvernadero(String idInvernadero) throws GestionSensoresException {
+        // Validar que el invernadero existe
+        obtenerInvernaderoPorId(new ObjectId(idInvernadero));
+
+        // Buscar sensores asociados al invernadero
+        List<Sensor> sensoresEntidad = gestionSensoresRepository.findByIdInvernadero(new ObjectId(idInvernadero));
+
+        if (!sensoresEntidad.isEmpty()) {
+            return convertirSensoresEntidadDTO(sensoresEntidad);
+        } else {
+            throw new GestionSensoresException("No se encontraron sensores para el invernadero con ID " + idInvernadero + ".");
+        }
+    }
+
 }

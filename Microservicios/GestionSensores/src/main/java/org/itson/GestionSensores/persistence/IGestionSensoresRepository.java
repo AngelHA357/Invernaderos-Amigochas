@@ -6,6 +6,7 @@ import org.itson.GestionSensores.collections.Sensor;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -16,4 +17,5 @@ import java.util.Optional;
 public interface IGestionSensoresRepository extends MongoRepository<Sensor, ObjectId> {
     Optional<Sensor> findByIdSensor(String idSensor);
     Optional<Sensor> findByMacAddress(String macAddress);
+    List<Sensor> findByIdInvernadero(ObjectId idInvernadero);
 }

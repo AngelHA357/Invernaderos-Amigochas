@@ -1,124 +1,136 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
+import { registrarSensor, getAllInvernaderos } from '../services/sensorService';
 
 function AgregarSensor() {
     const navigate = useNavigate();
-
-    const marcas = [
-        {
-            id: 1,
-            nombre: 'Bosch',
-            modelos: ['Bosch TE 2373', 'Bosch CO 7362', 'Bosch HU 2327']
-        },
-        {
-            id: 2,
-            nombre: 'Banner',
-            modelos: ['Banner 3000', 'Banner X1300']
-        },
-        {
-            id: 3,
-            nombre: 'Cognex',
-            modelos: ['COGX4000', 'COGY1000', 'COGZ9000', 'COGW8000']
-        },
-        {
-            id: 4,
-            nombre: 'Steren',
-            modelos: ['Steren Sen 1234', 'Steren Sen 4382']
-        },
-        {
-            id: 5,
-            nombre: 'Omron',
-            modelos: ['Omron Pro', 'Omron Lite', 'Omron Ultra']
-        }
-    ];
-
-    const tipo = [
-        { id: 'HUM', name: 'Humedad' },
-        { id: 'TEMC', name: 'Temperatura (C°)' },
-        { id: 'TEMF', name: 'Temperatura (F°)' },
-        { id: 'CO2', name: 'CO2' }
-    ];
-
-    const invernaderos = [
-        {
-            id: 'INV-0101',
-            name: 'Invernadero 1',
-            sectors: [
-                { sector: 'Sector 1', rows: ['Fila 1', 'Fila 2', 'Fila 3'] },
-                { sector: 'Sector 2', rows: ['Fila 1', 'Fila 2'] }
-            ]
-        },
-        {
-            id: 'INV-0201',
-            name: 'Invernadero 2',
-            sectors: [
-                { sector: 'Sector 1', rows: ['Fila 1', 'Fila 2'] },
-                { sector: 'Sector 3', rows: ['Fila 1', 'Fila 2', 'Fila 3', 'Fila 4'] }
-            ]
-        },
-        {
-            id: 'INV-0301',
-            name: 'Invernadero 3',
-            sectors: [
-                { sector: 'Sector 2', rows: ['Fila 1', 'Fila 2', 'Fila 3'] },
-                { sector: 'Sector 4', rows: ['Fila 1'] }
-            ]
-        },
-        {
-            id: 'INV-0401',
-            name: 'Invernadero 4',
-            sectors: [
-                { sector: 'Sector 1', rows: ['Fila 1', 'Fila 2', 'Fila 3', 'Fila 4'] },
-                { sector: 'Sector 5', rows: ['Fila 1', 'Fila 2'] }
-            ]
-        },
-        {
-            id: 'INV-0501',
-            name: 'Invernadero 5',
-            sectors: [
-                { sector: 'Sector 3', rows: ['Fila 1', 'Fila 2', 'Fila 3'] },
-                { sector: 'Sector 6', rows: ['Fila 1', 'Fila 2', 'Fila 3', 'Fila 4', 'Fila 5'] }
-            ]
-        },
-    ];
-
+    const { idInvernadero } = useParams(); // Capturar el ID del invernadero de la URL
+    
+    const [invernaderos, setInvernaderos] = useState([]);
+    const [invernaderoSeleccionado, setInvernaderoSeleccionado] = useState(null);
+    
     const [formData, setFormData] = useState({
-        id: '',
-        invernaderoId: '',
+        idSensor: '',
+        macAddress: '',
+        marca: '',
+        modelo: '',
+        tipoSensor: '',
+        magnitud: '%',
         sector: '',
         fila: '',
-        tipo: '',
-        marca: '',
-        modelo: ''
+        estado: true
     });
 
     const [errors, setErrors] = useState({});
     const [showModal, setShowModal] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [apiError, setApiError] = useState('');
+
+    useEffect(() => {
+        const cargarInvernaderos = async () => {
+            try {
+                setIsLoading(true);
+                const data = await getAllInvernaderos();
+                setInvernaderos(data);
+                
+                // Si hay un ID de invernadero en la URL, seleccionarlo
+                if (idInvernadero) {
+                    const invSeleccionado = data.find(inv => inv.id === idInvernadero);
+                    if (invSeleccionado) {
+                        setInvernaderoSeleccionado(invSeleccionado);
+                    } else {
+                        setApiError('No se encontró el invernadero especificado.');
+                    }
+                }
+            } catch (error) {
+                console.error('Error al cargar invernaderos:', error);
+                setApiError('No se pudieron cargar los invernaderos.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        
+        cargarInvernaderos();
+    }, [idInvernadero]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+        
+        // Actualizar magnitud automáticamente según el tipo de sensor
+        if (name === 'tipoSensor') {
+            let magnitud = '%';
+            switch(value) {
+                case 'Humedad':
+                    magnitud = '%';
+                    break;
+                case 'Temperatura':
+                    magnitud = '°C';
+                    break;
+                case 'CO2':
+                    magnitud = 'ppm';
+                    break;
+                case 'Luz':
+                    magnitud = 'lux';
+                    break;
+                default:
+                    magnitud = '';
+            }
+            setFormData(prev => ({ ...prev, magnitud }));
+        }
     };
 
     const validateForm = () => {
         const newErrors = {};
-        if (!formData.id) newErrors.id = 'El ID del sensor es obligatorio.';
-        if (!formData.invernaderoId) newErrors.invernaderoId = 'Debe seleccionar un invernadero.';
+        if (!formData.idSensor) newErrors.idSensor = 'El ID del sensor es obligatorio.';
+        if (!formData.macAddress) newErrors.macAddress = 'La dirección MAC es obligatoria.';
         if (!formData.sector) newErrors.sector = 'Debe seleccionar un sector.';
         if (!formData.fila) newErrors.fila = 'Debe seleccionar una fila.';
-        if (!formData.tipo) newErrors.tipo = 'Debe seleccionar un tipo de sensor.';
+        if (!formData.tipoSensor) newErrors.tipoSensor = 'Debe seleccionar un tipo de sensor.';
         if (!formData.marca) newErrors.marca = 'Debe seleccionar una marca.';
         if (!formData.modelo) newErrors.modelo = 'Debe seleccionar un modelo.';
+        if (!invernaderoSeleccionado) newErrors.invernadero = 'Debe seleccionar un invernadero.';
+        
+        // Validar formato de MAC address (XX:XX:XX:XX:XX:XX)
+        const macRegex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
+        if (formData.macAddress && !macRegex.test(formData.macAddress)) {
+            newErrors.macAddress = 'La dirección MAC debe tener el formato XX:XX:XX:XX:XX:XX';
+        }
+        
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (validateForm()) {
-            console.log('Datos del sensor:', formData);
-            setShowModal(true);
+            setIsLoading(true);
+            setApiError('');
+            
+            try {
+                const sensorData = {
+                    idSensor: formData.idSensor,
+                    macAddress: formData.macAddress,
+                    marca: formData.marca,
+                    modelo: formData.modelo,
+                    tipoSensor: formData.tipoSensor,
+                    magnitud: formData.magnitud,
+                    idInvernadero: invernaderoSeleccionado.id,
+                    sector: formData.sector,
+                    fila: formData.fila,
+                    estado: formData.estado
+                };
+                
+                const response = await registrarSensor(sensorData);
+                console.log('Sensor registrado:', response);
+                setShowModal(true);
+            } catch (error) {
+                console.error('Error al registrar el sensor:', error);
+                setApiError('No se pudo registrar el sensor. Por favor, inténtelo de nuevo.');
+            } finally {
+                setIsLoading(false);
+            }
         }
     };
 
@@ -145,29 +157,32 @@ function AgregarSensor() {
                                 <label className="block text-gray-700 font-medium mb-2">ID Sensor</label>
                                 <input
                                     type="text"
-                                    name="id"
-                                    value={formData.id}
+                                    name="idSensor"
+                                    value={formData.idSensor}
                                     onChange={handleChange}
                                     className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
                                 />
-                                {errors.id && <p className="text-red-500 text-xs mt-1">{errors.id}</p>}
+                                {errors.idSensor && <p className="text-red-500 text-xs mt-1">{errors.idSensor}</p>}
                             </div>
                             <div>
                                 <label className="block text-gray-700 font-medium mb-2">Invernadero</label>
                                 <select
                                     name="invernaderoId"
-                                    value={formData.invernaderoId}
-                                    onChange={handleChange}
+                                    value={invernaderoSeleccionado ? invernaderoSeleccionado.id : ''}
+                                    onChange={(e) => {
+                                        const inv = invernaderos.find(inv => inv.id === e.target.value);
+                                        setInvernaderoSeleccionado(inv);
+                                    }}
                                     className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
                                 >
                                     <option value="">Seleccionar Invernadero</option>
-                                    {invernaderos.map((invernadero) => (
-                                        <option key={invernadero.id} value={invernadero.id}>
-                                            {invernadero.name}
+                                    {invernaderos.map((inv) => (
+                                        <option key={inv.id} value={inv.id}>
+                                            {inv.name}
                                         </option>
                                     ))}
                                 </select>
-                                {errors.invernaderoId && <p className="text-red-500 text-xs mt-1">{errors.invernaderoId}</p>}
+                                {errors.invernadero && <p className="text-red-500 text-xs mt-1">{errors.invernadero}</p>}
                             </div>
                         </div>
 
@@ -182,14 +197,12 @@ function AgregarSensor() {
                                     className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
                                 >
                                     <option value="">Seleccionar Sector</option>
-                                    {formData.invernaderoId &&
-                                        invernaderos
-                                            .find((inv) => inv.id === formData.invernaderoId)
-                                            ?.sectors.map((sector, index) => (
-                                                <option key={index} value={sector.sector}>
-                                                    {sector.sector}
-                                                </option>
-                                            ))}
+                                    {invernaderoSeleccionado &&
+                                        invernaderoSeleccionado.sectors.map((sector, index) => (
+                                            <option key={index} value={sector.sector}>
+                                                {sector.sector}
+                                            </option>
+                                        ))}
                                 </select>
                                 {errors.sector && <p className="text-red-500 text-xs mt-1">{errors.sector}</p>}
                             </div>
@@ -202,11 +215,10 @@ function AgregarSensor() {
                                     className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
                                 >
                                     <option value="">Seleccionar Fila</option>
-                                    {formData.invernaderoId &&
+                                    {invernaderoSeleccionado &&
                                         formData.sector &&
-                                        invernaderos
-                                            .find((inv) => inv.id === formData.invernaderoId)
-                                            ?.sectors.find((sec) => sec.sector === formData.sector)
+                                        invernaderoSeleccionado.sectors
+                                            .find((sec) => sec.sector === formData.sector)
                                             ?.rows.map((fila, index) => (
                                                 <option key={index} value={fila}>
                                                     {fila}
@@ -222,8 +234,8 @@ function AgregarSensor() {
                             <div>
                                 <label className="block text-gray-700 font-medium mb-2">Tipo de Sensor</label>
                                 <select
-                                    name="tipo"
-                                    value={formData.tipo}
+                                    name="tipoSensor"
+                                    value={formData.tipoSensor}
                                     onChange={handleChange}
                                     className="w-full border border-green-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
                                 >
@@ -234,7 +246,7 @@ function AgregarSensor() {
                                         </option>
                                     ))}
                                 </select>
-                                {errors.tipo && <p className="text-red-500 text-xs mt-1">{errors.tipo}</p>}
+                                {errors.tipoSensor && <p className="text-red-500 text-xs mt-1">{errors.tipoSensor}</p>}
                             </div>
                             <div>
                                 <label className="block text-gray-700 font-medium mb-2">Marca</label>
@@ -282,10 +294,12 @@ function AgregarSensor() {
                             <button
                                 type="submit"
                                 className="px-6 py-3 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors duration-300 shadow-sm flex items-center justify-center"
+                                disabled={isLoading}
                             >
-                                <span className="mr-2">+</span> Agregar Sensor
+                                {isLoading ? 'Agregando...' : <><span className="mr-2">+</span> Agregar Sensor</>}
                             </button>
                         </div>
+                        {apiError && <p className="text-red-500 text-center mt-4">{apiError}</p>}
                     </form>
                 </div>
             </div>
