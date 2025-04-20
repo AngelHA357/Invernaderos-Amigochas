@@ -5,17 +5,18 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
-import dtos.LecturaDTO;
 import jakarta.annotation.PostConstruct;
+import org.itson.Anomalyzer.dtos.LecturaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 
-@Service
+@Component
 public class LecturaConsumer {
     @Autowired
     Analizador analizador;
+
     private static final String QUEUE_RECEIVE = "lecturas_enriquecidas";
     private final Gson gson = new Gson();
 

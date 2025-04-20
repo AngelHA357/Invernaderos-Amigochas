@@ -19,15 +19,9 @@ public class ClienteAnomalyzerGrpc {
     }
 
     public void registrarAlarma(AlarmaDTO alarmaDTO) {
-        List<ObjectId> sensoresId = alarmaDTO.getSensores();
-        List<String> sensoresStringId = new ArrayList<>();
-        for (ObjectId id : sensoresId) {
-            sensoresStringId.add(id.toString());
-        }
-
         Anomalyzer.AlarmaDTO alarmaNueva = Anomalyzer.AlarmaDTO.newBuilder()
                 .setIdAlarma(alarmaDTO.getIdAlarma())
-                .addAllIdSensores(sensoresStringId)
+                .addAllIdSensores(alarmaDTO.getSensores())
                 .setInvernadero(alarmaDTO.getInvernadero())
                 .setValorMinimo(alarmaDTO.getValorMinimo())
                 .setValorMaximo(alarmaDTO.getValorMaximo())
@@ -41,16 +35,10 @@ public class ClienteAnomalyzerGrpc {
         System.out.println("Alarma registrada correctamente.");
     }
 
-    public void actualizaeAlarma(AlarmaDTO alarmaDTO) {
-        List<ObjectId> sensoresId = alarmaDTO.getSensores();
-        List<String> sensoresStringId = new ArrayList<>();
-        for (ObjectId id : sensoresId) {
-            sensoresStringId.add(id.toString());
-        }
-
+    public void actualizarAlarma(AlarmaDTO alarmaDTO) {
         Anomalyzer.AlarmaDTO alarmaNueva = Anomalyzer.AlarmaDTO.newBuilder()
                 .setIdAlarma(alarmaDTO.getIdAlarma())
-                .addAllIdSensores(sensoresStringId)
+                .addAllIdSensores(alarmaDTO.getSensores())
                 .setInvernadero(alarmaDTO.getInvernadero())
                 .setValorMinimo(alarmaDTO.getValorMinimo())
                 .setValorMaximo(alarmaDTO.getValorMaximo())
@@ -77,16 +65,10 @@ public class ClienteAnomalyzerGrpc {
     public void actualizarAlarmas(List<AlarmaDTO> alarmas) {
         List<Anomalyzer.AlarmaDTO> alarmasGrpc = new ArrayList<>();
         for (AlarmaDTO alarma : alarmas) {
-            List<ObjectId> sensoresId = alarma.getSensores();
-            List<String> sensoresStringId = new ArrayList<>();
-            for (ObjectId id : sensoresId) {
-                sensoresStringId.add(id.toString());
-            }
-
             alarmasGrpc.add(
                     Anomalyzer.AlarmaDTO.newBuilder()
                             .setIdAlarma(alarma.getIdAlarma())
-                            .addAllIdSensores(sensoresStringId)
+                            .addAllIdSensores(alarma.getSensores())
                             .setInvernadero(alarma.getInvernadero())
                             .setValorMinimo(alarma.getValorMinimo())
                             .setValorMaximo(alarma.getValorMaximo())

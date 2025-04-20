@@ -90,7 +90,7 @@ public class AlarmasService {
             alarmaEntidad.setMedioNotificacion(alarmaDTO.getMedioNotificacion());
             alarmaEntidad.setActivo(alarmaDTO.isActivo());
             Alarma resultado = alarmasRepository.save(alarmaEntidad);
-            clienteAnomalyzerGrpc.actualizaeAlarma(convertirAlarmaEntidadDTO(resultado));
+            clienteAnomalyzerGrpc.actualizarAlarma(convertirAlarmaEntidadDTO(resultado));
             return convertirAlarmaEntidadDTO(resultado);
         } else {
             throw new AlarmasException("Alarma con ID " + alarmaDTO.getIdAlarma() + " no encontrada.");

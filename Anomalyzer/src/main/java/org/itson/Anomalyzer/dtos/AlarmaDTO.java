@@ -1,4 +1,4 @@
-package dtos;
+package org.itson.Anomalyzer.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class AlarmaDTO {
     private String idAlarma;
-    private List<ObjectId> sensores;
+    private List<String> sensores;
     private String invernadero;
     private float valorMinimo;
     private float valorMaximo;

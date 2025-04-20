@@ -1,4 +1,4 @@
-package dtos;
+package org.itson.Anomalyzer.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,13 +14,12 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LecturaDTO {
-    private ObjectId _id;
     private String idSensor;
     private String macAddress;
     private String marca;
     private String modelo;
-    private String tipoLectura;
     private String magnitud;
+    private String unidad;
     private float valor;
     private Date fechaHora;
     private String invernadero;

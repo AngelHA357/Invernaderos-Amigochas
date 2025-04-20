@@ -1,4 +1,4 @@
-package org.itson.GestionSensores.proto;
+package org.itson.Anomalyzer.proto;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 public class ServidorGrpcLauncher {
 
     @Autowired
-    private ServidorGestionSensoresGrpc servidorGestionSensoresGRPC;
+    private ServidorAnomalyzerGrpc servidorAnomalyzerGrpc;
 
     private Server server;
 
     @PostConstruct
     public void start() throws Exception {
-        server = ServerBuilder.forPort(50050)
-                .addService(servidorGestionSensoresGRPC)
+        server = ServerBuilder.forPort(50054)
+                .addService(servidorAnomalyzerGrpc)
                 .build()
                 .start();
 

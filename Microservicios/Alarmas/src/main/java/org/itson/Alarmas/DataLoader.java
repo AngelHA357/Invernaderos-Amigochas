@@ -18,22 +18,15 @@ public class DataLoader {
             // Eliminar todas las alarmas existentes
             alarmasRepository.deleteAll();
 
-            // IDs de sensores de ejemplo
-            ObjectId sensor1 = new ObjectId();
-            ObjectId sensor2 = new ObjectId();
-            ObjectId sensor3 = new ObjectId();
-            ObjectId sensor4 = new ObjectId();
-            ObjectId sensor5 = new ObjectId();
-
             // Insertar alarmas
             alarmasRepository.save(new Alarma(
                     "ALM-001",
-                    "Temperatura",
-                    Arrays.asList(sensor1, sensor2),
+                    "Humedad",
+                    Arrays.asList("SEN-0101"),
                     "Invernadero A",
                     15.0f,
-                    30.0f,
-                    1.0f,
+                    16.0f,
+                    "%",
                     "Email",
                     true
             ));
@@ -41,11 +34,11 @@ public class DataLoader {
             alarmasRepository.save(new Alarma(
                     "ALM-002",
                     "Humedad",
-                    Arrays.asList(sensor2, sensor3),
-                    "Invernadero B",
+                    Arrays.asList("SEN-0202"),
+                    "Invernadero A",
                     40.0f,
                     80.0f,
-                    1.0f,
+                    "%",
                     "SMS",
                     true
             ));
@@ -53,40 +46,40 @@ public class DataLoader {
             alarmasRepository.save(new Alarma(
                     "ALM-003",
                     "Temperatura",
-                    Arrays.asList(sensor3, sensor4),
+                    Arrays.asList("SEN-0303"),
                     "Invernadero C",
                     10.0f,
                     25.0f,
-                    1.0f,
+                    "F",
                     "Email",
                     false
             ));
 
             alarmasRepository.save(new Alarma(
                     "ALM-004",
-                    "Humedad",
-                    Arrays.asList(sensor4, sensor5),
+                    "Temperatura",
+                    Arrays.asList("SEN-0404"),
                     "Invernadero D",
                     30.0f,
                     70.0f,
-                    1.0f,
+                    "K",
                     "SMS",
                     true
             ));
 
             alarmasRepository.save(new Alarma(
                     "ALM-005",
-                    "Luz",
-                    Arrays.asList(sensor1, sensor5),
+                    "Humedad",
+                    Arrays.asList("SEN-0404"),
                     "Invernadero E",
                     100.0f,
                     1000.0f,
-                    1.0f,
+                    "%",
                     "Email",
                     true
             ));
 
-            System.out.println("Se han insertado 5 alarmas");
+            System.out.println("Se han insertado 5 alarmas con IDs de sensores reales.");
         };
     }
 }

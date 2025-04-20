@@ -1,4 +1,4 @@
-package proto;
+package org.itson.Anomalyzer.proto;
 
 import com.google.protobuf.Empty;
 import net.devh.boot.grpc.client.inject.GrpcClient;

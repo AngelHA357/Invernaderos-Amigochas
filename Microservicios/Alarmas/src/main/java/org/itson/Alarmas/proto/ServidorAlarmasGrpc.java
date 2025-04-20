@@ -25,17 +25,11 @@ public class ServidorAlarmasGrpc extends AlarmasServidorGrpc.AlarmasServidorImpl
         Alarmas.AlarmasList.Builder responseBuilder = Alarmas.AlarmasList.newBuilder();
 
         for (AlarmaDTO alarmaPojo : listaAlarmas) {
-            // Convertir List<ObjectId> a List<String>
-            List<String> ids = new ArrayList<>();
-            for (ObjectId id : alarmaPojo.getSensores()) {
-                ids.add(id.toString());
-            }
-
             // Construir el mensaje gRPC
             Alarmas.AlarmaDTO grpcAlarma = Alarmas.AlarmaDTO.newBuilder()
                     .setIdAlarma(alarmaPojo.getIdAlarma())
                     .setMagnitud(alarmaPojo.getMagnitud())
-                    .addAllIdSensores(ids)
+                    .addAllIdSensores(alarmaPojo.getSensores())
                     .setInvernadero(alarmaPojo.getInvernadero())
                     .setValorMinimo(alarmaPojo.getValorMinimo())
                     .setValorMaximo(alarmaPojo.getValorMaximo())

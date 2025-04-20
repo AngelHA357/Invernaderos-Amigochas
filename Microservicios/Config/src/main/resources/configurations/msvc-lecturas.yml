@@ -14,7 +14,7 @@ grpc:
     port: 9091
   client:
     gestion-sensores:
-      address: static://localhost:50051
+      address: static://localhost:50050
       negotiation-type: plaintext
       enable-keep-alive: true
 

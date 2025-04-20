@@ -16,7 +16,7 @@ public class ServidorGrpcLauncher {
 
     @PostConstruct
     public void start() throws Exception {
-        server = ServerBuilder.forPort(50052)
+        server = ServerBuilder.forPort(50051)
                 .addService(servidorEstadoSensoresGrpc)
                 .build()
                 .start();

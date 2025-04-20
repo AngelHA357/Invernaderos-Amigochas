@@ -1,4 +1,4 @@
-package proto;
+package org.itson.Anomalyzer.proto;
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.itson.Alarma.Alarmas;

@@ -8,7 +8,6 @@ spring:
     mongodb:
       database: anomalias_db
       uri: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
-      auto-index-creation: true
 
 grpc:
   server:

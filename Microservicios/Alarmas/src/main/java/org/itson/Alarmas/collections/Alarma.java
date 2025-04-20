@@ -18,7 +18,7 @@ public class Alarma {
     private ObjectId _id;
     private String idAlarma;
     private String magnitud;
-    private List<ObjectId> sensores;
+    private List<String> sensores;
     private String invernadero;
     private float valorMinimo;
     private float valorMaximo;
@@ -26,7 +26,7 @@ public class Alarma {
     private String medioNotificacion;
     private boolean activo;
 
-    public Alarma(String idAlarma, String magnitud, List<ObjectId> sensores, String invernadero, float valorMinimo, float valorMaximo, String unidad, String medioNotificacion, boolean activo) {
+    public Alarma(String idAlarma, String magnitud, List<String> sensores, String invernadero, float valorMinimo, float valorMaximo, String unidad, String medioNotificacion, boolean activo) {
         this.idAlarma = idAlarma;
         this.magnitud = magnitud;
         this.sensores = sensores;

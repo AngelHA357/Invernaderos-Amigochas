@@ -1,6 +1,6 @@
-package proto;
+package org.itson.Anomalyzer.proto;
 
-import dtos.AlarmaDTO;
+import org.itson.Anomalyzer.dtos.AlarmaDTO;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.bson.types.ObjectId;
@@ -41,7 +41,7 @@ public class ServidorAnomalyzerGrpc extends AnomalyzerServidorGrpc.AnomalyzerSer
 
         AlarmaDTO alarmaDTO = new AlarmaDTO(
                 request.getIdAlarma(),
-                sensoresObjectId,
+                request.getIdSensoresList(),
                 request.getInvernadero(),
                 request.getValorMinimo(),
                 request.getValorMaximo(),
@@ -73,7 +73,7 @@ public class ServidorAnomalyzerGrpc extends AnomalyzerServidorGrpc.AnomalyzerSer
 
         AlarmaDTO alarmaDTO = new AlarmaDTO(
                 request.getIdAlarma(),
-                sensoresObjectId,
+                request.getIdSensoresList(),
                 request.getInvernadero(),
                 request.getValorMinimo(),
                 request.getValorMaximo(),
@@ -121,7 +121,7 @@ public class ServidorAnomalyzerGrpc extends AnomalyzerServidorGrpc.AnomalyzerSer
 
             AlarmaDTO alarmaDTO = new AlarmaDTO(
                     alarma.getIdAlarma(),
-                    sensoresObjectId,
+                    alarma.getIdSensoresList(),
                     alarma.getInvernadero(),
                     alarma.getValorMinimo(),
                     alarma.getValorMaximo(),

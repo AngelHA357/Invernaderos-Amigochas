@@ -30,11 +30,11 @@ public class DataLoader {
             System.out.println("Se han insertado 6 invernaderos");
 
             // Insertar sensores
-            gestionSensoresRepository.save(new Sensor("SEN-0101", "AA:BB:CC:DD:EE:FF", "SensorTech", "ST-100", "Humedad", "%", new ObjectId(invA.get_id()), "Sector 1", "Fila A", false));
-            gestionSensoresRepository.save(new Sensor("SEN-0202", "11:22:33:44:55:66", "EcoSense", "ES-200", "Temperatura", "C", new ObjectId(invB.get_id()), "Sector 2", "Fila B", true));
-            gestionSensoresRepository.save(new Sensor("SEN-0303", "AA:11:BB:22:CC:33", "TempTech", "T-300", "Temperatura", "F", new ObjectId(invC.get_id()), "Sector 1", "Fila A", true));
-            gestionSensoresRepository.save(new Sensor("SEN-0404", "66:55:44:33:22:11", "GreenGrow", "GG-500", "Temperatura", "K", new ObjectId(invD.get_id()), "Sector 1", "Fila A", true));
-            gestionSensoresRepository.save(new Sensor("SEN-0505", "77:88:99:AA:BB:CC", "AgroSense", "AS-400", "Humedad", "%", new ObjectId(invE.get_id()), "Sector 2", "Fila B", true));
+            gestionSensoresRepository.save(new Sensor(new ObjectId("661eff4b0000000000000001"), "SEN-0101", "AA:BB:CC:DD:EE:FF", "SensorTech", "ST-100", "Humedad", "%", new ObjectId(invA.get_id()), "Sector 1", "Fila A", true));
+            gestionSensoresRepository.save(new Sensor(new ObjectId("661eff4b0000000000000002"),"SEN-0202", "11:22:33:44:55:66", "EcoSense", "ES-200", "Temperatura", "C", new ObjectId(invB.get_id()), "Sector 2", "Fila B", true));
+            gestionSensoresRepository.save(new Sensor(new ObjectId("661eff4b0000000000000003"),"SEN-0303", "AA:11:BB:22:CC:33", "TempTech", "T-300", "Temperatura", "F", new ObjectId(invC.get_id()), "Sector 1", "Fila A", true));
+            gestionSensoresRepository.save(new Sensor(new ObjectId("661eff4b0000000000000004"),"SEN-0404", "66:55:44:33:22:11", "GreenGrow", "GG-500", "Temperatura", "K", new ObjectId(invD.get_id()), "Sector 1", "Fila A", true));
+            gestionSensoresRepository.save(new Sensor(new ObjectId("661eff4b0000000000000005"),"SEN-0505", "77:88:99:AA:BB:CC", "AgroSense", "AS-400", "Humedad", "%", new ObjectId(invE.get_id()), "Sector 2", "Fila B", true));
             System.out.println("Se han insertado 5 sensores");
         };
     }
