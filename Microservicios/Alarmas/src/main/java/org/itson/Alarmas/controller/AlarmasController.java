@@ -97,7 +97,7 @@ public class AlarmasController {
      * @param idAlarma El ID de la alarma a eliminar.
      * @return Un mensaje de éxito o un mensaje de error si la eliminación falla.
      */
-    @DeleteMapping("/{idAlarma}")
+    @DeleteMapping("/eliminar/{idAlarma}")
     public ResponseEntity<?> eliminarAlarma(@PathVariable String idAlarma) {
         try {
             alarmasService.eliminarAlarma(idAlarma);

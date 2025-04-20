@@ -1,5 +1,6 @@
 package org.itson.Alarmas.service;
 
+import io.grpc.StatusRuntimeException;
 import org.itson.Alarmas.collections.Alarma;
 import org.itson.Alarmas.dtos.AlarmaDTO;
 import org.itson.Alarmas.exceptions.AlarmasException;
@@ -66,7 +67,10 @@ public class AlarmasService {
         }
         Alarma alarmaEntidad = convertirAlarmaDTOEntidad(alarmaDTO);
         Alarma resultado = alarmasRepository.save(alarmaEntidad);
-        clienteAnomalyzerGrpc.registrarAlarma(convertirAlarmaEntidadDTO(resultado));
+        try {
+            clienteAnomalyzerGrpc.registrarAlarma(convertirAlarmaEntidadDTO(resultado));
+        } catch (StatusRuntimeException sre) {
+        }
         return convertirAlarmaEntidadDTO(resultado);
     }
 
@@ -90,7 +94,10 @@ public class AlarmasService {
             alarmaEntidad.setMedioNotificacion(alarmaDTO.getMedioNotificacion());
             alarmaEntidad.setActivo(alarmaDTO.isActivo());
             Alarma resultado = alarmasRepository.save(alarmaEntidad);
-            clienteAnomalyzerGrpc.actualizarAlarma(convertirAlarmaEntidadDTO(resultado));
+            try {
+                clienteAnomalyzerGrpc.actualizarAlarma(convertirAlarmaEntidadDTO(resultado));
+            } catch (StatusRuntimeException sre) {
+            }
             return convertirAlarmaEntidadDTO(resultado);
         } else {
             throw new AlarmasException("Alarma con ID " + alarmaDTO.getIdAlarma() + " no encontrada.");
@@ -100,16 +107,19 @@ public class AlarmasService {
     /**
      * Método para eliminar una alarma.
      *
-     * @param id ID de la alarma a eliminar.
+     * @param idAlarma ID de la alarma a eliminar.
      * @throws AlarmasException En caso de que ocurra un error durante la eliminación.
      */
-    public void eliminarAlarma(String id) throws AlarmasException {
-        Optional<Alarma> alarmaObtenida = alarmasRepository.findByIdAlarma(id);
+    public void eliminarAlarma(String idAlarma) throws AlarmasException {
+        Optional<Alarma> alarmaObtenida = alarmasRepository.findByIdAlarma(idAlarma);
         if (alarmaObtenida.isPresent()) {
             alarmasRepository.delete(alarmaObtenida.get());
-            clienteAnomalyzerGrpc.eliminarAlarma(id);
+            try {
+                clienteAnomalyzerGrpc.eliminarAlarma(idAlarma);
+            } catch (StatusRuntimeException sre) {
+            }
         } else {
-            throw new AlarmasException("Alarma con ID " + id + " no encontrada.");
+            throw new AlarmasException("Alarma con ID " + idAlarma + " no encontrada.");
         }
     }
 

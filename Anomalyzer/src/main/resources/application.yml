@@ -13,10 +13,6 @@ grpc:
   server:
     port: 9094
   client:
-    gestion-sensores:
-      address: static://localhost:50051
-      negotiation-type: plaintext
-      enable-keep-alive: true
     alarmas:
       address: static://localhost:50053
       negotiation-type: plaintext

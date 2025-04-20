@@ -1,14 +1,11 @@
 package org.itson.Anomalyzer.proto;
 
-import org.itson.Anomalyzer.dtos.AlarmaDTO;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.bson.types.ObjectId;
 import org.itson.Anomalyzer.Analizador;
 import org.itson.Anomalyzer.Anomalyzer;
 import org.itson.Anomalyzer.AnomalyzerServidorGrpc;
-import org.itson.grpc.SensorLectura;
-import org.itson.grpc.SensorRespuesta;
+import org.itson.Anomalyzer.dtos.AlarmaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -20,25 +17,11 @@ public class ServidorAnomalyzerGrpc extends AnomalyzerServidorGrpc.AnomalyzerSer
     private Analizador analizador;
 
     @Autowired
-    ClienteGestionSensoresGrpc clienteGestionSensoresGrpc;
-
-    @Autowired
     ClienteAlarmasGrpc clienteAlarmasGrpc;
 
     @Override
     public void registrarAlarma(Anomalyzer.AlarmaDTO request, StreamObserver<Anomalyzer.Empty> responseObserver) {
         System.out.println("Registrando alarma: " + request.getIdAlarma());
-
-        List<String> sensoresId = request.getIdSensoresList();
-        List<ObjectId> sensoresObjectId = new ArrayList<>();
-        for (String id : sensoresId) {
-            SensorRespuesta sensorRespuesta = clienteGestionSensoresGrpc.obtenerSensor(SensorLectura
-                    .newBuilder()
-                    .setIdSensor(id)
-                    .build());
-            sensoresObjectId.add(new ObjectId(sensorRespuesta.getId()));
-        }
-
         AlarmaDTO alarmaDTO = new AlarmaDTO(
                 request.getIdAlarma(),
                 request.getIdSensoresList(),
@@ -60,17 +43,6 @@ public class ServidorAnomalyzerGrpc extends AnomalyzerServidorGrpc.AnomalyzerSer
     @Override
     public void actualizarAlarma(Anomalyzer.AlarmaDTO request, StreamObserver<Anomalyzer.Empty> responseObserver) {
         System.out.println("Actualizando alarma: " + request.getIdAlarma());
-
-        List<String> sensoresId = request.getIdSensoresList();
-        List<ObjectId> sensoresObjectId = new ArrayList<>();
-        for (String id : sensoresId) {
-            SensorRespuesta sensorRespuesta = clienteGestionSensoresGrpc.obtenerSensor(SensorLectura
-                    .newBuilder()
-                    .setIdSensor(id)
-                    .build());
-            sensoresObjectId.add(new ObjectId(sensorRespuesta.getId()));
-        }
-
         AlarmaDTO alarmaDTO = new AlarmaDTO(
                 request.getIdAlarma(),
                 request.getIdSensoresList(),
@@ -109,16 +81,6 @@ public class ServidorAnomalyzerGrpc extends AnomalyzerServidorGrpc.AnomalyzerSer
         List<Anomalyzer.AlarmaDTO> alarmas = request.getAlarmasList();
         List<AlarmaDTO> alarmasDTO = new ArrayList<>();
         for (Anomalyzer.AlarmaDTO alarma : alarmas) {
-            List<String> sensoresId = alarma.getIdSensoresList();
-            List<ObjectId> sensoresObjectId = new ArrayList<>();
-            for (String id : sensoresId) {
-                SensorRespuesta sensorRespuesta = clienteGestionSensoresGrpc.obtenerSensor(SensorLectura
-                        .newBuilder()
-                        .setIdSensor(id)
-                        .build());
-                sensoresObjectId.add(new ObjectId(sensorRespuesta.getId()));
-            }
-
             AlarmaDTO alarmaDTO = new AlarmaDTO(
                     alarma.getIdAlarma(),
                     alarma.getIdSensoresList(),
