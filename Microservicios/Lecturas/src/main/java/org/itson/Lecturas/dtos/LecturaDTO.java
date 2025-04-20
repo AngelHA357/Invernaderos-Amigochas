@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
+import org.itson.grpc.SensorLectura;
 
 import java.util.Date;
 
@@ -19,12 +20,23 @@ public class LecturaDTO {
     private String macAddress;
     private String marca;
     private String modelo;
-    private String tipoLectura;
     private String magnitud;
+    private String unidad;
     private float valor;
     private Date fechaHora;
     private String invernadero;
     private String sector;
     private String fila;
     private boolean estado;
+
+    public SensorLectura toSensorLectura() {
+        return SensorLectura.newBuilder()
+                .setIdSensor(this.getIdSensor())
+                .setMacAddress(this.getMacAddress() != null ? this.getMacAddress() : "")
+                .setMarca(this.getMarca() != null ? this.getMarca() : "")
+                .setModelo(this.getModelo() != null ? this.getModelo() : "")
+                .setMagnitud(this.getMagnitud() != null ? this.getMagnitud() : "")
+                .setUnidad(this.getUnidad() != null ? this.getUnidad() : "")
+                .build();
+    }
 }

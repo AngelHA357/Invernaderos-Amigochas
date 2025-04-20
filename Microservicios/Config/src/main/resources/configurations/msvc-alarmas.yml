@@ -10,6 +10,15 @@ spring:
       uri: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
       auto-index-creation: true
 
+grpc:
+  server:
+    port: 9093
+  client:
+    anomalyzer:
+      address: static://localhost:50054
+      negotiation-type: plaintext
+      enable-keep-alive: true
+
 management:
   tracing:
     sampling:

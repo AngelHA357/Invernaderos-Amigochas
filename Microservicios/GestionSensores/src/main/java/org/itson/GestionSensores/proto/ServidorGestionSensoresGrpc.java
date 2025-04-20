@@ -33,7 +33,7 @@ public class ServidorGestionSensoresGrpc extends GestionSensoresServidorGrpc.Ges
                         sensorLectura.getMacAddress(),
                         sensorLectura.getMarca(),
                         sensorLectura.getModelo(),
-                        sensorLectura.getTipoSensor(),
+                        sensorLectura.getUnidad(),
                         sensorLectura.getMagnitud(),
                         invernadero.get_id(),
                         invernadero.getSectores().getFirst(),
@@ -47,13 +47,15 @@ public class ServidorGestionSensoresGrpc extends GestionSensoresServidorGrpc.Ges
 
         // Si llegamos aquí, todo está bien
         SensorRespuesta response = SensorRespuesta.newBuilder()
+                .setId(sensor.get_id().toString())
                 .setIdSensor(sensor.getIdSensor())
                 .setMacAddress(sensor.getMacAddress())
                 .setMarca(sensor.getMarca())
                 .setModelo(sensor.getModelo())
-                .setTipoSensor(sensor.getTipoSensor())
                 .setMagnitud(sensor.getMagnitud())
+                .setUnidad(sensor.getUnidad())
                 .setIdInvernadero(sensor.getIdInvernadero())
+                .setNombreInvernadero(sensor.getNombreInvernadero())
                 .setSector(sensor.getSector())
                 .setFila(sensor.getFila())
                 .setEstado(sensor.isEstado())
@@ -77,9 +79,10 @@ public class ServidorGestionSensoresGrpc extends GestionSensoresServidorGrpc.Ges
                         .setMacAddress(sensor.getMacAddress())
                         .setMarca(sensor.getMarca())
                         .setModelo(sensor.getModelo())
-                        .setTipoSensor(sensor.getTipoSensor())
                         .setMagnitud(sensor.getMagnitud())
+                        .setUnidad(sensor.getUnidad())
                         .setIdInvernadero(sensor.getIdInvernadero())
+                        .setNombreInvernadero(sensor.getNombreInvernadero())
                         .setSector(sensor.getSector())
                         .setFila(sensor.getFila())
                         .setEstado(sensor.isEstado())

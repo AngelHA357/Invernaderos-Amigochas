@@ -16,18 +16,18 @@ public class LecturaDTO {
     private String macAddress;
     private String marca;
     private String modelo;
-    private String tipoLectura;
     private String magnitud;
+    private String unidad;
     private double valor;
     private Date fechaHora;
 
-    public LecturaDTO(String idSensor, String macAddress, String marca, String modelo, String tipoLectura, String magnitud, double valor, Date fechaHora) {
+    public LecturaDTO(String idSensor, String macAddress, String marca, String modelo, String magnitud, String unidad, double valor, Date fechaHora) {
         this.idSensor = idSensor;
         this.macAddress = macAddress;
         this.marca = marca;
         this.modelo = modelo;
-        this.tipoLectura = tipoLectura;
         this.magnitud = magnitud;
+        this.unidad = unidad;
         this.valor = valor;
         this.fechaHora = fechaHora;
     }
@@ -64,20 +64,20 @@ public class LecturaDTO {
         this.modelo = modelo;
     }
 
-    public String getTipoLectura() {
-        return tipoLectura;
-    }
-
-    public void setTipoLectura(String tipoLectura) {
-        this.tipoLectura = tipoLectura;
-    }
-
     public String getMagnitud() {
         return magnitud;
     }
 
     public void setMagnitud(String magnitud) {
         this.magnitud = magnitud;
+    }
+
+    public String getUnidad() {
+        return unidad;
+    }
+
+    public void setUnidad(String unidad) {
+        this.unidad = unidad;
     }
 
     public double getValor() {

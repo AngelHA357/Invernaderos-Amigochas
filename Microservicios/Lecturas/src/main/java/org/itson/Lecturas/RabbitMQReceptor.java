@@ -10,6 +10,7 @@ import org.itson.Lecturas.dtos.LecturaDTO;
 import org.itson.Lecturas.proto.ClienteGestionSensoresGrpc;
 import org.itson.grpc.SensorRespuesta;
 import org.itson.grpc.SensoresRespuesta;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,61 +22,83 @@ public class RabbitMQReceptor {
 
     @Autowired
     private ProcesadorLecturas procesadorLecturas;
-    private static final String QUEUE_NAME = "lecturas_crudas";
+
+    private static final String QUEUE_RECEIVE = "lecturas_crudas";
+    private static final String QUEUE_EMIT = "lecturas_enriquecidas";
+
     private final ConcurrentHashMap<String, LecturaDTO> lecturasPorSensor = new ConcurrentHashMap<>();
-    private static ConcurrentHashMap<String, Boolean> estadoSensores = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, Boolean> estadoSensores = new ConcurrentHashMap<>();
 
     @Autowired
     private ClienteGestionSensoresGrpc clienteGestionSensoresGrpc;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    private final Gson gson = new Gson();
+
     @PostConstruct
     public void init() {
         actualizarEstados();
-
-        // Iniciar el guardador de lecturas con nuestra referencia atómica
         procesadorLecturas.iniciar(lecturasPorSensor);
 
-        // Thread para recibir mensajes de RabbitMQ
         new Thread(() -> {
             ConnectionFactory factory = new ConnectionFactory();
             factory.setHost("localhost");
+
             try (Connection connection = factory.newConnection();
                  Channel channel = connection.createChannel()) {
-                channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+
+                channel.queueDeclare(QUEUE_RECEIVE, false, false, false, null);
                 System.out.println("Esperando lecturas...");
 
-                // Consumidor de RabbitMQ - recibe lecturas continuamente
                 DeliverCallback deliverCallback = (consumerTag, delivery) -> {
                     String mensaje = new String(delivery.getBody(), StandardCharsets.UTF_8);
-                    Gson gson = new Gson();
                     LecturaDTO lectura = gson.fromJson(mensaje, LecturaDTO.class);
-                    // Si el valor asociado al ID sensor es positivo, está activo, si no, está desactivado.
-                    if (estadoSensores.containsKey(lectura.getIdSensor()) && estadoSensores.get(lectura.getIdSensor())) {
+
+                    // Si el sensor está activo o es nuevo (anónimo), se procesa
+                    if (!estadoSensores.containsKey(lectura.getIdSensor()) || estadoSensores.get(lectura.getIdSensor())) {
                         lecturasPorSensor.put(lectura.getIdSensor(), lectura);
                         System.out.println("Lectura recibida");
-                    } else if (!estadoSensores.containsKey(lectura.getIdSensor())) {
-                        lecturasPorSensor.put(lectura.getIdSensor(), lectura);
-                        System.out.println("Lectura anónima recibida");
+
+                        try {
+                            // Enriquecer la lectura usando gRPC
+                            SensorRespuesta sensorInfo = clienteGestionSensoresGrpc.obtenerSensor(lectura.toSensorLectura());
+
+                            // Actualizar lectura con datos del sensor
+                            lectura.setMacAddress(sensorInfo.getMacAddress());
+                            lectura.setMarca(sensorInfo.getMarca());
+                            lectura.setModelo(sensorInfo.getModelo());
+                            lectura.setMagnitud(sensorInfo.getMagnitud());
+                            lectura.setUnidad(sensorInfo.getUnidad());
+                            lectura.setInvernadero(sensorInfo.getNombreInvernadero());
+                            lectura.setSector(sensorInfo.getSector());
+                            lectura.setFila(sensorInfo.getFila());
+
+                            // Serializar y enviar a cola enriquecida
+                            String lecturaEnriquecidaJson = gson.toJson(lectura);
+                            rabbitTemplate.convertAndSend(QUEUE_EMIT, lecturaEnriquecidaJson);
+                            System.out.println("Lectura enriquecida enviada");
+
+                        } catch (Exception e) {
+                            System.err.println("Error al enriquecer la lectura: " + e.getMessage());
+                        }
+
+                    } else {
+                        System.out.println("Lectura descartada por sensor inactivo: " + lectura.getIdSensor());
                     }
                 };
 
-                channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {
-                });
-
-                // Esperar indefinidamente para mantener el hilo principal vivo
+                channel.basicConsume(QUEUE_RECEIVE, true, deliverCallback, consumerTag -> {});
                 Thread.currentThread().join();
+
             } catch (Exception e) {
                 System.err.println("Error en el receptor: " + e.getMessage());
             }
         }).start();
     }
 
-    /**
-     * Método para actualizar los estados de los sensores al iniciar el receptor.
-     * Se obtienen todos los sensores y se almacenan en un mapa concurrente.
-     */
     public void actualizarEstados() {
-        // Obtener todos los sensores al iniciar el receptor
         SensoresRespuesta sensores = clienteGestionSensoresGrpc.obtenerTodosSensores();
         for (SensorRespuesta sensor : sensores.getSensoresList()) {
             estadoSensores.put(sensor.getIdSensor(), sensor.getEstado());

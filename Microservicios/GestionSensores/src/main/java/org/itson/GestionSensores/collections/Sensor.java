@@ -28,33 +28,33 @@ public class Sensor {
     private String macAddress;
     private String marca;
     private String modelo;
-    private String tipoSensor;
     private String magnitud;
+    private String unidad;
     private ObjectId idInvernadero;
     private String sector;
     private String fila;
     private boolean estado;
 
-    public Sensor(String idSensor, String macAddress, String marca, String modelo, String tipoSensor, String magnitud, ObjectId idInvernadero, String sector, String fila) {
+    public Sensor(String idSensor, String macAddress, String marca, String modelo, String magnitud, String unidad, ObjectId idInvernadero, String sector, String fila) {
         this.idSensor = idSensor;
         this.macAddress = macAddress;
         this.marca = marca;
         this.modelo = modelo;
-        this.tipoSensor = tipoSensor;
         this.magnitud = magnitud;
+        this.unidad = unidad;
         this.idInvernadero = idInvernadero;
         this.sector = sector;
         this.fila = fila;
         this.estado = true;
     }
 
-    public Sensor(String idSensor, String macAddress, String marca, String modelo, String tipoSensor, String magnitud, ObjectId idInvernadero, String sector, String fila, boolean estado) {
+    public Sensor(String idSensor, String macAddress, String marca, String modelo, String magnitud, String unidad, ObjectId idInvernadero, String sector, String fila, boolean estado) {
         this.idSensor = idSensor;
         this.macAddress = macAddress;
         this.marca = marca;
         this.modelo = modelo;
-        this.tipoSensor = tipoSensor;
         this.magnitud = magnitud;
+        this.unidad = unidad;
         this.idInvernadero = idInvernadero;
         this.sector = sector;
         this.fila = fila;

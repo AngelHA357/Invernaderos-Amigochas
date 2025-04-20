@@ -90,8 +90,8 @@ public class LecturaService {
                             .setMacAddress(lecturaColeccion.getMacAddress())
                             .setMarca(lecturaColeccion.getMarca())
                             .setModelo(lecturaColeccion.getModelo())
-                            .setTipoSensor(lecturaColeccion.getTipoLectura())
                             .setMagnitud(lecturaColeccion.getMagnitud())
+                            .setUnidad(lecturaColeccion.getUnidad())
                             .build());
         } catch (StatusRuntimeException sre) {
             System.err.println("No se pudo conectar al microservicio de gestión de sensores: " + sre.getMessage());
@@ -106,8 +106,8 @@ public class LecturaService {
                 lecturaColeccion.getMacAddress(),
                 lecturaColeccion.getMarca(),
                 lecturaColeccion.getModelo(),
-                lecturaColeccion.getTipoLectura(),
                 lecturaColeccion.getMagnitud(),
+                lecturaColeccion.getUnidad(),
                 lecturaColeccion.getValor(),
                 lecturaColeccion.getFechaHora(),
                 sensorRespuestaGRPC.getNombreInvernadero(),
@@ -132,8 +132,8 @@ public class LecturaService {
                             .setMacAddress(lecturaDTO.getMacAddress())
                             .setMarca(lecturaDTO.getMarca())
                             .setModelo(lecturaDTO.getModelo())
-                            .setTipoSensor(lecturaDTO.getTipoLectura())
                             .setMagnitud(lecturaDTO.getMagnitud())
+                            .setUnidad(lecturaDTO.getUnidad())
                             .setEstado(lecturaDTO.isEstado())
                             .build());
         } catch (StatusRuntimeException sre) {
@@ -148,8 +148,8 @@ public class LecturaService {
                 lecturaDTO.getMacAddress(),
                 lecturaDTO.getMarca(),
                 lecturaDTO.getModelo(),
-                lecturaDTO.getTipoLectura(),
                 lecturaDTO.getMagnitud(),
+                lecturaDTO.getUnidad(),
                 lecturaDTO.getValor(),
                 lecturaDTO.getFechaHora(),
                 sensorRespuestaGRPC.getNombreInvernadero(),

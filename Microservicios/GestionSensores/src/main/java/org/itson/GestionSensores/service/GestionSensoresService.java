@@ -115,8 +115,8 @@ public class GestionSensoresService {
             sensorEntidad.setMacAddress(sensorDTO.getMacAddress());
             sensorEntidad.setMarca(sensorDTO.getMarca());
             sensorEntidad.setModelo(sensorDTO.getModelo());
-            sensorEntidad.setTipoSensor(sensorDTO.getTipoSensor());
             sensorEntidad.setMagnitud(sensorDTO.getMagnitud());
+            sensorEntidad.setUnidad(sensorDTO.getUnidad());
             // Validar que el idInvernadero exista
             obtenerInvernaderoPorId(new ObjectId(sensorDTO.getIdInvernadero()));
             sensorEntidad.setIdInvernadero(new ObjectId(sensorDTO.getIdInvernadero()));
@@ -164,7 +164,7 @@ public class GestionSensoresService {
      * @param sensoresEntidad Lista Entidad a convertir.
      * @return La lista de sensores de tipo DTO.
      */
-    private List<SensorDTO> convertirSensoresEntidadDTO(List<Sensor> sensoresEntidad) {
+    private List<SensorDTO> convertirSensoresEntidadDTO(List<Sensor> sensoresEntidad) throws GestionSensoresException {
         List<SensorDTO> sensoresDTO = new ArrayList<>();
         for (Sensor sensorEntidad : sensoresEntidad) {
             sensoresDTO.add(convertirSensorEntidadDTO(sensorEntidad));
@@ -178,16 +178,17 @@ public class GestionSensoresService {
      * @param sensorEntidad Sensor Entidad a convertir.
      * @return El sensor de tipo DTO.
      */
-    public SensorDTO convertirSensorEntidadDTO(Sensor sensorEntidad) {
+    public SensorDTO convertirSensorEntidadDTO(Sensor sensorEntidad) throws GestionSensoresException {
         return new SensorDTO(
                 sensorEntidad.get_id().toString(),
                 sensorEntidad.getIdSensor(),
                 sensorEntidad.getMacAddress(),
                 sensorEntidad.getMarca(),
                 sensorEntidad.getModelo(),
-                sensorEntidad.getTipoSensor(),
                 sensorEntidad.getMagnitud(),
+                sensorEntidad.getUnidad(),
                 sensorEntidad.getIdInvernadero().toString(),
+                obtenerInvernaderoPorId(sensorEntidad.getIdInvernadero()).getNombre(),
                 sensorEntidad.getSector(),
                 sensorEntidad.getFila(),
                 sensorEntidad.isEstado()
@@ -206,8 +207,8 @@ public class GestionSensoresService {
                 sensorDTO.getMacAddress(),
                 sensorDTO.getMarca(),
                 sensorDTO.getModelo(),
-                sensorDTO.getTipoSensor(),
                 sensorDTO.getMagnitud(),
+                sensorDTO.getUnidad(),
                 new ObjectId(sensorDTO.getIdInvernadero()),
                 sensorDTO.getSector(),
                 sensorDTO.getFila()

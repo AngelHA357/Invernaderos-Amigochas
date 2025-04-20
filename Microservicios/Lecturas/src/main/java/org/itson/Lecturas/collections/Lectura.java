@@ -24,8 +24,8 @@ public class Lectura {
     private String macAddress;
     private String marca;
     private String modelo;
-    private String tipoLectura;
     private String magnitud;
+    private String unidad;
     private float valor;
     private Date fechaHora;
     private String invernadero;
@@ -33,13 +33,13 @@ public class Lectura {
     private String fila;
     private boolean estado;
 
-    public Lectura(String idSensor, String macAddress, String marca, String modelo, String tipoLectura, String magnitud, float valor, Date fechaHora, String invernadero, String sector, String fila, boolean estado) {
+    public Lectura(String idSensor, String macAddress, String marca, String modelo, String magnitud, String unidad, float valor, Date fechaHora, String invernadero, String sector, String fila, boolean estado) {
         this.idSensor = idSensor;
         this.macAddress = macAddress;
         this.marca = marca;
         this.modelo = modelo;
-        this.tipoLectura = tipoLectura;
         this.magnitud = magnitud;
+        this.unidad = unidad;
         this.valor = valor;
         this.fechaHora = fechaHora;
         this.invernadero = invernadero;

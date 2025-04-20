@@ -3,6 +3,7 @@ package org.itson.Alarmas.service;
 import org.itson.Alarmas.collections.Alarma;
 import org.itson.Alarmas.dtos.AlarmaDTO;
 import org.itson.Alarmas.exceptions.AlarmasException;
+import org.itson.Alarmas.proto.ClienteAnomalyzerGrpc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.itson.Alarmas.persistence.IAlarmasRepository;
@@ -15,6 +16,9 @@ import java.util.Optional;
 public class AlarmasService {
     @Autowired
     private IAlarmasRepository alarmasRepository;
+
+    @Autowired
+    ClienteAnomalyzerGrpc clienteAnomalyzerGrpc;
 
     /**
      * Método que obtiene todas las alarmas.
@@ -62,6 +66,7 @@ public class AlarmasService {
         }
         Alarma alarmaEntidad = convertirAlarmaDTOEntidad(alarmaDTO);
         Alarma resultado = alarmasRepository.save(alarmaEntidad);
+        clienteAnomalyzerGrpc.registrarAlarma(convertirAlarmaEntidadDTO(resultado));
         return convertirAlarmaEntidadDTO(resultado);
     }
 
@@ -85,6 +90,7 @@ public class AlarmasService {
             alarmaEntidad.setMedioNotificacion(alarmaDTO.getMedioNotificacion());
             alarmaEntidad.setActivo(alarmaDTO.isActivo());
             Alarma resultado = alarmasRepository.save(alarmaEntidad);
+            clienteAnomalyzerGrpc.actualizaeAlarma(convertirAlarmaEntidadDTO(resultado));
             return convertirAlarmaEntidadDTO(resultado);
         } else {
             throw new AlarmasException("Alarma con ID " + alarmaDTO.getIdAlarma() + " no encontrada.");
@@ -101,6 +107,7 @@ public class AlarmasService {
         Optional<Alarma> alarmaObtenida = alarmasRepository.findByIdAlarma(id);
         if (alarmaObtenida.isPresent()) {
             alarmasRepository.delete(alarmaObtenida.get());
+            clienteAnomalyzerGrpc.eliminarAlarma(id);
         } else {
             throw new AlarmasException("Alarma con ID " + id + " no encontrada.");
         }

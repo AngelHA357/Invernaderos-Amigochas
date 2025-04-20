@@ -22,11 +22,11 @@ public class Alarma {
     private String invernadero;
     private float valorMinimo;
     private float valorMaximo;
-    private float unidad;
+    private String unidad;
     private String medioNotificacion;
     private boolean activo;
 
-    public Alarma(String idAlarma, String magnitud, List<ObjectId> sensores, String invernadero, float valorMinimo, float valorMaximo, float unidad, String medioNotificacion, boolean activo) {
+    public Alarma(String idAlarma, String magnitud, List<ObjectId> sensores, String invernadero, float valorMinimo, float valorMaximo, String unidad, String medioNotificacion, boolean activo) {
         this.idAlarma = idAlarma;
         this.magnitud = magnitud;
         this.sensores = sensores;

@@ -1,20 +1,25 @@
 server:
-  port: 8091
+  port: 8094
 
 spring:
   application:
-    name: msvc-lecturas
+    name: anomalyzer
   data:
     mongodb:
-      database: lecturas_db
+      database: anomalias_db
       uri: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
+      auto-index-creation: true
 
 grpc:
   server:
-    port: 9091
+    port: 9094
   client:
     gestion-sensores:
       address: static://localhost:50051
+      negotiation-type: plaintext
+      enable-keep-alive: true
+    alarmas:
+      address: static://localhost:50053
       negotiation-type: plaintext
       enable-keep-alive: true
 
@@ -22,12 +27,3 @@ management:
   tracing:
     sampling:
       probability: 1.0
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-    register-with-eureka: true
-    fetch-registry: true
-  instance:
-    prefer-ip-address: true
