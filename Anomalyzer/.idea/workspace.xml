@@ -5,47 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9879af79-ecd7-44bc-bb39-f33813800b81" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/dtos/AlarmaDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dtos/LecturaDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dtos/LecturaEnriquecidaDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/Analizador.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/LecturaConsumer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/proto/ClienteAlarmasGrpc.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/proto/ClienteGestionSensoresGrpc.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/proto/ServidorAnomalyzerGrpc.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/proto/alarmas.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/proto/anomalyzer.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/proto/gestion-sensores.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/proto/ClienteAnomalyzerGrpc.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/proto/ServidorAlarmasGrpc.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/proto/ServidorGrpcLauncher.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/proto/alarmas.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/proto/anomalyzer.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DTOs/src/main/java/org/itson/dtos/LecturaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DTOs/src/main/java/org/itson/dtos/LecturaDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/collections/Alarma.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/collections/Alarma.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/dtos/AlarmaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/dtos/AlarmaDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-alarmas.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-alarmas.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-lecturas.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-lecturas.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/collections/Sensor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/collections/Sensor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/dtos/SensorDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/dtos/SensorDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/proto/ServidorGestionSensoresGrpc.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/proto/ServidorGestionSensoresGrpc.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/service/GestionSensoresService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/service/GestionSensoresService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/proto/gestion-sensores.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/proto/gestion-sensores.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/ProcesadorLecturas.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/ProcesadorLecturas.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/RabbitMQReceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/RabbitMQReceptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/collections/Lectura.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/collections/Lectura.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/dtos/LecturaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/dtos/LecturaDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/service/LecturaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/service/LecturaService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/proto/estado-sensores.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/proto/estado-sensores.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/proto/gestion-sensores.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/proto/gestion-sensores.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/Analizador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/Analizador.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,7 +94,7 @@
       <updated>1730182693366</updated>
       <workItem from="1730182694407" duration="403000" />
       <workItem from="1745116571575" duration="4781000" />
-      <workItem from="1745136793657" duration="6802000" />
+      <workItem from="1745136793657" duration="7502000" />
     </task>
     <servers />
   </component>

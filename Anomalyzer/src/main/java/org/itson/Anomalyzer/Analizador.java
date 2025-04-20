@@ -2,15 +2,41 @@ package org.itson.Anomalyzer;
 
 import dtos.AlarmaDTO;
 import dtos.LecturaDTO;
+import org.bson.types.ObjectId;
+import org.itson.Alarma.Alarmas;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import proto.ClienteAlarmasGrpc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class Analizador {
     List<AlarmaDTO> alarmas = new ArrayList<>();
+
+    @Autowired
+    ClienteAlarmasGrpc clienteAlarmasGrpc;
+
+    public Analizador() {
+        List<Alarmas.AlarmaDTO> alarmas = clienteAlarmasGrpc.obtenerAlarmas();
+
+        for (Alarmas.AlarmaDTO alarmasDTO : alarmas) {
+            List<String> idSensoresString = alarmasDTO.getIdSensoresList();
+            List<ObjectId> idSensoresObjectId = new ArrayList<>();
+            for (String idSensor : idSensoresString) {
+                idSensoresObjectId.add(new ObjectId(idSensor));
+            }
+            AlarmaDTO alarmaDTO = new AlarmaDTO();
+            alarmaDTO.setIdAlarma(alarmasDTO.getIdAlarma());
+            alarmaDTO.setSensores(idSensoresObjectId);
+            alarmaDTO.setInvernadero(alarmasDTO.getInvernadero());
+            alarmaDTO.setValorMinimo(alarmasDTO.getValorMinimo());
+            alarmaDTO.setValorMaximo(alarmasDTO.getValorMaximo());
+            alarmaDTO.setActivo(alarmasDTO.getActivo());
+            actualizarAlarma(alarmaDTO);
+        }
+    }
 
     public void procesarLectura(LecturaDTO lecturaEnriquecida) {
         try {
