@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { registrarSensor, obtenerInvernaderos } from '../services/sensorService';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
 
 function AgregarSensor() {
-    const { invernaderoId } = useParams(); // Capturar el ID del invernadero desde la URL
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [validationErrors, setValidationErrors] = useState({});
     const [success, setSuccess] = useState(false);
-    const [invernaderos, setInvernaderos] = useState([]);
-    const [invernaderoSeleccionado, setInvernaderoSeleccionado] = useState(null);
+    const [invernadero, setInvernadero] = useState(null);
     const [sectores, setSectores] = useState([]);
     const [filas, setFilas] = useState([]);
     
@@ -23,7 +21,7 @@ function AgregarSensor() {
         modelo: '',            // Modelo del sensor (String)
         tipoSensor: '',        // Tipo de sensor (String)
         magnitud: '',          // Unidad de medida (String)
-        idInvernadero: '',     // ID del invernadero (ObjectId)
+        idInvernadero: '',     // ID del invernadero (ObjectId) - se llenará desde sessionStorage
         sector: '',            // Sector del invernadero (String)
         fila: '',              // Fila del invernadero (String)
         estado: true           // Estado del sensor (Boolean)
@@ -43,86 +41,34 @@ function AgregarSensor() {
         'CO2': ['ppm', 'mg/m³']
     };
 
-    // Al iniciar, verificar si hay un invernaderoId en la URL o en sessionStorage
+    // Al iniciar, cargar el invernadero desde sessionStorage
     useEffect(() => {
-        // Verificar si hay un ID de invernadero en la URL
-        if (invernaderoId) {
-            setFormData(prev => ({
-                ...prev,
-                idInvernadero: invernaderoId
-            }));
-        } else {
-            // Intentar obtener el invernadero seleccionado del sessionStorage
-            const invernaderoData = sessionStorage.getItem('invernaderoSeleccionado');
-            if (invernaderoData) {
-                const invData = JSON.parse(invernaderoData);
-                setFormData(prev => ({
-                    ...prev,
-                    idInvernadero: invData.id
-                }));
-            }
-        }
-    }, [invernaderoId]);
-
-    // Cargar lista de invernaderos
-    useEffect(() => {
-        const cargarInvernaderos = async () => {
+        const cargarInvernadero = async () => {
             try {
-                setLoading(true);
-                const data = await obtenerInvernaderos();
-                setInvernaderos(data);
-                
-                // Si ya tenemos un ID de invernadero preseleccionado
-                if (formData.idInvernadero) {
-                    const invSeleccionado = data.find(inv => inv.id === formData.idInvernadero);
-                    if (invSeleccionado) {
-                        setInvernaderoSeleccionado(invSeleccionado);
-                        setSectores(invSeleccionado.sectores || []);
-                        setFilas(invSeleccionado.filas || []);
-                    }
-                } 
-                // Sino, seleccionar el primero por defecto
-                else if (data.length > 0) {
-                    const primerInv = data[0];
-                    setInvernaderoSeleccionado(primerInv);
+                // Obtener el invernadero del sessionStorage
+                const invernaderoData = sessionStorage.getItem('invernaderoSeleccionado');
+                if (invernaderoData) {
+                    const invData = JSON.parse(invernaderoData);
+                    setInvernadero(invData);
                     setFormData(prev => ({
                         ...prev,
-                        idInvernadero: primerInv.id
+                        idInvernadero: invData.id
                     }));
-                    
-                    // Cargar sectores y filas del primer invernadero
-                    setSectores(primerInv.sectores || []);
-                    setFilas(primerInv.filas || []);
+                    setSectores(invData.sectores || []);
+                    setFilas(invData.filas || []);
+                } else {
+                    // Si no hay invernadero seleccionado, redirigir a la lista
+                    navigate('/invernaderos');
+                    return;
                 }
-            } catch (err) {
-                console.error('Error al cargar invernaderos:', err);
-                setError('No se pudieron cargar los invernaderos. Por favor, intente nuevamente.');
-            } finally {
-                setLoading(false);
+            } catch (error) {
+                console.error("Error al cargar el invernadero:", error);
+                setError("No se pudo cargar la información del invernadero");
             }
         };
         
-        cargarInvernaderos();
-    }, [formData.idInvernadero]);
-
-    // Manejar cambio de invernadero seleccionado
-    const handleInvernaderoChange = (e) => {
-        const idInvernaderoSeleccionado = e.target.value;
-        const invSeleccionado = invernaderos.find(inv => inv.id === idInvernaderoSeleccionado);
-        
-        if (invSeleccionado) {
-            setInvernaderoSeleccionado(invSeleccionado);
-            setSectores(invSeleccionado.sectores || []);
-            setFilas(invSeleccionado.filas || []);
-            
-            setFormData(prev => ({
-                ...prev,
-                idInvernadero: idInvernaderoSeleccionado,
-                sector: '', // Reset sector
-                fila: ''    // Reset fila
-            }));
-        }
-    };
+        cargarInvernadero();
+    }, [navigate]);
 
     // Validar formato de MAC Address
     const isValidMACAddress = (mac) => {
@@ -172,7 +118,7 @@ function AgregarSensor() {
         }
         
         if (!formData.idInvernadero) {
-            errors.idInvernadero = 'Debe seleccionar un invernadero';
+            errors.idInvernadero = 'No se ha detectado un invernadero seleccionado';
         }
         
         if (!formData.sector) {
@@ -252,7 +198,7 @@ function AgregarSensor() {
             
             setSuccess(true);
             
-            // Redirigir después de un breve retraso
+            // Redirigir después de un breve retraso - volvemos a la lista de sensores del invernadero actual
             setTimeout(() => {
                 navigate(`/sensores/${formData.idInvernadero}`);
             }, 2000);
@@ -262,6 +208,15 @@ function AgregarSensor() {
             setError('Ocurrió un error al registrar el sensor. Por favor, intente nuevamente.');
         } finally {
             setLoading(false);
+        }
+    };
+
+    // Función para volver a la lista de sensores
+    const volverASensores = () => {
+        if (invernadero && invernadero.id) {
+            navigate(`/sensores/${invernadero.id}`);
+        } else {
+            navigate('/invernaderos');
         }
     };
 
@@ -278,16 +233,13 @@ function AgregarSensor() {
                             </div>
                             <div>
                                 <h1 className="text-2xl font-bold text-gray-800">Agregar Sensor</h1>
+                                {invernadero && (
+                                    <p className="text-sm text-green-600">Invernadero: {invernadero.name}</p>
+                                )}
                             </div>
                         </div>
                         <button 
-                            onClick={() => {
-                                // Asegurarnos de tener el invernadero en sessionStorage
-                                if (invernaderoSeleccionado) {
-                                    sessionStorage.setItem('invernaderoSeleccionado', JSON.stringify(invernaderoSeleccionado));
-                                }
-                                navigate(formData.idInvernadero ? `/sensores/${formData.idInvernadero}` : '/invernaderos');
-                            }} 
+                            onClick={volverASensores}
                             className="px-4 py-2 bg-green-100 rounded-md text-green-700 hover:bg-green-200 transition-colors duration-300 flex items-center shadow-sm">
                             <span className="mr-1">←</span> Volver a Sensores
                         </button>
@@ -311,34 +263,6 @@ function AgregarSensor() {
 
                     {/* Formulario */}
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        {/* Selección de invernadero */}
-                        <div className="bg-green-50 p-4 rounded-md border border-green-200">
-                            <h2 className="text-lg font-semibold text-gray-700 mb-3">Selección de Invernadero</h2>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="idInvernadero">
-                                    Invernadero *
-                                </label>
-                                <select
-                                    id="idInvernadero"
-                                    name="idInvernadero"
-                                    value={formData.idInvernadero}
-                                    onChange={handleInvernaderoChange}
-                                    required
-                                    className={`w-full border ${validationErrors.idInvernadero ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500`}
-                                >
-                                    <option value="">Seleccionar invernadero</option>
-                                    {invernaderos.map(inv => (
-                                        <option key={inv.id} value={inv.id}>
-                                            {inv.name}
-                                        </option>
-                                    ))}
-                                </select>
-                                {validationErrors.idInvernadero && (
-                                    <p className="text-red-500 text-xs mt-1">{validationErrors.idInvernadero}</p>
-                                )}
-                            </div>
-                        </div>
-
                         {/* Identificación del sensor */}
                         <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
                             <h2 className="text-lg font-semibold text-gray-700 mb-3">Identificación del Sensor</h2>
@@ -490,7 +414,7 @@ function AgregarSensor() {
                                         onChange={handleChange}
                                         required
                                         className={`w-full border ${validationErrors.sector ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500`}
-                                        disabled={!invernaderoSeleccionado || sectores.length === 0}
+                                        disabled={!invernadero || sectores.length === 0}
                                     >
                                         <option value="">Seleccionar sector</option>
                                         {sectores.map((sector, idx) => (
@@ -502,7 +426,7 @@ function AgregarSensor() {
                                     {validationErrors.sector && (
                                         <p className="text-red-500 text-xs mt-1">{validationErrors.sector}</p>
                                     )}
-                                    {sectores.length === 0 && invernaderoSeleccionado && (
+                                    {sectores.length === 0 && invernadero && (
                                         <p className="text-xs text-orange-500 mt-1">
                                             Este invernadero no tiene sectores definidos
                                         </p>
@@ -519,7 +443,7 @@ function AgregarSensor() {
                                         onChange={handleChange}
                                         required
                                         className={`w-full border ${validationErrors.fila ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500`}
-                                        disabled={!invernaderoSeleccionado || filas.length === 0}
+                                        disabled={!invernadero || filas.length === 0}
                                     >
                                         <option value="">Seleccionar fila</option>
                                         {filas.map((fila, idx) => (
@@ -531,7 +455,7 @@ function AgregarSensor() {
                                     {validationErrors.fila && (
                                         <p className="text-red-500 text-xs mt-1">{validationErrors.fila}</p>
                                     )}
-                                    {filas.length === 0 && invernaderoSeleccionado && (
+                                    {filas.length === 0 && invernadero && (
                                         <p className="text-xs text-orange-500 mt-1">
                                             Este invernadero no tiene filas definidas
                                         </p>
@@ -565,13 +489,7 @@ function AgregarSensor() {
                         <div className="flex justify-end space-x-4 pt-4">
                             <button
                                 type="button"
-                                onClick={() => {
-                                    // Asegurarnos de tener el invernadero en sessionStorage
-                                    if (invernaderoSeleccionado) {
-                                        sessionStorage.setItem('invernaderoSeleccionado', JSON.stringify(invernaderoSeleccionado));
-                                    }
-                                    navigate(formData.idInvernadero ? `/sensores/${formData.idInvernadero}` : '/invernaderos')
-                                }}
+                                onClick={volverASensores}
                                 className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors duration-300"
                             >
                                 Cancelar

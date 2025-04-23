@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
-import { obtenerInvernaderos, obtenerSensorPorId, editarSensor } from '../services/sensorService';
+import { obtenerSensorPorId, editarSensor } from '../services/sensorService';
 
 function EditarSensor() {
     const navigate = useNavigate();
-    const { sensorId } = useParams();
     const [loading, setLoading] = useState(false);
-    const [invernaderos, setInvernaderos] = useState([]);
     const [sectores, setSectores] = useState([]);
     const [filas, setFilas] = useState([]);
     const [error, setError] = useState('');
     const [validationErrors, setValidationErrors] = useState({});
     const [showModal, setShowModal] = useState(false);
+    const [invernaderoSeleccionado, setInvernaderoSeleccionado] = useState(null);
     
     // Obtener sensor del sessionStorage para datos iniciales
     const sensorSeleccionado = JSON.parse(sessionStorage.getItem('sensorSeleccionado')) || {};
@@ -40,28 +39,26 @@ function EditarSensor() {
         modelo: sensorSeleccionado.modelo || '',    
         tipoSensor: sensorSeleccionado.type || '',  
         magnitud: sensorSeleccionado.magnitud || '',
-        idInvernadero: sensorSeleccionado.invernaderoId || '',
         sector: sensorSeleccionado.sector || '',    
         fila: sensorSeleccionado.fila || '',        
         estado: sensorSeleccionado.status === 'Activo' // true o false
     });
 
-    // Cargar lista de invernaderos y datos del sensor
+    // Cargar datos del invernadero y configuración desde sessionStorage
     useEffect(() => {
         const cargarDatos = async () => {
             try {
                 setLoading(true);
-                // Cargar la lista de invernaderos
-                const invData = await obtenerInvernaderos();
-                setInvernaderos(invData);
                 
-                // Cargar el invernadero seleccionado
-                if (formData.idInvernadero) {
-                    const invernaderoSeleccionado = invData.find(inv => inv.id === formData.idInvernadero);
-                    if (invernaderoSeleccionado) {
-                        setSectores(invernaderoSeleccionado.sectores || []);
-                        setFilas(invernaderoSeleccionado.filas || []);
-                    }
+                // Obtener datos del invernadero seleccionado del sessionStorage
+                const invernaderoData = sessionStorage.getItem('invernaderoSeleccionado');
+                if (invernaderoData) {
+                    const invData = JSON.parse(invernaderoData);
+                    setInvernaderoSeleccionado(invData);
+                    setSectores(invData.sectores || []);
+                    setFilas(invData.filas || []);
+                } else {
+                    setError('No se encontró información del invernadero. Por favor, vuelva a la lista de invernaderos.');
                 }
             } catch (err) {
                 console.error('Error al cargar datos:', err);
@@ -85,34 +82,6 @@ function EditarSensor() {
     const isValidSensorId = (id) => {
         const idRegex = /^[a-zA-Z0-9-_]+$/;
         return idRegex.test(id);
-    };
-
-    // Manejar cambio de invernadero seleccionado
-    const handleInvernaderoChange = (e) => {
-        const idInvernaderoSeleccionado = e.target.value;
-        const invernaderoSeleccionado = invernaderos.find(inv => inv.id === idInvernaderoSeleccionado);
-        
-        if (invernaderoSeleccionado) {
-            setSectores(invernaderoSeleccionado.sectores || []);
-            setFilas(invernaderoSeleccionado.filas || []);
-            
-            setFormData(prev => ({
-                ...prev,
-                idInvernadero: idInvernaderoSeleccionado,
-                sector: '', // Reset sector
-                fila: ''    // Reset fila
-            }));
-
-            // Limpiar errores de validación
-            if (validationErrors.idInvernadero) {
-                setValidationErrors(prev => ({
-                    ...prev,
-                    idInvernadero: '',
-                    sector: '',
-                    fila: ''
-                }));
-            }
-        }
     };
 
     // Manejar cambios generales en el formulario
@@ -188,10 +157,6 @@ function EditarSensor() {
             errors.magnitud = 'La magnitud es obligatoria';
         }
         
-        if (!formData.idInvernadero) {
-            errors.idInvernadero = 'Debe seleccionar un invernadero';
-        }
-        
         if (!formData.sector) {
             errors.sector = 'Debe seleccionar un sector';
         }
@@ -228,7 +193,7 @@ function EditarSensor() {
                 modelo: formData.modelo,
                 tipoSensor: formData.tipoSensor,
                 magnitud: formData.magnitud,
-                idInvernadero: formData.idInvernadero,
+                idInvernadero: invernaderoSeleccionado?.id, // Usar el ID del invernadero seleccionado
                 sector: formData.sector,
                 fila: formData.fila,
                 estado: formData.estado
@@ -248,7 +213,7 @@ function EditarSensor() {
                 modelo: formData.modelo,
                 type: formData.tipoSensor,
                 magnitud: formData.magnitud,
-                invernaderoId: formData.idInvernadero,
+                invernaderoId: invernaderoSeleccionado?.id,
                 sector: formData.sector,
                 fila: formData.fila,
                 status: formData.estado ? 'Activo' : 'Inactivo'
@@ -263,6 +228,17 @@ function EditarSensor() {
             setError(`Error al actualizar el sensor: ${err.message}`);
         } finally {
             setLoading(false);
+        }
+    };
+
+    // Manejar el botón volver a sensores
+    const handleVolverASensores = () => {
+        // Usar el invernadero seleccionado del sessionStorage para navegar
+        if (invernaderoSeleccionado) {
+            navigate(`/sensores/${invernaderoSeleccionado.id}`);
+        } else {
+            // Si no hay invernadero seleccionado, ir a la lista general
+            navigate('/invernaderos');
         }
     };
 
@@ -282,10 +258,13 @@ function EditarSensor() {
                                 {sensorSeleccionado && (
                                     <p className="text-sm text-green-600">ID: {sensorSeleccionado.id}</p>
                                 )}
+                                {invernaderoSeleccionado && (
+                                    <p className="text-sm text-green-600">Invernadero: {invernaderoSeleccionado.name}</p>
+                                )}
                             </div>
                         </div>
                         <button 
-                            onClick={() => navigate(`/sensores/${formData.idInvernadero}`)}
+                            onClick={handleVolverASensores}
                             className="px-4 py-2 bg-green-100 rounded-md text-green-700 hover:bg-green-200 transition-colors duration-300 flex items-center shadow-sm">
                             <span className="mr-1">←</span> Volver a Sensores
                         </button>
@@ -433,34 +412,9 @@ function EditarSensor() {
                             </div>
                         </div>
 
-                        {/* Selección de invernadero */}
+                        {/* Selección de ubicación */}
                         <div className="bg-green-50 p-4 rounded-md border border-green-200">
                             <h2 className="text-lg font-semibold text-gray-700 mb-3">Ubicación</h2>
-                            <div className="grid grid-cols-1 mb-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="idInvernadero">
-                                        Invernadero *
-                                    </label>
-                                    <select
-                                        id="idInvernadero"
-                                        name="idInvernadero"
-                                        value={formData.idInvernadero}
-                                        onChange={handleInvernaderoChange}
-                                        required
-                                        className={`w-full border ${validationErrors.idInvernadero ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500`}
-                                    >
-                                        <option value="">Seleccionar invernadero</option>
-                                        {invernaderos.map(inv => (
-                                            <option key={inv.id} value={inv.id}>
-                                                {inv.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {validationErrors.idInvernadero && (
-                                        <p className="text-red-500 text-xs mt-1">{validationErrors.idInvernadero}</p>
-                                    )}
-                                </div>
-                            </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="sector">
@@ -538,7 +492,7 @@ function EditarSensor() {
                         <div className="flex justify-end space-x-4 pt-4">
                             <button
                                 type="button"
-                                onClick={() => navigate(`/sensores/${formData.idInvernadero}`)}
+                                onClick={handleVolverASensores}
                                 className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors duration-300"
                             >
                                 Cancelar
@@ -573,7 +527,7 @@ function EditarSensor() {
                             <button
                                 onClick={() => {
                                     setShowModal(false);
-                                    navigate(`/sensores/${formData.idInvernadero}`);
+                                    handleVolverASensores();
                                 }}
                                 className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 font-bold"
                             >

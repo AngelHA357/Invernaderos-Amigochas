@@ -14,6 +14,10 @@ spring:
           uri: lb://msvc-gestion-sensores
           predicates:
             - Path=/api/v1/gestionSensores/**
+        - id: msvc-alarmas
+          uri: lb://msvc-alarmas
+          predicates:
+            - Path=/api/v1/alarmas/**
         - id: msvc-lecturas
           uri: lb://msvc-lecturas
           predicates:

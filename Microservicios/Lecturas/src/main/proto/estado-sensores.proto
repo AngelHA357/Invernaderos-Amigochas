@@ -10,13 +10,30 @@ option java_outer_classname = "GestionSensoresProto"; // Nombre de la clase exte
 // Importar el tipo Empty para peticiones vacías
 import "google/protobuf/empty.proto";
 
-// Servidor
+// Servidor para gestión de sensores
 service GestionSensoresServidor {
   rpc GetSensor (SensorPeticion) returns (SensorRespuesta);
   rpc GetTodosSensores (google.protobuf.Empty) returns (SensoresRespuesta);
 }
 
-// Mensaje de solicitud
+// Servidor para estado de sensores
+service EstadoSensoresServidor {
+  rpc ActualizarEstados (google.protobuf.Empty) returns (google.protobuf.Empty);
+}
+
+// Mensaje de solicitud para estado
+message EstadoPeticion {
+  string idSensor = 1;
+  bool estado = 2;
+}
+
+// Mensaje de respuesta para estado
+message EstadoRespuesta {
+  bool actualizado = 1;
+  string mensaje = 2;
+}
+
+// Mensaje de solicitud para sensor
 message SensorPeticion {
   SensorLectura sensorLectura = 1;
 }

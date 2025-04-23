@@ -7,3 +7,4 @@
 /Anomalyzer/target/
 /DTOs/target/
 **/paho*/
+/FrontInvernaderoAmigochas/node_modules/
