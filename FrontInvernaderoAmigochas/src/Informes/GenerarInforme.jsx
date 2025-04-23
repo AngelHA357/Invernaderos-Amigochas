@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
 
 function GenerarInforme() {
@@ -23,6 +23,34 @@ function GenerarInforme() {
     const [endDate, setEndDate] = useState('2023-03-08');
     const [formData, setFormData] = useState(null);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [lecturas, setLecturas] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    // Efecto para cargar las lecturas cuando se envía el formulario
+    useEffect(() => {
+        if (isSubmitted) {
+            fetchLecturas();
+        }
+    }, [isSubmitted]);
+
+    // Función para obtener las lecturas del sistema
+    const fetchLecturas = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/lecturas');
+            if (!response.ok) {
+                throw new Error('Error al obtener las lecturas');
+            }
+            const data = await response.json();
+            setLecturas(data);
+        } catch (err) {
+            setError(err.message);
+            console.error('Error:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleInvernaderoChange = (e) => {
         const selectedId = e.target.value;
@@ -71,6 +99,54 @@ function GenerarInforme() {
         console.log('Datos del informe:', data);
         
         alert('Informe generado correctamente');
+    };
+
+    // Función para exportar datos a CSV
+    const exportToCSV = () => {
+        if (!lecturas || lecturas.length === 0) {
+            alert('No hay datos para exportar');
+            return;
+        }
+
+        // Crear las cabeceras del CSV
+        let headers = ['ID Sensor', 'MAC Address', 'Marca', 'Modelo', 'Magnitud', 'Unidad', 'Valor', 'Fecha/Hora', 'Invernadero', 'Sector', 'Fila'];
+        
+        // Crear las filas de datos
+        let csvContent = headers.join(',') + '\n';
+        
+        lecturas.forEach(lectura => {
+            const fechaFormateada = new Date(lectura.fechaHora).toLocaleString();
+            const row = [
+                lectura.idSensor || '',
+                lectura.macAddress || '',
+                lectura.marca || '',
+                lectura.modelo || '',
+                lectura.magnitud || '',
+                lectura.unidad || '',
+                lectura.valor || '',
+                fechaFormateada,
+                lectura.invernadero || '',
+                lectura.sector || '',
+                lectura.fila || ''
+            ].map(value => `"${value}"`).join(',');
+            
+            csvContent += row + '\n';
+        });
+        
+        // Crear un objeto Blob para el archivo CSV
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        
+        // Crear un enlace para descargar el archivo
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', `informe_lecturas_${new Date().toISOString().slice(0, 10)}.csv`);
+        link.style.visibility = 'hidden';
+        
+        // Añadir el enlace al DOM y activar la descarga
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     return (
@@ -253,6 +329,7 @@ function GenerarInforme() {
                                     type="button"
                                     className={`flex items-center px-4 py-2 rounded-md ${!isSubmitted ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-green-100 text-green-700 hover:bg-green-200'} transition-colors duration-300`}
                                     disabled={!isSubmitted}
+                                    onClick={exportToCSV}
                                 >
                                     <span className="mr-1">Exportar</span>
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -290,29 +367,80 @@ function GenerarInforme() {
                                         })}
                                     </div>
 
-                                    <div className="h-80 bg-green-50 border border-green-100 flex flex-col items-center justify-center rounded-lg overflow-hidden">
-                                        <div className="text-5xl mb-4 text-green-300">📈</div>
-                                        <p className="text-gray-700 font-medium mb-2">
-                                            Datos recopilados con éxito
-                                        </p>
-                                        <p className="text-green-600 mb-4">
-                                            {formData ? 'Visualización de gráficas en desarrollo' : 'No hay datos para mostrar'}
-                                        </p>
-
-                                        {/* Gráfico simulado */}
-                                        <div className="w-full max-w-md h-24 bg-white rounded-lg shadow-inner overflow-hidden flex items-end p-2 mt-2">
-                                            <div className="h-50% w-4 bg-green-200 mx-1 rounded-t-sm"></div>
-                                            <div className="h-60% w-4 bg-green-300 mx-1 rounded-t-sm"></div>
-                                            <div className="h-40% w-4 bg-green-200 mx-1 rounded-t-sm"></div>
-                                            <div className="h-70% w-4 bg-green-400 mx-1 rounded-t-sm"></div>
-                                            <div className="h-85% w-4 bg-green-500 mx-1 rounded-t-sm"></div>
-                                            <div className="h-65% w-4 bg-green-400 mx-1 rounded-t-sm"></div>
-                                            <div className="h-55% w-4 bg-green-300 mx-1 rounded-t-sm"></div>
-                                            <div className="h-45% w-4 bg-green-200 mx-1 rounded-t-sm"></div>
-                                            <div className="h-35% w-4 bg-green-200 mx-1 rounded-t-sm"></div>
-                                            <div className="h-25% w-4 bg-green-100 mx-1 rounded-t-sm"></div>
+                                    {loading ? (
+                                        <div className="flex justify-center items-center h-80">
+                                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
                                         </div>
-                                    </div>
+                                    ) : error ? (
+                                        <div className="p-4 bg-red-50 border border-red-100 rounded-lg text-red-500">
+                                            <p className="font-medium">Error al cargar datos</p>
+                                            <p>{error}</p>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            {/* Tabla de lecturas */}
+                                            <div className="overflow-x-auto mb-4">
+                                                <table className="min-w-full divide-y divide-green-200">
+                                                    <thead className="bg-green-50">
+                                                        <tr>
+                                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">ID Sensor</th>
+                                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">MAC Address</th>
+                                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">Marca</th>
+                                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">Modelo</th>
+                                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">Magnitud</th>
+                                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">Unidad</th>
+                                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">Valor</th>
+                                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">Fecha/Hora</th>
+                                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">Invernadero</th>
+                                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">Sector</th>
+                                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">Fila</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody className="bg-white divide-y divide-green-100">
+                                                        {lecturas.length > 0 ? (
+                                                            lecturas.map((lectura, index) => (
+                                                                <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50'}>
+                                                                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{lectura.idSensor}</td>
+                                                                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{lectura.macAddress}</td>
+                                                                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{lectura.marca}</td>
+                                                                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{lectura.modelo}</td>
+                                                                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{lectura.magnitud}</td>
+                                                                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{lectura.unidad}</td>
+                                                                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{lectura.valor}</td>
+                                                                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">
+                                                                        {new Date(lectura.fechaHora).toLocaleDateString()} {new Date(lectura.fechaHora).toLocaleTimeString()}
+                                                                    </td>
+                                                                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{lectura.invernadero}</td>
+                                                                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{lectura.sector}</td>
+                                                                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{lectura.fila}</td>
+                                                                </tr>
+                                                            ))
+                                                        ) : (
+                                                            <tr>
+                                                                <td colSpan="11" className="px-4 py-8 text-center text-gray-500">
+                                                                    No se encontraron lecturas para los parámetros seleccionados
+                                                                </td>
+                                                            </tr>
+                                                        )}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            {/* Gráfico simulado */}
+                                            <div className="w-full max-w-md h-24 bg-white rounded-lg shadow-inner overflow-hidden flex items-end p-2 mt-2">
+                                                <div className="h-50% w-4 bg-green-200 mx-1 rounded-t-sm"></div>
+                                                <div className="h-60% w-4 bg-green-300 mx-1 rounded-t-sm"></div>
+                                                <div className="h-40% w-4 bg-green-200 mx-1 rounded-t-sm"></div>
+                                                <div className="h-70% w-4 bg-green-400 mx-1 rounded-t-sm"></div>
+                                                <div className="h-85% w-4 bg-green-500 mx-1 rounded-t-sm"></div>
+                                                <div className="h-65% w-4 bg-green-400 mx-1 rounded-t-sm"></div>
+                                                <div className="h-55% w-4 bg-green-300 mx-1 rounded-t-sm"></div>
+                                                <div className="h-45% w-4 bg-green-200 mx-1 rounded-t-sm"></div>
+                                                <div className="h-35% w-4 bg-green-200 mx-1 rounded-t-sm"></div>
+                                                <div className="h-25% w-4 bg-green-100 mx-1 rounded-t-sm"></div>
+                                            </div>
+                                        </>
+                                    )}
 
                                     <div className="flex space-x-4 mt-6 p-3 bg-white border border-green-100 rounded-lg shadow-sm">
                                         <div className="text-sm text-gray-700 mr-2 font-medium">Leyenda:</div>

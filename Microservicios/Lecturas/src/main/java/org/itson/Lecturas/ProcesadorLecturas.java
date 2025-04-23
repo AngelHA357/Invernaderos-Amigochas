@@ -71,7 +71,8 @@ public class ProcesadorLecturas {
         String modelo = lectura.getModelo();
         String magnitud = lectura.getMagnitud();
         String unidad = lectura.getUnidad();
-        String invernadero = lectura.getInvernadero();
+        String idInvernadero = lectura.getIdInvernadero();
+        String nombreInvernadero = lectura.getNombreInvernadero();
         String sector = lectura.getSector();
         String fila = lectura.getFila();
         float valor = lectura.getValor();
@@ -89,11 +90,12 @@ public class ProcesadorLecturas {
                 | Magnitud         | %-38s |
                 | Valor            | %-38.2f |
                 | Unidad           | %-38s |
+                | ID Invernadero   | %-38s |
                 | Invernadero      | %-38s |
                 | Sector           | %-38s |
                 | Fila             | %-38s |
                 | Hora             | %-38s |
                 └------------------┴----------------------------------------┘
-                """, idSensor, macAddress, marca, modelo, magnitud, valor, unidad, invernadero, sector, fila, fechaHoraFormateada);
+                """, idSensor, macAddress, marca, modelo, magnitud, valor, unidad, idInvernadero, nombreInvernadero, sector, fila, fechaHoraFormateada);
     }
 }

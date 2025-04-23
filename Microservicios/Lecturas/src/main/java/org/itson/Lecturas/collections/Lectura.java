@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
 /**
- * Clase entidad que representa un sensor.
+ * Clase entidad que representa una lectura de un sensor.
  */
 @Document(collection = "lecturas")
 @Data
@@ -28,12 +28,15 @@ public class Lectura {
     private String unidad;
     private float valor;
     private Date fechaHora;
-    private String invernadero;
+    private String idInvernadero;  // Cambiado de invernadero a idInvernadero
+    private String nombreInvernadero; // Agregado para guardar el nombre del invernadero
     private String sector;
     private String fila;
     private boolean estado;
 
-    public Lectura(String idSensor, String macAddress, String marca, String modelo, String magnitud, String unidad, float valor, Date fechaHora, String invernadero, String sector, String fila, boolean estado) {
+    public Lectura(String idSensor, String macAddress, String marca, String modelo, String magnitud, String unidad, 
+                  float valor, Date fechaHora, String idInvernadero, String nombreInvernadero, String sector, 
+                  String fila, boolean estado) {
         this.idSensor = idSensor;
         this.macAddress = macAddress;
         this.marca = marca;
@@ -42,7 +45,8 @@ public class Lectura {
         this.unidad = unidad;
         this.valor = valor;
         this.fechaHora = fechaHora;
-        this.invernadero = invernadero;
+        this.idInvernadero = idInvernadero;
+        this.nombreInvernadero = nombreInvernadero;
         this.sector = sector;
         this.fila = fila;
         this.estado = estado;

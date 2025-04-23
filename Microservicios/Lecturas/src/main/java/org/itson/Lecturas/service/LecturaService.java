@@ -110,10 +110,11 @@ public class LecturaService {
                 lecturaColeccion.getUnidad(),
                 lecturaColeccion.getValor(),
                 lecturaColeccion.getFechaHora(),
-                sensorRespuestaGRPC.getNombreInvernadero(),
-                sensorRespuestaGRPC.getSector(),
-                sensorRespuestaGRPC.getFila(),
-                sensorRespuestaGRPC.getEstado()
+                lecturaColeccion.getIdInvernadero(),
+                lecturaColeccion.getNombreInvernadero(),
+                lecturaColeccion.getSector(),
+                lecturaColeccion.getFila(),
+                lecturaColeccion.isEstado()
         );
     }
 
@@ -125,6 +126,7 @@ public class LecturaService {
      */
     private Lectura conversorLecturaDTOColeccion(LecturaDTO lecturaDTO) throws LecturasException {
         SensorRespuesta sensorRespuestaGRPC;
+        String idInvernadero = "N/A";
         String nombreInvernadero = "N/A";
         String sector = "N/A";
         String fila = "N/A";
@@ -142,6 +144,7 @@ public class LecturaService {
                             .setEstado(lecturaDTO.isEstado())
                             .build());
             
+            idInvernadero = sensorRespuestaGRPC.getIdInvernadero();
             nombreInvernadero = sensorRespuestaGRPC.getNombreInvernadero();
             sector = sensorRespuestaGRPC.getSector();
             fila = sensorRespuestaGRPC.getFila();
@@ -161,6 +164,7 @@ public class LecturaService {
                 lecturaDTO.getUnidad(),
                 lecturaDTO.getValor(),
                 lecturaDTO.getFechaHora(),
+                idInvernadero,
                 nombreInvernadero,
                 sector,
                 fila,

@@ -24,7 +24,8 @@ public class LecturaDTO {
     private String unidad;
     private float valor;
     private Date fechaHora;
-    private String invernadero;
+    private String idInvernadero;
+    private String nombreInvernadero;
     private String sector;
     private String fila;
     private boolean estado;

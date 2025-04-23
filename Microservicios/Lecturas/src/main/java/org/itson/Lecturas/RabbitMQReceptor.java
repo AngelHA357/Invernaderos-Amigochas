@@ -71,7 +71,7 @@ public class RabbitMQReceptor {
                             lectura.setModelo(sensorInfo.getModelo());
                             lectura.setMagnitud(sensorInfo.getMagnitud());
                             lectura.setUnidad(sensorInfo.getUnidad());
-                            lectura.setInvernadero(sensorInfo.getNombreInvernadero());
+                            lectura.setNombreInvernadero(sensorInfo.getNombreInvernadero());
                             lectura.setSector(sensorInfo.getSector());
                             lectura.setFila(sensorInfo.getFila());
 
