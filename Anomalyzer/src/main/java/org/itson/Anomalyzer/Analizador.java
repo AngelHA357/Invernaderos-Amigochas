@@ -61,14 +61,14 @@ public class Analizador {
 
             List<AlarmaDTO> alarmasActivas = filtrarAlarmasActivas(alarmas);
             String idSensor = lecturaEnriquecida.getIdSensor();
-            String invernadero = lecturaEnriquecida.getInvernadero();
+            String nombreInvernadero = lecturaEnriquecida.getNombreInvernadero();
             float valor = lecturaEnriquecida.getValor();
 
             int coincidenciasAnomalias = 0;
 
             for (AlarmaDTO alarma : alarmasActivas) {
                 if (verificarSensor(alarma, idSensor)
-                        && verificarInvernadero(alarma, invernadero)
+                        && verificarInvernadero(alarma, nombreInvernadero)
                         && verificarValor(alarma, valor)) {
                     coincidenciasAnomalias++;
                 }
@@ -204,7 +204,7 @@ public class Analizador {
         String modelo = lectura.getModelo();
         String magnitud = lectura.getMagnitud();
         String unidad = lectura.getUnidad();
-        String invernadero = lectura.getInvernadero();
+        String nombreInvernadero = lectura.getNombreInvernadero();
         String sector = lectura.getSector();
         String fila = lectura.getFila();
         float valor = lectura.getValor();
@@ -227,6 +227,6 @@ public class Analizador {
                 | Fila             | %-38s |
                 | Hora             | %-38s |
                 └------------------┴----------------------------------------┘
-                """, idSensor, macAddress, marca, modelo, magnitud, valor, unidad, invernadero, sector, fila, fechaHoraFormateada);
+                """, idSensor, macAddress, marca, modelo, magnitud, valor, unidad, nombreInvernadero, sector, fila, fechaHoraFormateada);
     }
 }

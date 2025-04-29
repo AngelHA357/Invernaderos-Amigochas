@@ -24,7 +24,8 @@ public class Lectura implements Serializable {
     private String unidad;
     private float valor;
     private Date fechaHora;
-    private String invernadero;
+    private ObjectId idInvernadero;
+    private String nombreInvernadero;
     private String sector;
     private String fila;
 
@@ -37,7 +38,8 @@ public class Lectura implements Serializable {
         this.unidad = lecturaEnriquecida.getUnidad();
         this.valor = lecturaEnriquecida.getValor();
         this.fechaHora = lecturaEnriquecida.getFechaHora();
-        this.invernadero = lecturaEnriquecida.getInvernadero();
+        this.idInvernadero = new ObjectId(lecturaEnriquecida.getIdInvernadero());
+        this.nombreInvernadero = lecturaEnriquecida.getNombreInvernadero();
         this.sector = lecturaEnriquecida.getSector();
         this.fila = lecturaEnriquecida.getFila();
     }
