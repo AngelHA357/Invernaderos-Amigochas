@@ -6,33 +6,19 @@ import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.Date;
+import java.util.List;
 
 @Document(collection = "anomalias")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Anomalia {
+
     @Id
     private ObjectId _id;
+    private List<Lectura> lecturas;
     private Date fechaHora;
     private String causa;
-    private String invernadero;
-    private String magnitud;
-    private float valor;
-    private String idSensor;
-    private String sector;
-    private String fila;
 
-    public Anomalia(Date fechaHora, String causa, String invernadero, String magnitud, float valor, String idSensor, String sector, String fila) {
-        this.fechaHora = fechaHora;
-        this.causa = causa;
-        this.invernadero = invernadero;
-        this.magnitud = magnitud;
-        this.valor = valor;
-        this.idSensor = idSensor;
-        this.sector = sector;
-        this.fila = fila;
-    }
 }
