@@ -6,7 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="9879af79-ecd7-44bc-bb39-f33813800b81" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/collections/Lectura.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/collections/Lectura.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/Analizador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/Analizador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/collections/Anomalia.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/collections/Anomalia.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/dtos/AnomaliaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/dtos/AnomaliaDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/dtos/LecturaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/dtos/LecturaDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/dtos/LecturaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/dtos/LecturaDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/service/LecturaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/service/LecturaService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,7 +148,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/Analizador.java</url>
-          <line>99</line>
+          <line>96</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

@@ -8,6 +8,7 @@ import org.itson.Anomalyzer.collections.Lectura;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -16,5 +17,6 @@ import java.util.List;
 public class AnomaliaDTO implements Serializable {
     private String idAnomalia;
     private List<LecturaDTO> lecturas;
+    private Date fechaHora;
     private String causa;
 }

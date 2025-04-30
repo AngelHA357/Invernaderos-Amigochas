@@ -15,6 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LecturaDTO {
+    private String _id;
     private String idSensor;
     private String macAddress;
     private String marca;

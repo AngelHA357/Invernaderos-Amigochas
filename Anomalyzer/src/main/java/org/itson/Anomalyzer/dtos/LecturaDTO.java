@@ -27,7 +27,6 @@ public class LecturaDTO {
     private String nombreInvernadero;
     private String sector;
     private String fila;
-    private boolean estado;
 
     public LecturaDTO(Lectura lectura) {
         this.idSensor = lectura.getIdSensor();

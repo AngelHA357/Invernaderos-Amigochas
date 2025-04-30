@@ -13,10 +13,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class Analizador {
@@ -125,6 +122,7 @@ public class Analizador {
                     }
 
                     anomalia.setCausa(causa);
+                    anomalia.setFechaHora(new Date());
                     anomaliasRepository.save(anomalia);
 
                     AnomaliaDTO anomaliaDTO = convertirAnomaliaDTO(anomalia);
@@ -161,6 +159,7 @@ public class Analizador {
         AnomaliaDTO anomaliaDTO = new AnomaliaDTO(
                 anomalia.get_id().toHexString(),
                 convertirAnomaliaDTO(anomalia.getLecturas()),
+                anomalia.getFechaHora(),
                 anomalia.getCausa()
         );
 
