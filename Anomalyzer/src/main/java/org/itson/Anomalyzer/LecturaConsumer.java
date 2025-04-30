@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Component
 public class LecturaConsumer {
@@ -36,6 +38,8 @@ public class LecturaConsumer {
                     String mensaje = new String(delivery.getBody(), StandardCharsets.UTF_8);
                     LecturaDTO lecturaEnriquecida = gson.fromJson(mensaje, LecturaDTO.class);
 
+                    imprimirLectura(lecturaEnriquecida);
+
                     analizador.procesarLectura(lecturaEnriquecida);
                 };
 
@@ -48,5 +52,39 @@ public class LecturaConsumer {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    // Método para imprimir la información de la lectura
+    private void imprimirLectura(LecturaDTO lectura) {
+        String idSensor = lectura.getIdSensor();
+        String macAddress = lectura.getMacAddress();
+        String marca = lectura.getMarca();
+        String modelo = lectura.getModelo();
+        String magnitud = lectura.getMagnitud();
+        String unidad = lectura.getUnidad();
+        String nombreInvernadero = lectura.getNombreInvernadero();
+        String sector = lectura.getSector();
+        String fila = lectura.getFila();
+        float valor = lectura.getValor();
+        Date fechaHora = lectura.getFechaHora();
+        String fechaHoraFormateada = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(fechaHora);
+
+        System.out.printf("""
+                ┌-----------------------------------------------------------┐
+                |                     LECTURA GUARDADA                      |
+                ├------------------┬----------------------------------------┤
+                | ID sensor        | %-38s |
+                | MAC address      | %-38s |
+                | Marca            | %-38s |
+                | Modelo           | %-38s |
+                | Magnitud         | %-38s |
+                | Valor            | %-38.2f |
+                | Unidad           | %-38s |
+                | Invernadero      | %-38s |
+                | Sector           | %-38s |
+                | Fila             | %-38s |
+                | Hora             | %-38s |
+                └------------------┴----------------------------------------┘
+                """, idSensor, macAddress, marca, modelo, magnitud, valor, unidad, nombreInvernadero, sector, fila, fechaHoraFormateada);
     }
 }

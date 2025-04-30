@@ -1,7 +1,6 @@
 package org.itson.Anomalyzer;
 
 import jakarta.annotation.PostConstruct;
-import org.bson.types.ObjectId;
 import org.itson.Alarma.Alarmas;
 import org.itson.Anomalyzer.collections.Anomalia;
 import org.itson.Anomalyzer.collections.Lectura;
@@ -12,27 +11,26 @@ import org.itson.Anomalyzer.proto.ClienteAlarmasGrpc;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class Analizador {
-    List<AlarmaDTO> alarmas = new ArrayList<>();
-
     @Autowired
     ClienteAlarmasGrpc clienteAlarmasGrpc;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+    @Autowired
+    IAnomaliasRepository anomaliasRepository;
 
     // Mapa para llevar el conteo de anomalías seguidas por sensor
+    private List<AlarmaDTO> alarmas = new ArrayList<>();
     private Map<String, Integer> contadorAnomalias = new HashMap<>();
     private Map<String, Integer> contadorNormales = new HashMap<>();
     private Map<String, List<Lectura>> lecturasAnomalasPorSensor = new HashMap<>();
-
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
-
-    @Autowired
-    IAnomaliasRepository anomaliasRepository;
+    private static final String QUEUE_SEND= "anomalias";
 
     @PostConstruct
     public void inicializarAlarmas() {
@@ -52,14 +50,12 @@ public class Analizador {
 
     public void procesarLectura(LecturaDTO lecturaEnriquecida) {
         try {
-            imprimirLectura(lecturaEnriquecida);
-
             if (alarmas.isEmpty()) {
-                System.out.println("No hay alarmas registradas.");
+                System.out.println("Llegó una lectura, pero no hay alarmas registradas (no se dispararán anomalías).");
                 return;
             }
 
-            List<AlarmaDTO> alarmasActivas = filtrarAlarmasActivas(alarmas);
+            List<AlarmaDTO> alarmasActivas = obtenerAlarmasActivas(alarmas);
             String idSensor = lecturaEnriquecida.getIdSensor();
             String nombreInvernadero = lecturaEnriquecida.getNombreInvernadero();
             float valor = lecturaEnriquecida.getValor();
@@ -97,7 +93,7 @@ public class Analizador {
                     anomalia.setLecturas(new ArrayList<>(lecturasAnomalias));
                     anomalia.setDescripcion("Se detectaron 5 o más lecturas anómalas para el sensor " + idSensor);
 
-                    rabbitTemplate.convertAndSend("anomalias", anomalia);
+                    rabbitTemplate.convertAndSend(QUEUE_SEND, anomalia);
                     System.out.println("Anomalía enviada a la cola 'anomalias'.");
 
                     anomaliasRepository.save(anomalia);
@@ -128,7 +124,7 @@ public class Analizador {
         }
     }
 
-    private List<AlarmaDTO> filtrarAlarmasActivas(List<AlarmaDTO> alarmas) {
+    private List<AlarmaDTO> obtenerAlarmasActivas(List<AlarmaDTO> alarmas) {
         List<AlarmaDTO> alarmasActivas = new ArrayList<>();
         for (AlarmaDTO alarma : alarmas) {
             if (alarma.isActivo()) {
@@ -194,39 +190,5 @@ public class Analizador {
                 agregarAlarma(nuevaAlarma);
             }
         }
-    }
-
-    // Método para imprimir la información de la lectura
-    private void imprimirLectura(LecturaDTO lectura) {
-        String idSensor = lectura.getIdSensor();
-        String macAddress = lectura.getMacAddress();
-        String marca = lectura.getMarca();
-        String modelo = lectura.getModelo();
-        String magnitud = lectura.getMagnitud();
-        String unidad = lectura.getUnidad();
-        String nombreInvernadero = lectura.getNombreInvernadero();
-        String sector = lectura.getSector();
-        String fila = lectura.getFila();
-        float valor = lectura.getValor();
-        Date fechaHora = lectura.getFechaHora();
-        String fechaHoraFormateada = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(fechaHora);
-
-        System.out.printf("""
-                ┌-----------------------------------------------------------┐
-                |                     LECTURA GUARDADA                      |
-                ├------------------┬----------------------------------------┤
-                | ID sensor        | %-38s |
-                | MAC address      | %-38s |
-                | Marca            | %-38s |
-                | Modelo           | %-38s |
-                | Magnitud         | %-38s |
-                | Valor            | %-38.2f |
-                | Unidad           | %-38s |
-                | Invernadero      | %-38s |
-                | Sector           | %-38s |
-                | Fila             | %-38s |
-                | Hora             | %-38s |
-                └------------------┴----------------------------------------┘
-                """, idSensor, macAddress, marca, modelo, magnitud, valor, unidad, nombreInvernadero, sector, fila, fechaHoraFormateada);
     }
 }
