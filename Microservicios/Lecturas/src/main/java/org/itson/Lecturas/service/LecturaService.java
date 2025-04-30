@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -50,6 +51,25 @@ public class LecturaService {
         Lectura lecturaColeccion = conversorLecturaDTOColeccion(lecturaDTO);
         Lectura resultado = lecturasRepository.save(lecturaColeccion);
         return conversorLecturaColeccionDTO(resultado);
+    }
+
+    /**
+     * Obtiene una lista de lecturas filtradas según los parámetros
+     *
+     * @param idInvernadero El ID del invernadero a filtrar.
+     * @param fechaInicio La fecha de inicio del rango.
+     * @param fechaFin La fecha de fin del rango.
+     * @param magnitud El tipo de magnitud a filtrar.
+     * @return Una lista de LecturaDTO que coinciden con los filtros. Puede estar vacía.
+     * @throws LecturasException Si ocurre un error, como fechas inválidas.
+     */
+    public List<LecturaDTO> obtenerLecturasFiltradas(String idInvernadero, Date fechaInicio, Date fechaFin, String magnitud) throws LecturasException {
+        if (fechaInicio.after(fechaFin)) {
+            throw new LecturasException("La fecha de inicio no puede ser posterior a la fecha de fin.");
+        }
+        List<Lectura> lecturasEncontradas = lecturasRepository.findLecturasByFiltros(idInvernadero, fechaInicio, fechaFin, magnitud);
+        List<LecturaDTO> lecturasDTO = conversorLecturasColeccionDTO(lecturasEncontradas);
+        return lecturasDTO;
     }
 
     /**
