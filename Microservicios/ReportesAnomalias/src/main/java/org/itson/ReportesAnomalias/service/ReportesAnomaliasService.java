@@ -1,7 +1,9 @@
 package org.itson.ReportesAnomalias.service;
 
 import org.bson.types.ObjectId;
+import org.itson.ReportesAnomalias.collections.Lectura;
 import org.itson.ReportesAnomalias.dtos.AnomaliaDTO;
+import org.itson.ReportesAnomalias.dtos.LecturaDTO;
 import org.itson.ReportesAnomalias.dtos.ReporteAnomaliaDTO;
 import org.itson.ReportesAnomalias.collections.Anomalia;
 import org.itson.ReportesAnomalias.collections.ReporteAnomalia;
@@ -127,14 +129,31 @@ public class ReportesAnomaliasService {
      */
 
     private Anomalia convertirAnomaliaDTO(AnomaliaDTO anomalia) {
+        List<Lectura> lecturas = new LinkedList<>();
 
+        for(LecturaDTO lectura: anomalia.getLecturas()) {
+            lecturas.add(new Lectura(lectura.getIdSensor(), lectura.getMacAddress(), lectura.getMarca(),
+                    lectura.getModelo(), lectura.getMagnitud(), lectura.getUnidad(), lectura.getValor(),
+                    lectura.getFechaHora(), new ObjectId(lectura.getIdInvernadero()), lectura.getNombreInvernadero(),
+                    lectura.getSector(), lectura.getFila()));
+        }
+
+        Anomalia anomaliaCreada = new Anomalia(new ObjectId(anomalia.getIdAnomalia()), lecturas, anomalia.getFechaHora(), anomalia.getCausa());
 
         return anomaliaCreada;
     }
 
     private AnomaliaDTO convertirAnomalia(Anomalia anomalia) {
-        AnomaliaDTO anomaliaCreada = new AnomaliaDTO();
+        List<LecturaDTO> lecturas = new LinkedList<>();
 
+        for(Lectura lectura: anomalia.getLecturas()) {
+            lecturas.add(new LecturaDTO(lectura.getIdSensor(), lectura.getMacAddress(), lectura.getMarca(),
+                    lectura.getModelo(), lectura.getMagnitud(), lectura.getUnidad(), lectura.getValor(),
+                    lectura.getFechaHora(), lectura.getIdInvernadero().toString(), lectura.getNombreInvernadero(),
+                    lectura.getSector(), lectura.getFila()));
+        }
+
+        AnomaliaDTO anomaliaCreada = new AnomaliaDTO(anomalia.get_id().toString(), lecturas, anomalia.getFechaHora(), anomalia.getCausa());
 
         return anomaliaCreada;
     }

@@ -16,6 +16,7 @@ public class AnomaliaDTO {
 
     private String idAnomalia;
     private List<LecturaDTO> lecturas;
+    private Date fechaHora;
     private String causa;
 
 }

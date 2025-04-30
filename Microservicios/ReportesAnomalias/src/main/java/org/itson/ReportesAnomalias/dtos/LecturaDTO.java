@@ -25,6 +25,5 @@ public class LecturaDTO {
     private String nombreInvernadero;
     private String sector;
     private String fila;
-    private boolean estado;
 
 }
