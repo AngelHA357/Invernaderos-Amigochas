@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
+import org.itson.Anomalyzer.collections.Lectura;
 
 import java.util.Date;
 
@@ -27,4 +28,19 @@ public class LecturaDTO {
     private String sector;
     private String fila;
     private boolean estado;
+
+    public LecturaDTO(Lectura lectura) {
+        this.idSensor = lectura.getIdSensor();
+        this.macAddress = lectura.getMacAddress();
+        this.marca = lectura.getMarca();
+        this.modelo = lectura.getModelo();
+        this.magnitud = lectura.getMagnitud();
+        this.unidad = lectura.getUnidad();
+        this.valor = lectura.getValor();
+        this.fechaHora = lectura.getFechaHora();
+        this.idInvernadero = lectura.getIdInvernadero().toHexString();
+        this.nombreInvernadero = lectura.getNombreInvernadero();
+        this.sector = lectura.getSector();
+        this.fila = lectura.getFila();
+    }
 }

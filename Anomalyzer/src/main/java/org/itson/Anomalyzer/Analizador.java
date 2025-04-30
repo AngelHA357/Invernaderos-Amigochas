@@ -5,12 +5,14 @@ import org.itson.Alarma.Alarmas;
 import org.itson.Anomalyzer.collections.Anomalia;
 import org.itson.Anomalyzer.collections.Lectura;
 import org.itson.Anomalyzer.dtos.AlarmaDTO;
+import org.itson.Anomalyzer.dtos.AnomaliaDTO;
 import org.itson.Anomalyzer.dtos.LecturaDTO;
 import org.itson.Anomalyzer.persistence.IAnomaliasRepository;
 import org.itson.Anomalyzer.proto.ClienteAlarmasGrpc;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +32,7 @@ public class Analizador {
     private Map<String, Integer> contadorAnomalias = new HashMap<>();
     private Map<String, Integer> contadorNormales = new HashMap<>();
     private Map<String, List<Lectura>> lecturasAnomalasPorSensor = new HashMap<>();
-    private static final String QUEUE_SEND= "anomalias";
+    private static final String QUEUE_SEND = "anomalias";
 
     @PostConstruct
     public void inicializarAlarmas() {
@@ -57,6 +59,7 @@ public class Analizador {
 
             List<AlarmaDTO> alarmasActivas = obtenerAlarmasActivas(alarmas);
             String idSensor = lecturaEnriquecida.getIdSensor();
+            String magnitud = lecturaEnriquecida.getMagnitud();
             String nombreInvernadero = lecturaEnriquecida.getNombreInvernadero();
             float valor = lecturaEnriquecida.getValor();
 
@@ -86,17 +89,47 @@ public class Analizador {
                 System.out.println("Anomalías detectadas (" + coincidenciasAnomalias + ") en sensor " + idSensor +
                         ". Contador acumulado: " + acumuladas);
 
+                // Si se acumulan 5 o más lecturas anómalas, se envía la anomalía
                 if (acumuladas >= 5) {
                     List<Lectura> lecturasAnomalias = lecturasAnomalasPorSensor.getOrDefault(idSensor, new ArrayList<>());
 
                     Anomalia anomalia = new Anomalia();
                     anomalia.setLecturas(new ArrayList<>(lecturasAnomalias));
-                    anomalia.setDescripcion("Se detectaron 5 o más lecturas anómalas para el sensor " + idSensor);
 
-                    rabbitTemplate.convertAndSend(QUEUE_SEND, anomalia);
-                    System.out.println("Anomalía enviada a la cola 'anomalias'.");
+                    // Obtener la alarma coincidente
+                    AlarmaDTO alarmaCoincidente =
+                            alarmasActivas.stream() // Filtrar las alarmas activas
+                            .filter(a -> verificarSensor(a, idSensor) && verificarInvernadero(a, nombreInvernadero)) // Filtrar por sensor e invernadero
+                            .findFirst() // Obtener la primera alarma que coincida
+                            .orElse(null); // Si no hay coincidencias, se asigna null
 
+                    String causa = "";
+                    if (alarmaCoincidente != null) {
+                        float valorUltimaLectura = lecturasAnomalias.get(lecturasAnomalias.size() - 1).getValor();
+                        float minimo = alarmaCoincidente.getValorMinimo();
+                        float maximo = alarmaCoincidente.getValorMaximo();
+
+                        if (valorUltimaLectura < minimo) {
+                            if (magnitud.equalsIgnoreCase("humedad")) {
+                                causa = "La humedad ha bajado del " + minimo + "%";
+                            } else if (magnitud.equalsIgnoreCase("temperatura")) {
+                                causa = "La temperatura ha disminuido de los " + minimo + "°C";
+                            }
+                        } else if (valorUltimaLectura > maximo) {
+                            if (magnitud.equalsIgnoreCase("humedad")) {
+                                causa = "La humedad ha subido del " + maximo + "%";
+                            } else if (magnitud.equalsIgnoreCase("temperatura")) {
+                                causa = "La temperatura ha superado los " + maximo + "°C";
+                            }
+                        }
+                    }
+
+                    anomalia.setCausa(causa);
                     anomaliasRepository.save(anomalia);
+
+                    AnomaliaDTO anomaliaDTO = convertirAnomaliaDTO(anomalia);
+                    rabbitTemplate.convertAndSend(QUEUE_SEND, anomaliaDTO);
+                    System.out.println("Anomalía enviada a la cola 'anomalias'.");
 
                     // Reset
                     contadorAnomalias.put(idSensor, 0);
@@ -122,6 +155,25 @@ public class Analizador {
             System.err.println("Error al procesar lectura enriquecida: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    private AnomaliaDTO convertirAnomaliaDTO(Anomalia anomalia) {
+        AnomaliaDTO anomaliaDTO = new AnomaliaDTO(
+                anomalia.get_id().toHexString(),
+                convertirAnomaliaDTO(anomalia.getLecturas()),
+                anomalia.getCausa()
+        );
+
+        return anomaliaDTO;
+    }
+
+    private List<LecturaDTO> convertirAnomaliaDTO(List<Lectura> lecturas) {
+        List<LecturaDTO> lecturasDTO = new ArrayList<>();
+        for (Lectura lectura : lecturas) {
+            LecturaDTO lecturaDTO = new LecturaDTO(lectura);
+            lecturasDTO.add(lecturaDTO);
+        }
+        return lecturasDTO;
     }
 
     private List<AlarmaDTO> obtenerAlarmasActivas(List<AlarmaDTO> alarmas) {
