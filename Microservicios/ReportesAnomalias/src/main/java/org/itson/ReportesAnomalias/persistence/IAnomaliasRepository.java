@@ -12,9 +12,9 @@ import java.util.List;
 public interface IAnomaliasRepository extends MongoRepository<Anomalia, ObjectId> {
     public List<Anomalia> findAllByFechaHoraBetween(Date fechaInicio, Date fechaFin);
 
-    public List<Anomalia> findAllByInvernadero(String id);
+    public List<Anomalia> findAllByIdInvernadero(String id);
 
-    public List<Anomalia> findAllBySensor(String id);
+    public List<Anomalia> findAllByIdSensor(String id);
 
     public List<Anomalia> findAllByMagnitud(String magnitud);
 }

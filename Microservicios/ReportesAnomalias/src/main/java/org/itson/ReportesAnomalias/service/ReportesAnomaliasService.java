@@ -48,7 +48,7 @@ public class ReportesAnomaliasService {
     }
 
     public List<AnomaliaDTO> obtenerAnomaliasPorInvernadero(String id) throws ReportesAnomaliasServiceException {
-        List<Anomalia> anomaliasEncontradas = anomaliasRepository.findAllByInvernadero(id);
+        List<Anomalia> anomaliasEncontradas = anomaliasRepository.findAllByIdInvernadero(id);
         if (!anomaliasEncontradas.isEmpty()) {
             // Si se obtuvo algo, se convierte a DTO y se regresa eso.
             List<AnomaliaDTO> anomalias = new LinkedList<>();
@@ -62,7 +62,7 @@ public class ReportesAnomaliasService {
     }
 
     public List<AnomaliaDTO> obtenerAnomaliasPorSensor(String id) throws ReportesAnomaliasServiceException {
-        List<Anomalia> anomaliasEncontradas = anomaliasRepository.findAllBySensor(id);
+        List<Anomalia> anomaliasEncontradas = anomaliasRepository.findAllByIdSensor(id);
         if (!anomaliasEncontradas.isEmpty()) {
             // Si se obtuvo algo, se convierte a DTO y se regresa eso.
             List<AnomaliaDTO> anomalias = new LinkedList<>();
@@ -127,9 +127,7 @@ public class ReportesAnomaliasService {
      */
 
     private Anomalia convertirAnomaliaDTO(AnomaliaDTO anomalia) {
-        Anomalia anomaliaCreada = new Anomalia(anomalia.getFechaHora(), anomalia.getCausa(),
-                anomalia.getInvernadero(), anomalia.getMagnitud(), anomalia.getValor(),
-                anomalia.getIdSensor(), anomalia.getSector(), anomalia.getFila());
+
 
         return anomaliaCreada;
     }
@@ -137,15 +135,6 @@ public class ReportesAnomaliasService {
     private AnomaliaDTO convertirAnomalia(Anomalia anomalia) {
         AnomaliaDTO anomaliaCreada = new AnomaliaDTO();
 
-        anomaliaCreada.setId(anomalia.get_id().toString());
-        anomaliaCreada.setFechaHora(anomalia.getFechaHora());
-        anomaliaCreada.setCausa(anomalia.getCausa());
-        anomaliaCreada.setInvernadero(anomalia.getInvernadero());
-        anomaliaCreada.setIdSensor(anomalia.getIdSensor());
-        anomaliaCreada.setValor(anomalia.getValor());
-        anomaliaCreada.setSector(anomalia.getSector());
-        anomaliaCreada.setFila(anomalia.getFila());
-        anomaliaCreada.setMagnitud(anomalia.getMagnitud());
 
         return anomaliaCreada;
     }

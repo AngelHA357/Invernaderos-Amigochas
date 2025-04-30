@@ -16,23 +16,36 @@ import java.util.Date;
 public class Anomalia {
     @Id
     private ObjectId _id;
-    private Date fechaHora;
-    private String causa;
-    private String invernadero;
-    private String magnitud;
-    private float valor;
     private String idSensor;
+    private String macAddress;
+    private String marca;
+    private String modelo;
+    private String magnitud;
+    private String unidad;
+    private float valor;
+    private Date fechaHora;
+    private String idInvernadero;
+    private String nombreInvernadero;
     private String sector;
     private String fila;
+    private boolean estado;
+    private String causa;
 
-    public Anomalia(Date fechaHora, String causa, String invernadero, String magnitud, float valor, String idSensor, String sector, String fila) {
-        this.fechaHora = fechaHora;
-        this.causa = causa;
-        this.invernadero = invernadero;
-        this.magnitud = magnitud;
-        this.valor = valor;
+    public Anomalia(String idSensor, String macAddress, String marca, String modelo, String magnitud, String unidad, float valor, Date fechaHora, String idInvernadero, String nombreInvernadero, String sector, String fila, boolean estado, String causa) {
         this.idSensor = idSensor;
+        this.macAddress = macAddress;
+        this.marca = marca;
+        this.modelo = modelo;
+        this.magnitud = magnitud;
+        this.unidad = unidad;
+        this.valor = valor;
+        this.fechaHora = fechaHora;
+        this.idInvernadero = idInvernadero;
+        this.nombreInvernadero = nombreInvernadero;
         this.sector = sector;
         this.fila = fila;
+        this.estado = estado;
+        this.causa = causa;
     }
+
 }
