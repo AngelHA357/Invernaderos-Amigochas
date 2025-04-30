@@ -101,7 +101,6 @@ public class LecturaService {
         }
 
         return new LecturaDTO(
-                lecturaColeccion.get_id(),
                 lecturaColeccion.getIdSensor(),
                 lecturaColeccion.getMacAddress(),
                 lecturaColeccion.getMarca(),
