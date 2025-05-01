@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9879af79-ecd7-44bc-bb39-f33813800b81" name="Changes" comment="" />
+    <list default="true" id="9879af79-ecd7-44bc-bb39-f33813800b81" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/AnomalyzerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/Analizador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/Analizador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/LecturaConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/LecturaConsumer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/collections/Anomalia.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/collections/Anomalia.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/dtos/AnomaliaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/dtos/AnomaliaDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/dtos/LecturaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/dtos/LecturaDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -58,6 +67,9 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
     "settings.editor.selected.configurable": "reference.projectsettings.compiler.annotationProcessors",
     "vue.rearranger.settings.migration": "true"
   }
@@ -78,7 +90,7 @@
       <command value="mvn depenency-tree" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.AnomalyzerApplication">
+  <component name="RunManager" selected="Spring Boot.AnomalyzerApplication">
     <configuration name="AnomalyzerApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.itson.Anomalyzer.AnomalyzerApplication" />
       <module name="Anomalyzer" />
@@ -129,22 +141,25 @@
       <workItem from="1745952708810" duration="2793000" />
       <workItem from="1745983040073" duration="496000" />
       <workItem from="1745985010957" duration="187000" />
+      <workItem from="1746079250435" duration="4620000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/Analizador.java</url>
-          <line>96</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="SpringBootApplicationConfigurationType">
         <watch expression="alarmasObtenidas" />

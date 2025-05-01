@@ -39,13 +39,8 @@
             <version>5.20.0</version>
         </dependency>
         <dependency>
-            <groupId>com.itson</groupId>
-            <artifactId>DTOs</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>DTOs</artifactId>
+            <artifactId>SimuladorSensores</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

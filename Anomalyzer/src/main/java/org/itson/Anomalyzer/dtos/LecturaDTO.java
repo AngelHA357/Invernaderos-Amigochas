@@ -28,18 +28,4 @@ public class LecturaDTO {
     private String sector;
     private String fila;
 
-    public LecturaDTO(Lectura lectura) {
-        this.idSensor = lectura.getIdSensor();
-        this.macAddress = lectura.getMacAddress();
-        this.marca = lectura.getMarca();
-        this.modelo = lectura.getModelo();
-        this.magnitud = lectura.getMagnitud();
-        this.unidad = lectura.getUnidad();
-        this.valor = lectura.getValor();
-        this.fechaHora = lectura.getFechaHora();
-        this.idInvernadero = lectura.getIdInvernadero().toHexString();
-        this.nombreInvernadero = lectura.getNombreInvernadero();
-        this.sector = lectura.getSector();
-        this.fila = lectura.getFila();
-    }
 }

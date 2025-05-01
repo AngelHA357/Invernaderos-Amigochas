@@ -3,20 +3,16 @@ package org.itson.Anomalyzer.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
-import org.itson.Anomalyzer.collections.Lectura;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnomaliaDTO implements Serializable {
-    private String idAnomalia;
-    private List<LecturaDTO> lecturas;
-    private Date fechaHora;
+public class AnomaliaDTO extends LecturaDTO{
     private String causa;
+
+    public AnomaliaDTO(LecturaDTO lectura) {
+        super(lectura.getIdSensor(), lectura.getMacAddress(), lectura.getMarca(), lectura.getModelo(),
+                lectura.getMagnitud(), lectura.getUnidad(), lectura.getValor(), lectura.getFechaHora(),
+                lectura.getIdInvernadero(), lectura.getNombreInvernadero(), lectura.getSector(), lectura.getFila());
+    }
 }

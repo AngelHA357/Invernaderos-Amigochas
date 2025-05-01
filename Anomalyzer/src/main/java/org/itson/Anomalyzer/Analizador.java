@@ -1,152 +1,85 @@
 package org.itson.Anomalyzer;
 
 import jakarta.annotation.PostConstruct;
-import org.itson.Alarma.Alarmas;
-import org.itson.Anomalyzer.collections.Anomalia;
-import org.itson.Anomalyzer.collections.Lectura;
+import org.checkerframework.checker.units.qual.A;
 import org.itson.Anomalyzer.dtos.AlarmaDTO;
 import org.itson.Anomalyzer.dtos.AnomaliaDTO;
 import org.itson.Anomalyzer.dtos.LecturaDTO;
-import org.itson.Anomalyzer.persistence.IAnomaliasRepository;
-import org.itson.Anomalyzer.proto.ClienteAlarmasGrpc;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.itson.Anomalyzer.service.AnomalyzerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component
 public class Analizador {
     @Autowired
-    ClienteAlarmasGrpc clienteAlarmasGrpc;
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
-    @Autowired
-    IAnomaliasRepository anomaliasRepository;
+    AnomalyzerService anomalyzerService;
 
     // Mapa para llevar el conteo de anomalías seguidas por sensor
     private List<AlarmaDTO> alarmas = new ArrayList<>();
-    private Map<String, Integer> contadorAnomalias = new HashMap<>();
-    private Map<String, Integer> contadorNormales = new HashMap<>();
-    private Map<String, List<Lectura>> lecturasAnomalasPorSensor = new HashMap<>();
-    private static final String QUEUE_SEND = "anomalias";
+    private Map<String, Integer> lecturasAnomalasPorSensor = new HashMap<>();
+    private static final int LIMITE_LECTURAS_ANOMALAS = 5;
 
     @PostConstruct
     public void inicializarAlarmas() {
-        List<Alarmas.AlarmaDTO> alarmasObtenidas = clienteAlarmasGrpc.obtenerAlarmas();
-
-        for (Alarmas.AlarmaDTO alarmasRecibida : alarmasObtenidas) {
-            AlarmaDTO alarmaDTO = new AlarmaDTO();
-            alarmaDTO.setIdAlarma(alarmasRecibida.getIdAlarma());
-            alarmaDTO.setSensores(alarmasRecibida.getIdSensoresList());
-            alarmaDTO.setInvernadero(alarmasRecibida.getInvernadero());
-            alarmaDTO.setValorMinimo(alarmasRecibida.getValorMinimo());
-            alarmaDTO.setValorMaximo(alarmasRecibida.getValorMaximo());
-            alarmaDTO.setActivo(alarmasRecibida.getActivo());
-            agregarAlarma(alarmaDTO);
-        }
+        List<AlarmaDTO> alarmasObtenidas = anomalyzerService.obtenerAlarmas();
+        agregarAlarmas(alarmasObtenidas);
     }
 
-    public void procesarLectura(LecturaDTO lecturaEnriquecida) {
+    public void procesarLectura(LecturaDTO lectura) {
         try {
             if (alarmas.isEmpty()) {
                 System.out.println("Llegó una lectura, pero no hay alarmas registradas (no se dispararán anomalías).");
                 return;
             }
 
-            List<AlarmaDTO> alarmasActivas = obtenerAlarmasActivas(alarmas);
-            String idSensor = lecturaEnriquecida.getIdSensor();
-            String magnitud = lecturaEnriquecida.getMagnitud();
-            String nombreInvernadero = lecturaEnriquecida.getNombreInvernadero();
-            float valor = lecturaEnriquecida.getValor();
+            List<AlarmaDTO> alarmasActivas = obtenerAlarmasActivas();
+            String idSensor = lectura.getIdSensor();
+            String nombreInvernadero = lectura.getNombreInvernadero();
+            AlarmaDTO alarmaDetonadora = null;
+            float valor = lectura.getValor();
 
-            int coincidenciasAnomalias = 0;
+            boolean coincidenciasAnomalias = false;
 
             for (AlarmaDTO alarma : alarmasActivas) {
-                if (verificarSensor(alarma, idSensor)
-                        && verificarInvernadero(alarma, nombreInvernadero)
-                        && verificarValor(alarma, valor)) {
-                    coincidenciasAnomalias++;
+                if (verificarSensor(alarma, idSensor) &&
+                        verificarInvernadero(alarma, nombreInvernadero) &&
+                        verificarValor(alarma, valor)) {
+                    System.out.println("Lectura anómala detectada en el sensor " + idSensor + " en el " + nombreInvernadero);
+                    if (lecturasAnomalasPorSensor.containsKey(idSensor)) {
+                        lecturasAnomalasPorSensor.put(idSensor, lecturasAnomalasPorSensor.get(idSensor) + 1);
+                    } else {
+                        lecturasAnomalasPorSensor.put(idSensor, 1);
+                    }
+                    coincidenciasAnomalias = true;
+                    alarmaDetonadora = alarma;
+                } else {
+
                 }
             }
 
-            if (coincidenciasAnomalias > 0) {
-                int acumuladas = contadorAnomalias.getOrDefault(idSensor, 0) + coincidenciasAnomalias;
-                contadorAnomalias.put(idSensor, acumuladas);
-                contadorNormales.put(idSensor, 0); // reset normales
-
-                // Acumular la lectura anómala
-                Lectura lectura = new Lectura(lecturaEnriquecida);
-                // Agregar la lectura anómala a la lista del sensor correspondiente
-                if (!lecturasAnomalasPorSensor.containsKey(idSensor)) {
-                    lecturasAnomalasPorSensor.put(idSensor, new ArrayList<>());
-                }
-                lecturasAnomalasPorSensor.get(idSensor).add(lectura);
-
-                System.out.println("Anomalías detectadas (" + coincidenciasAnomalias + ") en sensor " + idSensor +
-                        ". Contador acumulado: " + acumuladas);
-
-                // Si se acumulan 5 o más lecturas anómalas, se envía la anomalía
-                if (acumuladas >= 5) {
-                    List<Lectura> lecturasAnomalias = lecturasAnomalasPorSensor.getOrDefault(idSensor, new ArrayList<>());
-
-                    Anomalia anomalia = new Anomalia();
-                    anomalia.setLecturas(new ArrayList<>(lecturasAnomalias));
-
-                    // Obtener la alarma coincidente
-                    AlarmaDTO alarmaCoincidente =
-                            alarmasActivas.stream() // Filtrar las alarmas activas
-                            .filter(a -> verificarSensor(a, idSensor) && verificarInvernadero(a, nombreInvernadero)) // Filtrar por sensor e invernadero
-                            .findFirst() // Obtener la primera alarma que coincida
-                            .orElse(null); // Si no hay coincidencias, se asigna null
-
-                    String causa = "";
-                    if (alarmaCoincidente != null) {
-                        float valorUltimaLectura = lecturasAnomalias.get(lecturasAnomalias.size() - 1).getValor();
-                        float minimo = alarmaCoincidente.getValorMinimo();
-                        float maximo = alarmaCoincidente.getValorMaximo();
-
-                        if (valorUltimaLectura < minimo) {
-                            if (magnitud.equalsIgnoreCase("humedad")) {
-                                causa = "La humedad ha bajado del " + minimo + "%";
-                            } else if (magnitud.equalsIgnoreCase("temperatura")) {
-                                causa = "La temperatura ha disminuido de los " + minimo + "°C";
-                            }
-                        } else if (valorUltimaLectura > maximo) {
-                            if (magnitud.equalsIgnoreCase("humedad")) {
-                                causa = "La humedad ha subido del " + maximo + "%";
-                            } else if (magnitud.equalsIgnoreCase("temperatura")) {
-                                causa = "La temperatura ha superado los " + maximo + "°C";
-                            }
-                        }
-                    }
-
-                    anomalia.setCausa(causa);
-                    anomalia.setFechaHora(new Date());
-                    anomaliasRepository.save(anomalia);
-
-                    AnomaliaDTO anomaliaDTO = convertirAnomaliaDTO(anomalia);
-                    rabbitTemplate.convertAndSend(QUEUE_SEND, anomaliaDTO);
-                    System.out.println("Anomalía enviada a la cola 'anomalias'.");
-
-                    // Reset
-                    contadorAnomalias.put(idSensor, 0);
-                    lecturasAnomalasPorSensor.remove(idSensor);
+            if (!coincidenciasAnomalias) {
+                return;
+            }
+            if (lecturasAnomalasPorSensor.get(idSensor) == LIMITE_LECTURAS_ANOMALAS) {
+                String magnitud = lectura.getMagnitud();
+                String unidad = lectura.getUnidad();
+                float maximo = alarmaDetonadora.getValorMaximo();
+                float minimo = alarmaDetonadora.getValorMinimo();
+                AnomaliaDTO anomalia = new AnomaliaDTO(lectura);
+                if (lectura.getValor() > alarmaDetonadora.getValorMaximo()) {
+                    anomalia.setCausa("Valores de " + magnitud.toLowerCase() + " por encima del máximo (" + maximo + unidad + ") permitido.");
+                } else if (lectura.getValor() < alarmaDetonadora.getValorMinimo()) {
+                    anomalia.setCausa("Valores de " + magnitud.toLowerCase() + " por debajo del mínimo (" + minimo + unidad + ") permitido.");
                 }
 
-            } else {
-                int normales = contadorNormales.getOrDefault(idSensor, 0) + 1;
-                contadorNormales.put(idSensor, normales);
-                contadorAnomalias.put(idSensor, 0); // reset anomalías
-                lecturasAnomalasPorSensor.remove(idSensor); // también limpiar
+                imprimirAnomalia(anomalia);
 
-                System.out.println("Lectura normal en sensor " + idSensor +
-                        ". Contador normales: " + normales);
-
-                if (normales >= 5) {
-                    contadorNormales.put(idSensor, 0);
-                    contadorAnomalias.put(idSensor, 0);
-                }
+                anomalyzerService.guardarAnomalia(anomalia);
+                anomalyzerService.emitirAnomalia(anomalia);
+                lecturasAnomalasPorSensor.put(idSensor, 0); // Reiniciar el conteo de lecturas anómalas
             }
 
         } catch (Exception e) {
@@ -155,29 +88,9 @@ public class Analizador {
         }
     }
 
-    private AnomaliaDTO convertirAnomaliaDTO(Anomalia anomalia) {
-        AnomaliaDTO anomaliaDTO = new AnomaliaDTO(
-                anomalia.get_id().toHexString(),
-                convertirAnomaliaDTO(anomalia.getLecturas()),
-                anomalia.getFechaHora(),
-                anomalia.getCausa()
-        );
-
-        return anomaliaDTO;
-    }
-
-    private List<LecturaDTO> convertirAnomaliaDTO(List<Lectura> lecturas) {
-        List<LecturaDTO> lecturasDTO = new ArrayList<>();
-        for (Lectura lectura : lecturas) {
-            LecturaDTO lecturaDTO = new LecturaDTO(lectura);
-            lecturasDTO.add(lecturaDTO);
-        }
-        return lecturasDTO;
-    }
-
-    private List<AlarmaDTO> obtenerAlarmasActivas(List<AlarmaDTO> alarmas) {
+    private List<AlarmaDTO> obtenerAlarmasActivas() {
         List<AlarmaDTO> alarmasActivas = new ArrayList<>();
-        for (AlarmaDTO alarma : alarmas) {
+        for (AlarmaDTO alarma : this.alarmas) {
             if (alarma.isActivo()) {
                 alarmasActivas.add(alarma);
             }
@@ -195,6 +108,12 @@ public class Analizador {
 
     public boolean verificarValor(AlarmaDTO alarma, float valor) {
         return valor < alarma.getValorMinimo() || valor > alarma.getValorMaximo();
+    }
+
+    private void agregarAlarmas(List<AlarmaDTO> alarmas) {
+        for (AlarmaDTO alarma : alarmas) {
+            agregarAlarma(alarma);
+        }
     }
 
     public void agregarAlarma(AlarmaDTO alarma) {
@@ -241,5 +160,41 @@ public class Analizador {
                 agregarAlarma(nuevaAlarma);
             }
         }
+    }
+
+    // Método para imprimir la información de la anomalía
+    private void imprimirAnomalia(AnomaliaDTO anomalia) {
+        String idSensor = anomalia.getIdSensor();
+        String macAddress = anomalia.getMacAddress();
+        String marca = anomalia.getMarca();
+        String modelo = anomalia.getModelo();
+        String magnitud = anomalia.getMagnitud();
+        String unidad = anomalia.getUnidad();
+        String nombreInvernadero = anomalia.getNombreInvernadero();
+        String sector = anomalia.getSector();
+        String fila = anomalia.getFila();
+        float valor = anomalia.getValor();
+        Date fechaHora = anomalia.getFechaHora();
+        String causa = anomalia.getCausa();
+        String fechaHoraFormateada = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(fechaHora);
+
+        System.out.printf("""
+                ┌-------------------------------------------------------------------------------------------------┐
+                |                                        ANOMALíA GUARDADA                                        |
+                ├------------------┬------------------------------------------------------------------------------┤
+                | ID sensor        | %-76s |
+                | MAC address      | %-76s |
+                | Marca            | %-76s |
+                | Modelo           | %-76s |
+                | Magnitud         | %-76s |
+                | Valor            | %-76.2f |
+                | Unidad           | %-76s |
+                | Invernadero      | %-76s |
+                | Sector           | %-76s |
+                | Fila             | %-76s |
+                | Causa            | %-76s |
+                | Hora             | %-76s |
+                └------------------┴------------------------------------------------------------------------------┘
+                """, idSensor, macAddress, marca, modelo, magnitud, valor, unidad, nombreInvernadero, sector, fila, causa, fechaHoraFormateada);
     }
 }
