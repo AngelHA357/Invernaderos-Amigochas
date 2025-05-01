@@ -25,6 +25,7 @@
         <module>GestionSensores</module>
         <module>ReportesAnomalias</module>
         <module>Lecturas</module>
+        <module>Informes</module>
     </modules>
 
     <properties>
