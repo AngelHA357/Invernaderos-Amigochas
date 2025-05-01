@@ -26,6 +26,7 @@
         <module>ReportesAnomalias</module>
         <module>Lecturas</module>
         <module>Informes</module>
+        <module>ExposicionDatos</module>
     </modules>
 
     <properties>
