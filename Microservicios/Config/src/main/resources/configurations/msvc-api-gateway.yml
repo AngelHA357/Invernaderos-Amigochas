@@ -26,6 +26,10 @@ spring:
           uri: lb://msvc-reportes-anomalias
           predicates:
             - Path=/api/v1/reportesAnomalias/**
+        - id: msvc-informes
+          uri: lb://msvc-informes
+          predicates:
+            - Path=/api/v1/informes/**
 
 management:
   tracing:
