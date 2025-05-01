@@ -22,3 +22,8 @@ eureka:
     fetch-registry: true
   instance:
     prefer-ip-address: true
+
+logging:
+  level:
+    org.springframework.data.mongodb.core: DEBUG
+    org.mongodb.driver: DEBUG
