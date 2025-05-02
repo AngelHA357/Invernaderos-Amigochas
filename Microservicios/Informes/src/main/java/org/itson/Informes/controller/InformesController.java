@@ -23,30 +23,18 @@ public class InformesController {
     @Autowired
     private InformeService informesService;
 
-    /**
-     * Endpoint GET para obtener informes (lecturas) filtrados.
-     * Consulta la base de datos LOCAL del microservicio de Informes.
-     *
-     * @param idInvernadero ID del invernadero.
-     * @param fechaInicio   Fecha de inicio (ISO DateTime).
-     * @param fechaFin      Fecha de fin (ISO DateTime).
-     * @param magnitud      Tipo de magnitud.
-     * @return ResponseEntity con la lista de InformeLectura (o DTOs) o un error.
-     */
     @GetMapping("/filtradas")
     public ResponseEntity<?> obtenerInformeFiltrado(
-            @RequestParam String idInvernadero,
+            @RequestParam List<String> idsInvernadero,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date fechaInicio,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date fechaFin,
-            @RequestParam String magnitud
+            @RequestParam List<String> magnitudes
     ) {
         try {
             List<InformeLectura> resultado = informesService.obtenerInformesFiltrados(
-                    idInvernadero, fechaInicio, fechaFin, magnitud
+                    idsInvernadero, fechaInicio, fechaFin, magnitudes
             );
-
             return new ResponseEntity<>(resultado, HttpStatus.OK);
-
         } catch (IllegalArgumentException iae) {
             Map<String, String> error = new HashMap<>();
             error.put("mensaje", "Error en los parámetros: " + iae.getMessage());
@@ -57,5 +45,4 @@ public class InformesController {
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 }

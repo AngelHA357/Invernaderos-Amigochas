@@ -12,6 +12,11 @@ import java.util.List;
 @Repository
 public interface IInformeLecturasRepository extends MongoRepository<InformeLectura, ObjectId> {
 
-    @Query("{ 'idInvernadero': ?0, 'fechaHora': { $gte: ?1, $lte: ?2 }, 'magnitud': ?3 }")
-    List<InformeLectura> findInformeLecturasByFiltros(String idInvernadero, Date fechaInicio, Date fechaFin, String magnitud);
+    @Query("{ 'idInvernadero': { $in: ?0 }, 'fechaHora': { $gte: ?1, $lte: ?2 }, 'magnitud': { $in: ?3 } }")
+    List<InformeLectura> findInformeLecturasByFiltros(
+            List<String> idsInvernadero,
+            Date fechaInicio,
+            Date fechaFin,
+            List<String> magnitudes
+    );
 }
