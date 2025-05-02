@@ -45,4 +45,24 @@ public class InformesController {
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * Endpoint GET para obtener la lista de magnitudes únicas disponibles
+     * en los datos de informes guardados localmente.
+     * @return ResponseEntity con la lista de strings de magnitudes o un error 500.
+     */
+    @GetMapping("/magnitudesDisponibles")
+    public ResponseEntity<?> obtenerMagnitudesDisponibles() {
+        try {
+            List<String> magnitudes = informesService.obtenerMagnitudesDisponibles();
+            return ResponseEntity.ok(magnitudes);
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("mensaje", "Error interno al obtener lista de magnitudes: " + e.getMessage());
+            System.err.println("Error en obtenerMagnitudesDisponibles: " + e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR); // 500
+        }
+    }
+
 }

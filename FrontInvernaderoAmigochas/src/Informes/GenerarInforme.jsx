@@ -2,19 +2,6 @@ import React, { useState, useEffect } from 'react';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
 
 function GenerarInforme() {
-    const invernaderos = [
-        { id: 'INV-0101', name: 'Invernadero 1', location: 'Sector 1, Fila 1' },
-        { id: 'INV-0201', name: 'Invernadero 2', location: 'Sector 1, Fila 2' },
-        { id: 'INV-0301', name: 'Invernadero 3', location: 'Sector 1, Fila 3' },
-        { id: 'INV-0401', name: 'Invernadero 4', location: 'Sector 1, Fila 4' },
-        { id: 'INV-0501', name: 'Invernadero 5', location: 'Sector 1, Fila 5' },
-    ];
-
-    const magnitudes = [
-        { id: 'HUM', name: 'Humedad' },
-        { id: 'TEM', name: 'Temperatura' },
-        { id: 'CO2', name: 'CO2' },
-    ];
 
     // Estados para el formulario
     const [selectedInvernaderos, setSelectedInvernaderos] = useState([]);
@@ -26,27 +13,108 @@ function GenerarInforme() {
     const [lecturas, setLecturas] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [listaInvernaderos, setListaInvernaderos] = useState([]);
+    const [loadingInvernaderos, setLoadingInvernaderos] = useState(false);
+    const [errorInvernaderos, setErrorInvernaderos] = useState(null);
+    const [listaMagnitudes, setListaMagnitudes] = useState([]);
+    const [loadingMagnitudes, setLoadingMagnitudes] = useState(false);
+    const [errorMagnitudes, setErrorMagnitudes] = useState(null);
 
-    // Efecto para cargar las lecturas cuando se envía el formulario
     useEffect(() => {
-        if (isSubmitted) {
-            fetchLecturas();
-        }
-    }, [isSubmitted]);
+        // Define la función asíncrona para cargar datos
+        const cargarOpciones = async () => {
+            // Reiniciar estados antes de cargar
+            setLoadingInvernaderos(true);
+            setLoadingMagnitudes(true);
+            setErrorInvernaderos(null);
+            setErrorMagnitudes(null);
+            setListaInvernaderos([]);
+            setListaMagnitudes([]);
 
-    // Función para obtener las lecturas del sistema
-    const fetchLecturas = async () => {
-        setLoading(true);
-        try {
-            const response = await fetch('http://localhost:8080/api/v1/lecturas');
-            if (!response.ok) {
-                throw new Error('Error al obtener las lecturas');
+            const gatewayUrl = 'http://localhost:8080';
+
+            try {
+                const [invernaderosResponse, magnitudesResponse] = await Promise.all([
+                    fetch(`${gatewayUrl}/api/v1/gestionSensores/invernaderos/basicos`),
+                    fetch(`${gatewayUrl}/api/v1/informes/magnitudesDisponibles`)
+                ]);
+
+                if (!invernaderosResponse.ok) {
+                    throw new Error(`Error al cargar invernaderos: ${invernaderosResponse.status}`);
+                }
+                const invernaderosData = await invernaderosResponse.json();
+                setListaInvernaderos(invernaderosData || []);
+
+                if (!magnitudesResponse.ok) {
+                    throw new Error(`Error al cargar magnitudes: ${magnitudesResponse.status}`);
+                }
+                const magnitudesData = await magnitudesResponse.json();
+                setListaMagnitudes(magnitudesData || []);
+
+            } catch (error) {
+                console.error("Error cargando opciones para filtros:", error);
+                const errorMessage = error.message || 'Error al cargar opciones';
+                setErrorInvernaderos(errorMessage);
+                setErrorMagnitudes(errorMessage);
+            } finally {
+                setLoadingInvernaderos(false);
+                setLoadingMagnitudes(false);
             }
+        };
+
+        cargarOpciones();
+
+    }, []);
+
+    const fetchInformeData = async () => {
+        if (selectedInvernaderos.length === 0 || selectedMagnitudes.length === 0) {
+            setError('Por favor, seleccione al menos un invernadero y una magnitud.');
+            setLecturas([]);
+            setIsSubmitted(false);
+            return;
+        }
+    
+        setLoading(true);
+        setError(null);
+        setLecturas([]);
+    
+        try {
+            const formattedStartDate = `${startDate}T00:00:00Z`;
+            const formattedEndDate = `${endDate}T23:59:59Z`;
+    
+            const invernaderoIds = selectedInvernaderos.map(inv => inv.id);
+            const magnitudNames = selectedMagnitudes;
+    
+            const params = new URLSearchParams();
+            params.append('fechaInicio', formattedStartDate);
+            params.append('fechaFin', formattedEndDate);
+            invernaderoIds.forEach(id => params.append('idsInvernadero', id));
+            magnitudNames.forEach(name => params.append('magnitudes', name));
+            const queryString = params.toString();
+    
+            const gatewayUrl = 'http://localhost:8080';
+            const endpointPath = '/api/v1/informes/filtradas';
+            const url = `<span class="math-inline">\{gatewayUrl\}</span>{endpointPath}?${queryString}`;
+    
+            console.log("Llamando a API Informes:", url);
+    
+            const response = await fetch(url);
+    
+            if (!response.ok) {
+                let errorMessage = `Error ${response.status}: ${response.statusText}`;
+                try { const errorData = await response.json(); errorMessage = errorData.mensaje || errorMessage; } catch (e) {}
+                throw new Error(errorMessage);
+            }
+    
             const data = await response.json();
-            setLecturas(data);
+            setLecturas(data || []);
+            setIsSubmitted(true);
+    
         } catch (err) {
-            setError(err.message);
-            console.error('Error:', err);
+            console.error('Error al obtener informe:', err);
+            setError(err.message || 'Ocurrió un error al cargar el informe.');
+            setLecturas([]);
+            setIsSubmitted(false);
         } finally {
             setLoading(false);
         }
@@ -54,10 +122,14 @@ function GenerarInforme() {
 
     const handleInvernaderoChange = (e) => {
         const selectedId = e.target.value;
-        const invernadero = invernaderos.find((inv) => inv.id === selectedId);
+        if (!selectedId) return;
+
+        const invernadero = listaInvernaderos.find((inv) => inv.id === selectedId);
+
         if (invernadero && !selectedInvernaderos.some((inv) => inv.id === selectedId)) {
             setSelectedInvernaderos([...selectedInvernaderos, invernadero]);
         }
+        e.target.value = "";
     };
 
     const removeInvernadero = (id) => {
@@ -65,15 +137,17 @@ function GenerarInforme() {
     };
 
     const handleMagnitudChange = (e) => {
-        const selectedId = e.target.value;
-        const magnitud = magnitudes.find((mag) => mag.id === selectedId);
-        if (magnitud && !selectedMagnitudes.some((mag) => mag.id === selectedId)) {
-            setSelectedMagnitudes([...selectedMagnitudes, magnitud]);
+        const selectedName = e.target.value;
+        if (!selectedName) return;
+
+        if (!selectedMagnitudes.includes(selectedName)) {
+            setSelectedMagnitudes([...selectedMagnitudes, selectedName]);
         }
+        e.target.value = "";
     };
 
-    const removeMagnitud = (id) => {
-        setSelectedMagnitudes(selectedMagnitudes.filter((mag) => mag.id !== id));
+    const removeMagnitud = (nameToRemove) => {
+        setSelectedMagnitudes(selectedMagnitudes.filter((magName) => magName !== nameToRemove));
     };
 
     const handleStartDateChange = (e) => {
@@ -86,19 +160,15 @@ function GenerarInforme() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
-        const data = {
-            fechaInicio: startDate,
-            fechaFin: endDate,
-            magnitudes: selectedMagnitudes,
-            invernaderos: selectedInvernaderos
-        };
-        
-        setFormData(data);
-        setIsSubmitted(true);
-        console.log('Datos del informe:', data);
-        
-        alert('Informe generado correctamente');
+    
+        if (selectedInvernaderos.length === 0 || selectedMagnitudes.length === 0) {
+             setError('Seleccione al menos un invernadero y una magnitud.');
+             setIsSubmitted(false);
+             return;
+        }
+        console.log('Generando informe con:', selectedInvernaderos, selectedMagnitudes, startDate, endDate);
+    
+        fetchInformeData();
     };
 
     // Función para exportar datos a CSV
@@ -110,10 +180,10 @@ function GenerarInforme() {
 
         // Crear las cabeceras del CSV
         let headers = ['ID Sensor', 'MAC Address', 'Marca', 'Modelo', 'Magnitud', 'Unidad', 'Valor', 'Fecha/Hora', 'Invernadero', 'Sector', 'Fila'];
-        
+
         // Crear las filas de datos
         let csvContent = headers.join(',') + '\n';
-        
+
         lecturas.forEach(lectura => {
             const fechaFormateada = new Date(lectura.fechaHora).toLocaleString();
             const row = [
@@ -125,24 +195,24 @@ function GenerarInforme() {
                 lectura.unidad || '',
                 lectura.valor || '',
                 fechaFormateada,
-                lectura.invernadero || '',
+                lectura.nombreInvernadero || '',
                 lectura.sector || '',
                 lectura.fila || ''
             ].map(value => `"${value}"`).join(',');
-            
+
             csvContent += row + '\n';
         });
-        
+
         // Crear un objeto Blob para el archivo CSV
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
-        
+
         // Crear un enlace para descargar el archivo
         const link = document.createElement('a');
         link.setAttribute('href', url);
         link.setAttribute('download', `informe_lecturas_${new Date().toISOString().slice(0, 10)}.csv`);
         link.style.visibility = 'hidden';
-        
+
         // Añadir el enlace al DOM y activar la descarga
         document.body.appendChild(link);
         link.click();
@@ -215,33 +285,33 @@ function GenerarInforme() {
                                         value=""
                                     >
                                         <option value="">
-                                            {selectedMagnitudes.length > 0 ? 'Añadir otra magnitud' : 'Seleccionar'}
+                                            {selectedMagnitudes.length > 0 ? 'Añadir otra magnitud' : (loadingMagnitudes ? 'Cargando...' : 'Seleccionar')}
                                         </option>
-                                        {magnitudes.map((magnitud) => (
-                                            <option key={magnitud.id} value={magnitud.id}>
-                                                {magnitud.name}
+                                        {!loadingMagnitudes && !errorMagnitudes && listaMagnitudes.map((nombreMagnitud) => (
+                                            <option key={nombreMagnitud} value={nombreMagnitud}>
+                                                {nombreMagnitud}
                                             </option>
                                         ))}
                                     </select>
                                     <div className="mt-3 flex flex-wrap gap-2">
-                                        {selectedMagnitudes.map((magnitud) => {
+                                        {selectedMagnitudes.map((magName) => {
                                             const colors = {
                                                 'Humedad': 'bg-blue-100 text-blue-700',
                                                 'Temperatura': 'bg-red-100 text-red-700',
                                                 'CO2': 'bg-gray-100 text-gray-700'
                                             };
-                                            const colorClass = colors[magnitud.name] || 'bg-green-100 text-green-700';
-                                            
+                                            const colorClass = colors[magName] || 'bg-green-100 text-green-700';
+
                                             return (
                                                 <span
-                                                    key={magnitud.id}
+                                                    key={magName}
                                                     className={`${colorClass} px-3 py-1 rounded-full flex items-center`}
                                                 >
-                                                    {magnitud.name}
+                                                    {magName}
                                                     <button
                                                         type="button"
                                                         className="ml-2 text-gray-500 hover:text-gray-700"
-                                                        onClick={() => removeMagnitud(magnitud.id)}
+                                                        onClick={() => removeMagnitud(magName)}
                                                     >
                                                         ✕
                                                     </button>
@@ -252,10 +322,10 @@ function GenerarInforme() {
                                     {selectedMagnitudes.length === 0 && (
                                         <p className="text-red-500 text-xs mt-1">Debe seleccionar al menos una magnitud</p>
                                     )}
-                                    <input 
-                                        type="hidden" 
-                                        name="magnitudes" 
-                                        value={JSON.stringify(selectedMagnitudes)} 
+                                    <input
+                                        type="hidden"
+                                        name="magnitudes"
+                                        value={JSON.stringify(selectedMagnitudes)}
                                     />
                                 </div>
 
@@ -270,11 +340,11 @@ function GenerarInforme() {
                                         value=""
                                     >
                                         <option value="">
-                                            {selectedInvernaderos.length > 0 ? 'Añadir otro invernadero' : 'Seleccionar'}
+                                            {selectedInvernaderos.length > 0 ? 'Añadir otro invernadero' : (loadingInvernaderos ? 'Cargando...' : 'Seleccionar')}
                                         </option>
-                                        {invernaderos.map((invernadero) => (
+                                        {!loadingInvernaderos && !errorInvernaderos && listaInvernaderos.map((invernadero) => (
                                             <option key={invernadero.id} value={invernadero.id}>
-                                                {invernadero.name} - {invernadero.location}
+                                                {invernadero.nombre}
                                             </option>
                                         ))}
                                     </select>
@@ -298,16 +368,16 @@ function GenerarInforme() {
                                     {selectedInvernaderos.length === 0 && (
                                         <p className="text-red-500 text-xs mt-1">Debe seleccionar al menos un invernadero</p>
                                     )}
-                                    <input 
-                                        type="hidden" 
-                                        name="invernaderos" 
-                                        value={JSON.stringify(selectedInvernaderos)} 
+                                    <input
+                                        type="hidden"
+                                        name="invernaderos"
+                                        value={JSON.stringify(selectedInvernaderos)}
                                     />
                                 </div>
 
                                 {/* Botón Generar Informe */}
-                                <button 
-                                    type="submit" 
+                                <button
+                                    type="submit"
                                     className="w-full px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors duration-300 shadow-sm flex items-center justify-center"
                                     disabled={selectedMagnitudes.length === 0 || selectedInvernaderos.length === 0}
                                 >
@@ -325,7 +395,7 @@ function GenerarInforme() {
                                         Visualización de Datos
                                     </h2>
                                 </div>
-                                <button 
+                                <button
                                     type="button"
                                     className={`flex items-center px-4 py-2 rounded-md ${!isSubmitted ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-green-100 text-green-700 hover:bg-green-200'} transition-colors duration-300`}
                                     disabled={!isSubmitted}
@@ -338,7 +408,7 @@ function GenerarInforme() {
                                 </button>
                             </div>
                             <p className="text-gray-600 mb-4">
-                                {isSubmitted 
+                                {isSubmitted
                                     ? `Datos de ${formData?.magnitudes.map(m => m.name).join(' y ')} del ${new Date(startDate).toLocaleDateString()} al ${new Date(endDate).toLocaleDateString()}`
                                     : 'Configura los parámetros y genera un informe para visualizar los datos'
                                 }
@@ -354,11 +424,11 @@ function GenerarInforme() {
                                                 'CO2': 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                             };
                                             const colorClass = colors[magnitud.name] || 'bg-green-100 text-green-700 hover:bg-green-200';
-                                            
+
                                             return (
-                                                <button 
+                                                <button
                                                     key={magnitud.id}
-                                                    type="button" 
+                                                    type="button"
                                                     className={`px-4 py-2 ${colorClass} rounded-full transition-colors duration-300`}
                                                 >
                                                     {magnitud.name}
@@ -410,7 +480,7 @@ function GenerarInforme() {
                                                                     <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">
                                                                         {new Date(lectura.fechaHora).toLocaleDateString()} {new Date(lectura.fechaHora).toLocaleTimeString()}
                                                                     </td>
-                                                                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{lectura.invernadero}</td>
+                                                                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{lectura.nombreInvernadero}</td>
                                                                     <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{lectura.sector}</td>
                                                                     <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{lectura.fila}</td>
                                                                 </tr>
@@ -447,7 +517,7 @@ function GenerarInforme() {
                                         {formData?.invernaderos.map((invernadero, index) => {
                                             const colors = ['bg-green-500', 'bg-blue-500', 'bg-yellow-500', 'bg-red-500', 'bg-purple-500'];
                                             const colorClass = colors[index % colors.length];
-                                            
+
                                             return (
                                                 <div key={invernadero.id} className="flex items-center">
                                                     <span className={`w-3 h-3 ${colorClass} rounded-full mr-2`}></span>
@@ -480,12 +550,12 @@ function GenerarInforme() {
                             )}
                         </div>
                     </div>
-                    
+
                     {/* Footer con información */}
                     <div className="mt-4 text-center text-xs text-green-600">
                         <p>Sistema de Informes Amigochas — Última actualización: {new Date().toLocaleDateString()}</p>
                     </div>
-                </div>  
+                </div>
             </div>
         </>
     );

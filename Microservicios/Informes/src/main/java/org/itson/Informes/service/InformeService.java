@@ -4,6 +4,8 @@ import org.itson.Informes.collections.InformeLectura;
 import org.itson.Informes.persistence.IInformeLecturasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.Date;
 import java.util.List; // Importar List
@@ -13,6 +15,9 @@ public class InformeService {
 
     @Autowired
     private IInformeLecturasRepository informeLecturaRepository;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     public List<InformeLectura> obtenerInformesFiltrados(
             List<String> idsInvernadero,
@@ -40,4 +45,16 @@ public class InformeService {
 
         return lecturasEncontradas;
     }
+
+    /**
+     * Obtiene la lista de nombres de magnitud únicos existentes
+     * en la colección local de lecturas para informes ('lecturas_informes_db.lecturas').
+     * @return Lista de strings con las magnitudes únicas (ej: ["Humedad", "Temperatura"]).
+     */
+    public List<String> obtenerMagnitudesDisponibles() {
+        Query query = new Query();
+        List<String> magnitudesUnicas = mongoTemplate.findDistinct(query, "magnitud", InformeLectura.class, String.class);
+        return magnitudesUnicas;
+    }
+
 }

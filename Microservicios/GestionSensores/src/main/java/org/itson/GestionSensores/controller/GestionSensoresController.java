@@ -1,6 +1,7 @@
 package org.itson.GestionSensores.controller;
 
 import org.itson.GestionSensores.dtos.InvernaderoDTO;
+import org.itson.GestionSensores.dtos.InvernaderoBasicoDTO;
 import org.itson.GestionSensores.excepciones.GestionSensoresException;
 import org.itson.GestionSensores.dtos.SensorDTO;
 import org.itson.GestionSensores.service.GestionSensoresService;
@@ -164,4 +165,24 @@ public class GestionSensoresController {
             return respuesta;
         }
     }
+
+    /**
+     * Endpoint GET para obtener SOLO la lista básica de invernaderos (ID como String y Nombre),
+     * optimizado para selectores del frontend y sin riesgo para otros procesos.
+     * @return ResponseEntity con la lista de InvernaderoBasicoDTO o un error 500.
+     */
+    @GetMapping("/invernaderos/basicos")
+    public ResponseEntity<?> obtenerTodosInvernaderosBasicos() {
+        try {
+            List<InvernaderoBasicoDTO> lista = gestionSensoresService.obtenerTodosLosInvernaderosBasicos();
+            return ResponseEntity.ok(lista);
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("mensaje", "Error interno al obtener lista básica de invernaderos: " + e.getMessage());
+            System.err.println("Error en GET /invernaderos/basicos: " + e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

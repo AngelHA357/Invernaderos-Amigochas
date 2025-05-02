@@ -12,6 +12,8 @@ import org.itson.GestionSensores.persistence.IInvernaderosRepository;
 import org.itson.GestionSensores.proto.ClienteEstadoSensoresGrpc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.itson.GestionSensores.dtos.InvernaderoBasicoDTO;
+import java.util.stream.Collectors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -305,6 +307,30 @@ public class GestionSensoresService {
             return convertirSensoresEntidadDTO(sensoresEntidad);
         } else {
             throw new GestionSensoresException("No se encontraron sensores para el invernadero con ID " + idInvernadero + ".");
+        }
+    }
+
+    /**
+     * Obtiene una lista simplificada (ID como String y Nombre) de todos los invernaderos
+     * registrados, ideal para poblar selectores en el frontend.
+     * @return Lista de InvernaderoBasicoDTO.
+     * @throws GestionSensoresException Si ocurre un error al consultar la base de datos.
+     */
+    public List<InvernaderoBasicoDTO> obtenerTodosLosInvernaderosBasicos() throws GestionSensoresException {
+        try {
+            List<Invernadero> listaEntidades = invernaderosRepository.findAll();
+
+            List<InvernaderoBasicoDTO> listaDtos = listaEntidades.stream()
+                    .map(entidad -> new InvernaderoBasicoDTO(
+                            entidad.get_id(),
+                            entidad.getNombre()
+                    ))
+                    .collect(Collectors.toList());
+
+            return listaDtos;
+        } catch (Exception e) {
+            System.err.println("Error al obtener invernaderos básicos: " + e.getMessage());
+            throw new GestionSensoresException("No se pudieron obtener los invernaderos.");
         }
     }
 }

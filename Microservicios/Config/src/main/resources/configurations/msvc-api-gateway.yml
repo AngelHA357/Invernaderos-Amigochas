@@ -31,6 +31,14 @@ spring:
           predicates:
             - Path=/api/v1/informes/**
 
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:5174"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
+
 management:
   tracing:
     sampling:
