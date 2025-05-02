@@ -1,4 +1,4 @@
-package org.itson.ReportesAnomalias;
+package org.itson.ReportesAnomalias.comunicacion;
 
 import com.google.gson.Gson;
 import com.rabbitmq.client.Channel;
