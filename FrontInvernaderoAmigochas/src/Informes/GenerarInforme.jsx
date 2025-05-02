@@ -94,7 +94,7 @@ function GenerarInforme() {
     
             const gatewayUrl = 'http://localhost:8080';
             const endpointPath = '/api/v1/informes/filtradas';
-            const url = `<span class="math-inline">\{gatewayUrl\}</span>{endpointPath}?${queryString}`;
+            const url = `${gatewayUrl}${endpointPath}?${queryString}`;
     
             console.log("Llamando a API Informes:", url);
     
