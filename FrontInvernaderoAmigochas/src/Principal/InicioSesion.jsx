@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logo from '../recursos/logo2.png'; 
+import logo from '../recursos/logo2.png';
 import fondo from '../recursos/fondo.png';
-import usuariosMock from '../mocks/usuarios.json';
 
 function InicioSesion() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({ usuario: '', contrasena: '' });
-    const [errors, setErrors] = useState({});
+    const [formErrors, setFormErrors] = useState({});
+    const [loading, setLoading] = useState(false);
+    const [loginError, setLoginError] = useState(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -18,25 +19,61 @@ function InicioSesion() {
         const newErrors = {};
         if (!formData.usuario) newErrors.usuario = 'El usuario es obligatorio.';
         if (!formData.contrasena) newErrors.contrasena = 'La contraseña es obligatoria.';
-        setErrors(newErrors);
+        setFormErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (validateForm()) {
-            // Validar credenciales con usuariosMock
-            const usuarioValido = usuariosMock.find(
-                (usuario) =>
-                    usuario.id === formData.usuario && usuario.contrasenia === formData.contrasena
-            );
 
-            if (usuarioValido) {
-                console.log('Inicio de sesión exitoso:', formData);
-                navigate('/invernaderos'); // Redirige a la página principal
-            } else {
-                setErrors({ general: 'Usuario o contraseña incorrectos.' });
+        if (!validateForm()) {
+            setLoginError(null);
+            return;
+        }
+
+        setLoading(true);
+        setLoginError(null);
+
+        const gatewayUrl = 'http://localhost:8080';
+        const loginEndpoint = '/api/v1/login';
+        const url = `${gatewayUrl}${loginEndpoint}`;
+
+        console.log(`Intentando login a: ${url} con usuario: ${formData.usuario}`);
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: formData.usuario,
+                    password: formData.contrasena
+                }),
+            });
+
+            if (!response.ok) {
+                let errorMsg = `Error ${response.status}`;
+                try {
+                    const errorData = await response.json();
+                    errorMsg = errorData.mensaje || errorMsg;
+                } catch (jsonError) {
+                    errorMsg = "Credenciales inválidas o error del servidor.";
+                    console.error("Respuesta de error no es JSON:", jsonError);
+                }
+                throw new Error(errorMsg);
             }
+
+            const data = await response.json();
+            console.log('Inicio de sesión exitoso:', data.mensaje);
+
+            navigate('/invernaderos');
+
+        } catch (error) {
+            console.error('Error en inicio de sesión:', error);
+            setLoginError(error.message || 'Ocurrió un error. Intente de nuevo.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -73,7 +110,7 @@ function InicioSesion() {
                             className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
                             placeholder="Ingresa tu usuario"
                         />
-                        {errors.usuario && <p className="text-red-500 text-xs mt-1">{errors.usuario}</p>}
+                        {errors.usuario && <p className="text-red-500 text-xs mt-1">{formErrors.usuario}</p>}
                     </div>
                     <div className="mb-6">
                         <label className="block text-gray-700 font-medium mb-2">Contraseña</label>
@@ -85,16 +122,17 @@ function InicioSesion() {
                             className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
                             placeholder="Ingresa tu contraseña"
                         />
-                        {errors.contrasena && <p className="text-red-500 text-xs mt-1">{errors.contrasena}</p>}
+                        {errors.contrasena && <p className="text-red-500 text-xs mt-1">{formErrors.contrasena}</p>}
                     </div>
                     {errors.general && (
-                        <p className="text-red-500 text-center text-sm mb-4">{errors.general}</p>
+                        <p className="text-red-500 text-center text-sm mb-4">{loginError}</p>
                     )}
                     <button
                         type="submit"
-                        className="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition-colors duration-300 shadow-md"
+                        disabled={loading}
+                        className={`w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition-colors duration-300 shadow-md ${loading ? 'opacity-70 cursor-wait' : ''}`}
                     >
-                        Iniciar Sesión
+                        {loading ? 'Ingresando...' : 'Iniciar Sesión'}
                     </button>
                 </form>
             </div>
