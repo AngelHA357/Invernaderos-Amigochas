@@ -110,7 +110,7 @@ function InicioSesion() {
                             className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
                             placeholder="Ingresa tu usuario"
                         />
-                        {errors.usuario && <p className="text-red-500 text-xs mt-1">{formErrors.usuario}</p>}
+                        {formErrors.usuario && <p className="text-red-500 text-xs mt-1">{formErrors.usuario}</p>}
                     </div>
                     <div className="mb-6">
                         <label className="block text-gray-700 font-medium mb-2">Contraseña</label>
@@ -122,9 +122,9 @@ function InicioSesion() {
                             className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
                             placeholder="Ingresa tu contraseña"
                         />
-                        {errors.contrasena && <p className="text-red-500 text-xs mt-1">{formErrors.contrasena}</p>}
+                        {formErrors.contrasena && <p className="text-red-500 text-xs mt-1">{formErrors.contrasena}</p>}
                     </div>
-                    {errors.general && (
+                    {loginError && (
                         <p className="text-red-500 text-center text-sm mb-4">{loginError}</p>
                     )}
                     <button

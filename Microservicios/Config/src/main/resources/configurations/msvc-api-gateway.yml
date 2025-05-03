@@ -30,14 +30,18 @@ spring:
           uri: lb://msvc-informes
           predicates:
             - Path=/api/v1/informes/**
+        - id: msvc-login
+          uri: lb://msvc-login
+          predicates:
+            - Path=/api/v1/login
 
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "http://localhost:5174"
-            allowedMethods: "*"
-            allowedHeaders: "*"
-            allowCredentials: true
+#      globalcors:
+#        cors-configurations:
+#          '[/**]':
+#            allowedOrigins: "http://localhost:5174"
+#            allowedMethods: "*"
+#            allowedHeaders: "*"
+#            allowCredentials: true
 
 management:
   tracing:
