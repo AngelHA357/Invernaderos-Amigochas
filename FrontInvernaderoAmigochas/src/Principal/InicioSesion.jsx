@@ -51,24 +51,27 @@ function InicioSesion() {
                     password: formData.contrasena
                 }),
             });
-
+        
             if (!response.ok) {
                 let errorMsg = `Error ${response.status}`;
                 try {
                     const errorData = await response.json();
                     errorMsg = errorData.mensaje || errorMsg;
                 } catch (jsonError) {
-                    errorMsg = "Credenciales inválidas o error del servidor.";
+                    try {
+                       const textError = await response.text();
+                       errorMsg = textError || errorMsg;
+                    } catch(textErrorErr) {
+                       errorMsg = `Error ${response.status} al procesar la respuesta.`;
+                    }
                     console.error("Respuesta de error no es JSON:", jsonError);
                 }
-                throw new Error(errorMsg);
+                throw new Error(errorMsg); // Lanza el error para el .catch()
             }
-
-            const data = await response.json();
-            console.log('Inicio de sesión exitoso:', data.mensaje);
-
+        
+            console.log('Inicio de sesión exitoso (Respuesta 200 OK recibida)');
             navigate('/invernaderos');
-
+        
         } catch (error) {
             console.error('Error en inicio de sesión:', error);
             setLoginError(error.message || 'Ocurrió un error. Intente de nuevo.');

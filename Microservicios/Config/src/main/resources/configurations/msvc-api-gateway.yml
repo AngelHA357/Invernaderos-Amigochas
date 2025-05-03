@@ -31,7 +31,7 @@ spring:
           predicates:
             - Path=/api/v1/informes/**
         - id: msvc-login
-          uri: lb://msvc-login
+          uri: lb://MSVC-LOGIN
           predicates:
             - Path=/api/v1/login
 
