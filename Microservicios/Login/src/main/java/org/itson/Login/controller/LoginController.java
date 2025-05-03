@@ -37,7 +37,7 @@ public class LoginController {
 
         } catch (AuthenticationException e) {
             Map<String, String> error = new HashMap<>();
-            error.put("mensaje", "Error de autenticación: Credenciales inválidas.");
+            error.put("mensaje", "Usuario o contraseña incorrecto.");
             System.err.println("Intento de login fallido para usuario: " + requestDTO.getUsername() + " - Razón: " + e.getMessage());
             return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
 
