@@ -1,11 +1,9 @@
-package org.itson.Anomalyzer;
+package org.itson.Anomalyzer.service;
 
 import jakarta.annotation.PostConstruct;
-import org.checkerframework.checker.units.qual.A;
 import org.itson.Anomalyzer.dtos.AlarmaDTO;
 import org.itson.Anomalyzer.dtos.AnomaliaDTO;
 import org.itson.Anomalyzer.dtos.LecturaDTO;
-import org.itson.Anomalyzer.service.AnomalyzerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,9 +15,13 @@ public class Analizador {
     @Autowired
     AnomalyzerService anomalyzerService;
 
-    // Mapa para llevar el conteo de anomalías seguidas por sensor
+    // Lista de alarmas.
     private List<AlarmaDTO> alarmas = new ArrayList<>();
+
+    // Mapa para contar lecturas anómalas por sensor.
     private Map<String, Integer> lecturasAnomalasPorSensor = new HashMap<>();
+
+    // Límite de lecturas anómalas para disparar una alarma.
     private static final int LIMITE_LECTURAS_ANOMALAS = 5;
 
     @PostConstruct
@@ -78,7 +80,8 @@ public class Analizador {
                 imprimirAnomalia(anomalia);
 
                 anomalyzerService.guardarAnomalia(anomalia);
-                anomalyzerService.emitirAnomalia(anomalia);
+                anomalyzerService.enviarAnomalia(anomalia);
+                anomalyzerService.enviarNotificacion(alarmaDetonadora, anomalia);
                 lecturasAnomalasPorSensor.put(idSensor, 0); // Reiniciar el conteo de lecturas anómalas
             }
 

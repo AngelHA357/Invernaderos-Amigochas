@@ -20,7 +20,7 @@ public class ServidorAlarmasGrpc extends AlarmasServidorGrpc.AlarmasServidorImpl
 
     @Override
     public void obtenerAlarmas(Alarmas.Empty request, StreamObserver<Alarmas.AlarmasList> responseObserver) {
-        List<AlarmaDTO> listaAlarmas = alarmasService.obtenerTodasLasAlarmas(); // Tu lista de POJOs
+        List<AlarmaDTO> listaAlarmas = alarmasService.obtenerTodasLasAlarmas();
 
         Alarmas.AlarmasList.Builder responseBuilder = Alarmas.AlarmasList.newBuilder();
 

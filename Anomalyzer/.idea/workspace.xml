@@ -5,12 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9879af79-ecd7-44bc-bb39-f33813800b81" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/comunication/AnomaliaConsumer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/dtos/AlarmaAnomaliaDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/dtos/AlarmaDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/dtos/AnomaliaDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/dtos/LecturaDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/proto/ClienteAlarmasGrpc.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/proto/ServidorAlarmatorGrpc.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/proto/ServidorGrpcLauncher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/service/AlarmatorService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Alarmator/src/main/proto/alarmas.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Alarmator/src/main/proto/alarmator.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Alarmator/src/main/resources/banner.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/dtos/AlarmaAnomaliaDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/proto/ClienteAlarmatorGrpc.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/proto/alarmator.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-exposicion-datos.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-exposicion-datos.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/application/ExposicionDatosApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/ExposicionDatosApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/collections/Lectura.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/collections/Lectura.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/comunicacion/RabbitMQReceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/comunicacion/RabbitMQReceptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/resources/applications.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/Analizador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/Analizador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/LecturaConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/comunication/LecturaConsumer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/RabbitConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/proto/ServidorAnomalyzerGrpc.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/proto/ServidorAnomalyzerGrpc.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/AnomalyzerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/AnomalyzerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/APIGateway/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/proto/ServidorAlarmasGrpc.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/proto/ServidorAlarmasGrpc.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/service/AlarmasService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/service/AlarmasService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-alarmas.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-alarmas.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +113,7 @@
       <module name="Anomalyzer" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.itson.Anomalyzer.*" />
+          <option name="PATTERN" value="org.itson.Anomalyzer.comunication.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -116,6 +135,14 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -132,6 +159,8 @@
       <workItem from="1745983040073" duration="496000" />
       <workItem from="1745985010957" duration="187000" />
       <workItem from="1746079250435" duration="4620000" />
+      <workItem from="1746392534747" duration="5540000" />
+      <workItem from="1746398160340" duration="1706000" />
     </task>
     <servers />
   </component>
@@ -150,6 +179,15 @@
     </option>
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/Analizador.java</url>
+          <line>83</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="SpringBootApplicationConfigurationType">
         <watch expression="alarmasObtenidas" />
