@@ -18,6 +18,10 @@ grpc:
       address: static://localhost:50054
       negotiation-type: plaintext
       enable-keep-alive: true
+    alarmator:
+      address: static://localhost:50057
+      negotiation-type: plaintext
+      enable-keep-alive: true
 
 management:
   tracing:

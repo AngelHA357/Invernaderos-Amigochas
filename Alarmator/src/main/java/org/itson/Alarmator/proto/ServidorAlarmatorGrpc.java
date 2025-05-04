@@ -1,26 +1,26 @@
-package org.itson.Anomalyzer.proto;
+package org.itson.Alarmator.proto;
 
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.itson.Anomalyzer.service.Analizador;
-import org.itson.Anomalyzer.Anomalyzer;
-import org.itson.Anomalyzer.AnomalyzerServidorGrpc;
-import org.itson.Anomalyzer.dtos.AlarmaDTO;
+import org.itson.Alarmator.Alarmator;
+import org.itson.Alarmator.AlarmatorServidorGrpc;
+import org.itson.Alarmator.dtos.AlarmaDTO;
+import org.itson.Alarmator.service.AlarmatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @GrpcService
-public class ServidorAnomalyzerGrpc extends AnomalyzerServidorGrpc.AnomalyzerServidorImplBase {
+public class ServidorAlarmatorGrpc extends AlarmatorServidorGrpc.AlarmatorServidorImplBase {
     @Autowired
-    private Analizador analizador;
+    private AlarmatorService alarmatorService;
 
     @Autowired
     ClienteAlarmasGrpc clienteAlarmasGrpc;
 
     @Override
-    public void registrarAlarma(Anomalyzer.AlarmaDTO request, StreamObserver<Anomalyzer.Empty> responseObserver) {
+    public void registrarAlarma(Alarmator.AlarmaDTO request, StreamObserver<Alarmator.Empty> responseObserver) {
         System.out.println("Registrando alarma: " + request.getIdAlarma());
         AlarmaDTO alarmaDTO = new AlarmaDTO(
                 request.getIdAlarma(),
@@ -34,14 +34,14 @@ public class ServidorAnomalyzerGrpc extends AnomalyzerServidorGrpc.AnomalyzerSer
                 request.getActivo()
         );
 
-        analizador.agregarAlarma(alarmaDTO);
+        alarmatorService.agregarAlarma(alarmaDTO);
 
-        responseObserver.onNext(Anomalyzer.Empty.newBuilder().build());
+        responseObserver.onNext(Alarmator.Empty.newBuilder().build());
         responseObserver.onCompleted();
     }
 
     @Override
-    public void actualizarAlarma(Anomalyzer.AlarmaDTO request, StreamObserver<Anomalyzer.Empty> responseObserver) {
+    public void actualizarAlarma(Alarmator.AlarmaDTO request, StreamObserver<Alarmator.Empty> responseObserver) {
         System.out.println("Actualizando alarma: " + request.getIdAlarma());
         AlarmaDTO alarmaDTO = new AlarmaDTO(
                 request.getIdAlarma(),
@@ -55,32 +55,32 @@ public class ServidorAnomalyzerGrpc extends AnomalyzerServidorGrpc.AnomalyzerSer
                 request.getActivo()
         );
 
-        analizador.actualizarAlarma(alarmaDTO);
+        alarmatorService.actualizarAlarma(alarmaDTO);
 
-        responseObserver.onNext(Anomalyzer.Empty.newBuilder().build());
+        responseObserver.onNext(Alarmator.Empty.newBuilder().build());
         responseObserver.onCompleted();
     }
 
     @Override
-    public void eliminarAlarma(Anomalyzer.AlarmaDTO request, StreamObserver<Anomalyzer.Empty> responseObserver) {
+    public void eliminarAlarma(Alarmator.AlarmaDTO request, StreamObserver<Alarmator.Empty> responseObserver) {
         System.out.println("Eliminando alarma: " + request.getIdAlarma());
 
         AlarmaDTO alarmaDTO = new AlarmaDTO();
         alarmaDTO.setIdAlarma(request.getIdAlarma());
 
-        analizador.eliminarAlarma(alarmaDTO);
+        alarmatorService.eliminarAlarma(alarmaDTO);
 
-        responseObserver.onNext(Anomalyzer.Empty.newBuilder().build());
+        responseObserver.onNext(Alarmator.Empty.newBuilder().build());
         responseObserver.onCompleted();
     }
 
     @Override
-    public void actualizarAlarmas(Anomalyzer.AlarmasList request, StreamObserver<Anomalyzer.Empty> responseObserver) {
+    public void actualizarAlarmas(Alarmator.AlarmasList request, StreamObserver<Alarmator.Empty> responseObserver) {
         System.out.println("Actualizando TODAS las alarmas");
 
-        List<Anomalyzer.AlarmaDTO> alarmas = request.getAlarmasList();
+        List<Alarmator.AlarmaDTO> alarmas = request.getAlarmasList();
         List<AlarmaDTO> alarmasDTO = new ArrayList<>();
-        for (Anomalyzer.AlarmaDTO alarma : alarmas) {
+        for (Alarmator.AlarmaDTO alarma : alarmas) {
             AlarmaDTO alarmaDTO = new AlarmaDTO(
                     alarma.getIdAlarma(),
                     alarma.getIdSensoresList(),
@@ -95,9 +95,9 @@ public class ServidorAnomalyzerGrpc extends AnomalyzerServidorGrpc.AnomalyzerSer
             alarmasDTO.add(alarmaDTO);
         }
 
-        analizador.actualizarAlarmas(alarmasDTO);
+        alarmatorService.actualizarAlarmas(alarmasDTO);
 
-        responseObserver.onNext(Anomalyzer.Empty.newBuilder().build());
+        responseObserver.onNext(Alarmator.Empty.newBuilder().build());
         responseObserver.onCompleted();
     }
 }

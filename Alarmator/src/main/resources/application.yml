@@ -1,0 +1,20 @@
+server:
+  port: 8097
+
+spring:
+  application:
+    name: alarmator
+
+grpc:
+  server:
+    port: 9097
+  client:
+    alarmas:
+      address: static://localhost:50053
+      negotiation-type: plaintext
+      enable-keep-alive: true
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
