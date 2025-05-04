@@ -6,8 +6,8 @@ function GenerarInforme() {
     // Estados para el formulario
     const [selectedInvernaderos, setSelectedInvernaderos] = useState([]);
     const [selectedMagnitudes, setSelectedMagnitudes] = useState([]);
-    const [startDate, setStartDate] = useState('2023-03-02');
-    const [endDate, setEndDate] = useState('2023-03-08');
+    const [startDate, setStartDate] = useState('2025-05-01');
+    const [endDate, setEndDate] = useState('2025-05-02');
     const [formData, setFormData] = useState(null);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [lecturas, setLecturas] = useState([]);
@@ -73,43 +73,43 @@ function GenerarInforme() {
             setIsSubmitted(false);
             return;
         }
-    
+
         setLoading(true);
         setError(null);
         setLecturas([]);
-    
+
         try {
             const formattedStartDate = `${startDate}T00:00:00Z`;
             const formattedEndDate = `${endDate}T23:59:59Z`;
-    
+
             const invernaderoIds = selectedInvernaderos.map(inv => inv.id);
             const magnitudNames = selectedMagnitudes;
-    
+
             const params = new URLSearchParams();
             params.append('fechaInicio', formattedStartDate);
             params.append('fechaFin', formattedEndDate);
             invernaderoIds.forEach(id => params.append('idsInvernadero', id));
             magnitudNames.forEach(name => params.append('magnitudes', name));
             const queryString = params.toString();
-    
+
             const gatewayUrl = 'http://localhost:8080';
             const endpointPath = '/api/v1/informes/filtradas';
             const url = `${gatewayUrl}${endpointPath}?${queryString}`;
-    
+
             console.log("Llamando a API Informes:", url);
-    
+
             const response = await fetch(url);
-    
+
             if (!response.ok) {
                 let errorMessage = `Error ${response.status}: ${response.statusText}`;
-                try { const errorData = await response.json(); errorMessage = errorData.mensaje || errorMessage; } catch (e) {}
+                try { const errorData = await response.json(); errorMessage = errorData.mensaje || errorMessage; } catch (e) { }
                 throw new Error(errorMessage);
             }
-    
+
             const data = await response.json();
             setLecturas(data || []);
             setIsSubmitted(true);
-    
+
         } catch (err) {
             console.error('Error al obtener informe:', err);
             setError(err.message || 'Ocurrió un error al cargar el informe.');
@@ -159,29 +159,40 @@ function GenerarInforme() {
     };
 
     const handleSubmit = (e) => {
+        console.log("handleSubmit ¡SE EJECUTÓ!");
         e.preventDefault();
     
-        if (selectedInvernaderos.length === 0 || selectedMagnitudes.length === 0) {
-             setError('Seleccione al menos un invernadero y una magnitud.');
-             setIsSubmitted(false);
-             return;
-        }
-        console.log('Generando informe con:', selectedInvernaderos, selectedMagnitudes, startDate, endDate);
+        console.log(`DEBUG ANTES DE VALIDAR: Invernaderos=${selectedInvernaderos.length}, Magnitudes=${selectedMagnitudes.length}`);
     
+        if (selectedInvernaderos.length === 0 || selectedMagnitudes.length === 0) {
+            console.log("VALIDACIÓN FALLIDA: Faltan selecciones.");
+            setError('Seleccione al menos un invernadero y una magnitud.');
+            setIsSubmitted(false);
+            setLecturas([]);
+            return;
+        }
+    
+        if (new Date(startDate) > new Date(endDate)) {
+            console.log("VALIDACIÓN FALLIDA: Fechas inválidas.");
+            setError('La fecha de inicio no puede ser posterior a la fecha de fin.');
+            setIsSubmitted(false);
+            setLecturas([]);
+            return;
+        }
+    
+        console.log("VALIDACIONES PASADAS. Continuando...");
+        console.log("--- Iniciando Generación de Informe ---");
         fetchInformeData();
     };
 
-    // Función para exportar datos a CSV
     const exportToCSV = () => {
         if (!lecturas || lecturas.length === 0) {
             alert('No hay datos para exportar');
             return;
         }
 
-        // Crear las cabeceras del CSV
         let headers = ['ID Sensor', 'MAC Address', 'Marca', 'Modelo', 'Magnitud', 'Unidad', 'Valor', 'Fecha/Hora', 'Invernadero', 'Sector', 'Fila'];
 
-        // Crear las filas de datos
         let csvContent = headers.join(',') + '\n';
 
         lecturas.forEach(lectura => {
@@ -203,17 +214,14 @@ function GenerarInforme() {
             csvContent += row + '\n';
         });
 
-        // Crear un objeto Blob para el archivo CSV
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
 
-        // Crear un enlace para descargar el archivo
         const link = document.createElement('a');
         link.setAttribute('href', url);
         link.setAttribute('download', `informe_lecturas_${new Date().toISOString().slice(0, 10)}.csv`);
         link.style.visibility = 'hidden';
 
-        // Añadir el enlace al DOM y activar la descarga
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
