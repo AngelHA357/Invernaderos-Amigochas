@@ -17,9 +17,9 @@ public class DataLoader {
     @Bean
     CommandLineRunner initData(IInvernaderosRepository invernaderosRepository, IGestionSensoresRepository gestionSensoresRepository) {
         return args -> {
-            invernaderosRepository.deleteAll();
-            gestionSensoresRepository.deleteAll();
-
+            if(invernaderosRepository.count() > 0) {
+                return; // No se hace nada si ya hay datos
+            }
             // Insertar invernaderos
             Invernadero invNA = invernaderosRepository.save(new Invernadero(null, "N/A", List.of("N/A"), List.of("N/A")));
             Invernadero invA = invernaderosRepository.save(new Invernadero(null, "Invernadero A", List.of("Sector 1", "Sector 2"), List.of("Fila A", "Fila B")));
