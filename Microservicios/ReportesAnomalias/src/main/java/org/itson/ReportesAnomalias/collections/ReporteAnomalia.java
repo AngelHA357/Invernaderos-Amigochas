@@ -14,6 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReporteAnomalia {
+
     @Id
     private ObjectId _id;
     private Date fecha;
