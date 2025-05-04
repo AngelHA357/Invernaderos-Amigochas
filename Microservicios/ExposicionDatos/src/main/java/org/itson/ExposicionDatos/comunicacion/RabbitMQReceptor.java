@@ -11,7 +11,6 @@ import org.itson.ExposicionDatos.dtos.LecturaDTO;
 import org.itson.ExposicionDatos.persistence.ILecturasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.nio.charset.StandardCharsets;
 
 @Component
@@ -54,14 +53,18 @@ public class RabbitMQReceptor {
 
                         System.out.println(" [EXPOSICION DATOS] Entidad ANTES de guardar: " + entidadParaGuardar.toString());
 
-                        Lectura guardada = informeLecturaRepository.save(entidadParaGuardar);
+                        System.out.println("Se recibió la lectura" + entidadParaGuardar);
 
-                        if (guardada != null) {
-                            System.out.println(" [EXPOSICION DATOS] Entidad DESPUÉS de guardar (devuelta por save): " + guardada.toString());
-                            System.out.println(" [EXPOSICION DATOS] Lectura guardada localmente en 'lecturas_informes_db' con ID: " + guardada.get_id());
-                        } else {
-                            System.err.println(" [!] ERROR RARO: informeLecturaRepository.save() devolvió NULL.");
-                        }
+                        /**
+                         * Lectura guardada = informeLecturaRepository.save(entidadParaGuardar);
+                         *
+                         *                         if (guardada != null) {
+                         *                             System.out.println(" [EXPOSICION DATOS] Entidad DESPUÉS de guardar (devuelta por save): " + guardada.toString());
+                         *                             System.out.println(" [EXPOSICION DATOS] Lectura guardada localmente en 'lecturas_informes_db' con ID: " + guardada.get_id());
+                         *                         } else {
+                         *                             System.err.println(" [!] ERROR RARO: informeLecturaRepository.save() devolvió NULL.");
+                         *                         }
+                         */
 
                     } catch (com.google.gson.JsonSyntaxException jsonEx) {
                         System.err.println(" [!] Error al deserializar JSON de RabbitMQ: " + jsonEx.getMessage());

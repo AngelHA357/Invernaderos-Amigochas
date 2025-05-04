@@ -1,4 +1,4 @@
-package org.itson.ExposicionDatos.application;
+package org.itson.ExposicionDatos;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
