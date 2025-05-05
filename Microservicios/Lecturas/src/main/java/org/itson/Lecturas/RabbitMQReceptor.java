@@ -86,7 +86,7 @@ public class RabbitMQReceptor {
                         }
 
                     } else {
-                        System.out.println("Lectura descartada por sensor inactivo: " + lectura.getIdSensor());
+                        //System.out.println("Lectura descartada por sensor inactivo: " + lectura.getIdSensor());
                     }
                 };
 

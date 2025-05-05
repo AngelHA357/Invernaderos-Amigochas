@@ -5,49 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9879af79-ecd7-44bc-bb39-f33813800b81" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/APIGateway/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/src/main/java/org/itson/APIGateway/ApiGatewayApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/APIGateway/src/main/java/org/itson/APIGateway/ApiGatewayApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/AlarmasApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/AlarmasApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-alarmas.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-alarmas.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-api-gateway.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-api-gateway.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-eureka.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-exposicion-datos.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-exposicion-datos.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-gestion-sensores.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-gestion-sensores.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-informes.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-informes.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-lecturas.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-lecturas.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-login.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-login.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-reportes-anomalias.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-reportes-anomalias.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/.gitattributes" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/src/main/java/org/itson/Eureka/EurekaApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/src/main/resources/application.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/src/main/resources/banner.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/src/test/java/org/itson/Eureka/EurekaApplicationTests.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/ExposicionDatosApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/ExposicionDatosApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/GestionSensoresApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/GestionSensoresApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Informes/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/InformesApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/InformesApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Login/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Login/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/ReportesAnomaliasApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/ReportesAnomaliasApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/collections/Anomalia.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/collections/Anomalia.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/collections/Lectura.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/collections/Lectura.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/dtos/AnomaliaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/dtos/AnomaliaDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/dtos/LecturaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/dtos/LecturaDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/dtos/ReporteAnomaliaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/dtos/ReporteAnomaliaDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/IAnomaliasRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/IAnomaliasRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/service/ReportesAnomaliasService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/service/ReportesAnomaliasService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/RabbitMQReceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/RabbitMQReceptor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +138,7 @@
       <workItem from="1746392534747" duration="5540000" />
       <workItem from="1746398160340" duration="1706000" />
       <workItem from="1746405889377" duration="3000" />
-      <workItem from="1746408273281" duration="1621000" />
+      <workItem from="1746408273281" duration="2000000" />
     </task>
     <servers />
   </component>
