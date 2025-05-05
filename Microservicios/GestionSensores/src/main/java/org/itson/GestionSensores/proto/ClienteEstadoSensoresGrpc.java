@@ -2,8 +2,6 @@ package org.itson.GestionSensores.proto;
 
 import com.google.protobuf.Empty;
 import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.itson.grpc.EstadoPeticion;
-import org.itson.grpc.EstadoRespuesta;
 import org.itson.grpc.EstadoSensoresServidorGrpc;
 import org.springframework.stereotype.Component;
 
