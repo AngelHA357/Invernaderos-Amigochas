@@ -5,7 +5,6 @@ import org.itson.Alarmas.collections.Alarma;
 import org.itson.Alarmas.dtos.AlarmaDTO;
 import org.itson.Alarmas.exceptions.AlarmasException;
 import org.itson.Alarmas.persistence.IAlarmasRepository;
-import org.itson.Alarmas.proto.ClienteAlarmatorGrpc;
 import org.itson.Alarmas.proto.ClienteAnomalyzerGrpc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,9 +20,6 @@ public class AlarmasService {
 
     @Autowired
     ClienteAnomalyzerGrpc clienteAnomalyzerGrpc;
-
-    @Autowired
-    ClienteAlarmatorGrpc clienteAlarmatorGrpc;
 
     /**
      * Método que obtiene todas las alarmas.
@@ -73,7 +69,6 @@ public class AlarmasService {
         Alarma resultado = alarmasRepository.save(alarmaEntidad);
         try {
             clienteAnomalyzerGrpc.registrarAlarma(convertirAlarmaEntidadDTO(resultado));
-            clienteAlarmatorGrpc.registrarAlarma(convertirAlarmaEntidadDTO(resultado));
         } catch (StatusRuntimeException sre) {
         }
         return convertirAlarmaEntidadDTO(resultado);
@@ -101,7 +96,6 @@ public class AlarmasService {
             Alarma resultado = alarmasRepository.save(alarmaEntidad);
             try {
                 clienteAnomalyzerGrpc.actualizarAlarma(convertirAlarmaEntidadDTO(resultado));
-                clienteAnomalyzerGrpc.actualizarAlarma(convertirAlarmaEntidadDTO(resultado));
             } catch (StatusRuntimeException sre) {
             }
             return convertirAlarmaEntidadDTO(resultado);
@@ -122,7 +116,6 @@ public class AlarmasService {
             alarmasRepository.delete(alarmaObtenida.get());
             try {
                 clienteAnomalyzerGrpc.eliminarAlarma(idAlarma);
-                clienteAlarmatorGrpc.eliminarAlarma(idAlarma);
             } catch (StatusRuntimeException sre) {
             }
         } else {

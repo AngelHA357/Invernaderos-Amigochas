@@ -1,7 +1,6 @@
 package org.itson.Alarmas.proto;
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.bson.types.ObjectId;
 import org.itson.Alarmas.dtos.AlarmaDTO;
 import org.itson.Anomalyzer.Anomalyzer;
 import org.itson.Anomalyzer.AnomalyzerServidorGrpc;
