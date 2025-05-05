@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,7 +12,6 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Lectura implements Serializable {
-
     private String idSensor;
     private String macAddress;
     private String marca;
@@ -25,5 +24,4 @@ public class Lectura implements Serializable {
     private String nombreInvernadero;
     private String sector;
     private String fila;
-
 }

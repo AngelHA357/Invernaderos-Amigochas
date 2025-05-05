@@ -12,7 +12,6 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LecturaDTO {
-
     private String idSensor;
     private String macAddress;
     private String marca;
@@ -25,5 +24,4 @@ public class LecturaDTO {
     private String nombreInvernadero;
     private String sector;
     private String fila;
-
 }

@@ -1,12 +1,10 @@
 package org.itson.ReportesAnomalias.service;
 
 import org.bson.types.ObjectId;
-import org.itson.ReportesAnomalias.collections.Lectura;
-import org.itson.ReportesAnomalias.dtos.AnomaliaDTO;
-import org.itson.ReportesAnomalias.dtos.LecturaDTO;
-import org.itson.ReportesAnomalias.dtos.ReporteAnomaliaDTO;
 import org.itson.ReportesAnomalias.collections.Anomalia;
 import org.itson.ReportesAnomalias.collections.ReporteAnomalia;
+import org.itson.ReportesAnomalias.dtos.AnomaliaDTO;
+import org.itson.ReportesAnomalias.dtos.ReporteAnomaliaDTO;
 import org.itson.ReportesAnomalias.excepciones.ReportesAnomaliasServiceException;
 import org.itson.ReportesAnomalias.persistence.IAnomaliasRepository;
 import org.itson.ReportesAnomalias.persistence.IReportesAnomaliasRepository;
@@ -50,7 +48,7 @@ public class ReportesAnomaliasService {
     }
 
     public List<AnomaliaDTO> obtenerAnomaliasPorInvernadero(String id) throws ReportesAnomaliasServiceException {
-        List<Anomalia> anomaliasEncontradas = anomaliasRepository.findAllByIdInvernadero(id);
+        List<Anomalia> anomaliasEncontradas = anomaliasRepository.findAllByIdInvernadero(new ObjectId(id));
         if (!anomaliasEncontradas.isEmpty()) {
             // Si se obtuvo algo, se convierte a DTO y se regresa eso.
             List<AnomaliaDTO> anomalias = new LinkedList<>();
@@ -131,17 +129,27 @@ public class ReportesAnomaliasService {
     private Anomalia convertirAnomaliaDTO(AnomaliaDTO anomalia) {
         Anomalia anomaliaCreada = new Anomalia(anomalia.getIdSensor(), anomalia.getMacAddress(), anomalia.getMarca(),
                 anomalia.getModelo(), anomalia.getMagnitud(), anomalia.getUnidad(), anomalia.getValor(),
-                anomalia.getFechaHora(), anomalia.getIdInvernadero(), anomalia.getNombreInvernadero(),
+                anomalia.getFechaHora(), new ObjectId(anomalia.getIdInvernadero()), anomalia.getNombreInvernadero(),
                 anomalia.getSector(), anomalia.getFila(), anomalia.getCausa());
 
         return anomaliaCreada;
     }
 
     private AnomaliaDTO convertirAnomalia(Anomalia anomalia) {
-        AnomaliaDTO anomaliaCreada = new AnomaliaDTO(anomalia.getIdSensor(), anomalia.getMacAddress(), anomalia.getMarca(),
-                anomalia.getModelo(), anomalia.getMagnitud(), anomalia.getUnidad(), anomalia.getValor(),
-                anomalia.getFechaHora(), anomalia.getIdInvernadero(), anomalia.getNombreInvernadero(),
-                anomalia.getSector(), anomalia.getFila(), anomalia.getCausa());
+        AnomaliaDTO anomaliaCreada = new AnomaliaDTO(
+                anomalia.getIdSensor(),
+                anomalia.getMacAddress(),
+                anomalia.getMarca(),
+                anomalia.getModelo(),
+                anomalia.getMagnitud(),
+                anomalia.getUnidad(),
+                anomalia.getValor(),
+                anomalia.getFechaHora(),
+                anomalia.getIdInvernadero().toHexString(),
+                anomalia.getNombreInvernadero(),
+                anomalia.getSector(),
+                anomalia.getFila(),
+                anomalia.getCausa());
 
         return anomaliaCreada;
     }
