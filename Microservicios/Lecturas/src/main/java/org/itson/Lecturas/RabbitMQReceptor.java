@@ -104,5 +104,14 @@ public class RabbitMQReceptor {
         for (SensorRespuesta sensor : sensores.getSensoresList()) {
             estadoSensores.put(sensor.getIdSensor(), sensor.getEstado());
         }
+
+        /**
+         * Obtiene los id del hashmap. En teoría, en este hashmap hay sensores que ya se borraron de la base de datos.
+         * De hecho la variable sensores contiene la lista de sensores que están en la base de datos.
+         * Así que se comparan los id de ambos y se eliminan los que no están en la variable sensores (los de la base de datos).
+         */
+        estadoSensores.keySet().removeIf(id -> sensores.getSensoresList().stream()
+                .noneMatch(sensor -> sensor.getIdSensor().equals(id)));
+        System.out.println("Estados de sensores actualizados. Cantidad actual: " + estadoSensores.size());
     }
 }

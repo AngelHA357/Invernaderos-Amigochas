@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 // Creo que este es el paquete papá de los pollitos.
-package org.itson.gestionSensores;
+package org.itson.lecturas;
 
 option java_multiple_files = true; // Indica que habrá una clase por mensaje y por servicio. En vez de una para todo.
 option java_package = "org.itson.grpc"; // Paquete donde se generarán las clases.
@@ -10,61 +10,7 @@ option java_outer_classname = "GestionSensoresProto"; // Nombre de la clase exte
 // Importar el tipo Empty para peticiones vacías
 import "google/protobuf/empty.proto";
 
-// Servidor para gestión de sensores
-service GestionSensoresServidor {
-  rpc GetSensor (SensorPeticion) returns (SensorRespuesta);
-  rpc GetTodosSensores (google.protobuf.Empty) returns (SensoresRespuesta);
-}
-
 // Servidor para estado de sensores
 service EstadoSensoresServidor {
   rpc ActualizarEstados (google.protobuf.Empty) returns (google.protobuf.Empty);
-}
-
-// Mensaje de solicitud para estado
-message EstadoPeticion {
-  string idSensor = 1;
-  bool estado = 2;
-}
-
-// Mensaje de respuesta para estado
-message EstadoRespuesta {
-  bool actualizado = 1;
-  string mensaje = 2;
-}
-
-// Mensaje de solicitud para sensor
-message SensorPeticion {
-  SensorLectura sensorLectura = 1;
-}
-
-// Este es el objeto Sensor que está arriba
-message SensorLectura {
-  string idSensor = 1;
-  string macAddress = 2;
-  string marca = 3;
-  string modelo = 4;
-  string magnitud = 5;
-  string unidad = 6;
-  bool estado = 7;
-}
-
-// Mensaje de respuesta
-message SensorRespuesta {
-  string idSensor = 1;
-  string macAddress = 2;
-  string marca = 3;
-  string modelo = 4;
-  string magnitud = 5;
-  string unidad = 6;
-  string idInvernadero = 7;
-  string nombreInvernadero = 8;
-  string sector = 9;
-  string fila = 10;
-  bool estado = 11;
-}
-
-// Lista de sensores
-message SensoresRespuesta {
-  repeated SensorRespuesta sensores = 1;
 }

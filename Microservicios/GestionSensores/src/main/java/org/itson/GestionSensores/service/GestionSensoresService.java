@@ -158,6 +158,12 @@ public class GestionSensoresService {
         } else {
             throw new GestionSensoresException("Sensor con ID " + id + " no encontrado.");
         }
+        // Actualizar estados gRPC
+        try {
+            clienteEstadoSensoresGrpc.actualizarEstados();
+        } catch (Exception e) {
+            System.err.println("Error al actualizar estados gRPC: " + e.getMessage());
+        }
     }
 
     /**

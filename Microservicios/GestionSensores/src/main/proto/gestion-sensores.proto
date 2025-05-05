@@ -1,22 +1,21 @@
 syntax = "proto3";
 
-// Creo que este es el paquete papá de los pollitos.
 package org.itson.gestionSensores;
 
-option java_multiple_files = true; // Indica que habrá una clase por mensaje y por servicio. En vez de una para todo.
-option java_package = "org.itson.grpc"; // Paquete donde se generarán las clases.
-option java_outer_classname = "GestionSensoresProto"; // Nombre de la clase externa por default.
+option java_multiple_files = true;
+option java_package = "org.itson.grpc";
+option java_outer_classname = "GestionSensoresGrpcProto";
 
 // Importar el tipo Empty para peticiones vacías
 import "google/protobuf/empty.proto";
 
-// Servidor
+// Servidor para gestión de sensores
 service GestionSensoresServidor {
   rpc GetSensor (SensorPeticion) returns (SensorRespuesta);
   rpc GetTodosSensores (google.protobuf.Empty) returns (SensoresRespuesta);
 }
 
-// Mensaje de solicitud
+// Mensaje de solicitud para sensor
 message SensorPeticion {
   SensorLectura sensorLectura = 1;
 }
