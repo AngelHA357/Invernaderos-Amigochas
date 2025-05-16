@@ -7,6 +7,8 @@ import com.google.gson.Gson;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import dtos.LecturaDTO;
+import dtos.LecturaEnriquecidaDTO;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,7 +20,6 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.itson.dtos.LecturaDTO;
 
 /**
  *
@@ -27,6 +28,8 @@ import org.itson.dtos.LecturaDTO;
 public class Gateway {
 
     private static final String QUEUE_NAME = "lecturas_crudas";
+    private static final String ID_INVERNADERO = "INV-0101";
+    private static final String NOMBRE_INVERNADERO = "Invernadero 1";
 
     public static void main(String[] args) {
         try {
@@ -78,9 +81,22 @@ public class Gateway {
 
                             // Deserializar JSON
                             LecturaDTO lectura = gson.fromJson(payload, LecturaDTO.class);
+                            
+                            //Se agregan los datos del invernadero a la lectura
+                            LecturaEnriquecidaDTO lecturaEnriquecida = new LecturaEnriquecidaDTO();
+                            
+                            lecturaEnriquecida.setIdInvernadero(ID_INVERNADERO);
+                            lecturaEnriquecida.setNombreInvernadero(NOMBRE_INVERNADERO);
+                            lecturaEnriquecida.setIdSensor(lectura.getIdSensor());
+                            lecturaEnriquecida.setMacAddress(lectura.getMacAddress());
+                            lecturaEnriquecida.setMarca(lectura.getMarca());
+                            lecturaEnriquecida.setModelo(lectura.getModelo());
+                            lecturaEnriquecida.setMagnitud(lectura.getMagnitud());
+                            lecturaEnriquecida.setUnidad(lectura.getUnidad());
+                            lecturaEnriquecida.setFechaHora(lectura.getFechaHora());
 
                             // Publicar en RabbitMQ
-                            String json = gson.toJson(lectura);
+                            String json = gson.toJson(lecturaEnriquecida);
                             channel.basicPublish("", QUEUE_NAME, null, json.getBytes());
 
                             System.out.println("Mensaje publicado en RabbitMQ con éxito.");

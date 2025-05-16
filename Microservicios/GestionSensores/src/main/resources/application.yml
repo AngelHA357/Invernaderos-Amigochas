@@ -2,4 +2,4 @@ spring:
   application:
     name: msvc-gestion-sensores
   config:
-    import: optional:configserver:http://localhost:8888
+    import: optional:configserver:http://host.docker.internal:8888

@@ -17,6 +17,7 @@ public class DTOUtils {
      * DTO para representar una lectura de un sensor
      */
     public static class LecturaDTO {
+        
         private String idSensor;
         private String macAddress;
         private String marca;
