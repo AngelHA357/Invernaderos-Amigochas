@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: svc-autenticacion
+  config:
+    import: optional:configserver:http://localhost:8888

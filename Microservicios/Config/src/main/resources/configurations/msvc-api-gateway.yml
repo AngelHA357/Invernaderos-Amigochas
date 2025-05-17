@@ -9,7 +9,11 @@ spring:
       discovery:
         locator:
           enabled: true
-      routes:
+      routes:        
+        - id: svc-autenticacion   
+          uri: lb://svc-autenticacion
+          predicates:  
+            - Path=/auth/**
         - id: msvc-gestion-sensores
           uri: lb://msvc-gestion-sensores
           predicates:
