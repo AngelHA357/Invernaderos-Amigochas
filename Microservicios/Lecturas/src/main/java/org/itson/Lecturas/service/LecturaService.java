@@ -21,8 +21,8 @@ public class LecturaService {
     @Autowired
     private ILecturasRepository lecturasRepository;
 
-    @Autowired
-    private ClienteGestionSensoresGrpc clienteGRPC;
+//    @Autowired
+//    private ClienteGestionSensoresGrpc clienteGRPC;
 
     /**
      * Método que obtiene todas las lecturas.
@@ -102,26 +102,9 @@ public class LecturaService {
      * @return La lectura de tipo DTO.
      */
     private LecturaDTO conversorLecturaColeccionDTO(Lectura lecturaColeccion) throws LecturasException {
-        SensorRespuesta sensorRespuestaGRPC;
-        try {
-            sensorRespuestaGRPC = clienteGRPC.obtenerSensor(
-                    SensorLectura.newBuilder()
-                            .setIdSensor(lecturaColeccion.getIdSensor())
-                            .setMacAddress(lecturaColeccion.getMacAddress())
-                            .setMarca(lecturaColeccion.getMarca())
-                            .setModelo(lecturaColeccion.getModelo())
-                            .setMagnitud(lecturaColeccion.getMagnitud())
-                            .setUnidad(lecturaColeccion.getUnidad())
-                            .build());
-        } catch (StatusRuntimeException sre) {
-            System.err.println("No se pudo conectar al microservicio de gestión de sensores: " + sre.getMessage());
-
-            // Puedes optar por lanzar una excepción controlada o continuar con valores por defecto
-            throw new LecturasException("Error al obtener datos del sensor que emitió la lectura.");
-        }
 
         return new LecturaDTO(
-                lecturaColeccion.get_id().toHexString(),
+                lecturaColeccion.get_id() != null ? lecturaColeccion.get_id().toHexString() : null,
                 lecturaColeccion.getIdSensor(),
                 lecturaColeccion.getMacAddress(),
                 lecturaColeccion.getMarca(),
@@ -137,6 +120,42 @@ public class LecturaService {
                 lecturaColeccion.isEstado()
         );
     }
+//    private LecturaDTO conversorLecturaColeccionDTO(Lectura lecturaColeccion) throws LecturasException {
+//        SensorRespuesta sensorRespuestaGRPC;
+//        try {
+//            sensorRespuestaGRPC = clienteGRPC.obtenerSensor(
+//                    SensorLectura.newBuilder()
+//                            .setIdSensor(lecturaColeccion.getIdSensor())
+//                            .setMacAddress(lecturaColeccion.getMacAddress())
+//                            .setMarca(lecturaColeccion.getMarca())
+//                            .setModelo(lecturaColeccion.getModelo())
+//                            .setMagnitud(lecturaColeccion.getMagnitud())
+//                            .setUnidad(lecturaColeccion.getUnidad())
+//                            .build());
+//        } catch (StatusRuntimeException sre) {
+//            System.err.println("No se pudo conectar al microservicio de gestión de sensores: " + sre.getMessage());
+//
+//            // Puedes optar por lanzar una excepción controlada o continuar con valores por defecto
+//            throw new LecturasException("Error al obtener datos del sensor que emitió la lectura.");
+//        }
+//
+//        return new LecturaDTO(
+//                lecturaColeccion.get_id().toHexString(),
+//                lecturaColeccion.getIdSensor(),
+//                lecturaColeccion.getMacAddress(),
+//                lecturaColeccion.getMarca(),
+//                lecturaColeccion.getModelo(),
+//                lecturaColeccion.getMagnitud(),
+//                lecturaColeccion.getUnidad(),
+//                lecturaColeccion.getValor(),
+//                lecturaColeccion.getFechaHora(),
+//                lecturaColeccion.getIdInvernadero(),
+//                lecturaColeccion.getNombreInvernadero(),
+//                lecturaColeccion.getSector(),
+//                lecturaColeccion.getFila(),
+//                lecturaColeccion.isEstado()
+//        );
+//    }
 
     /**
      * Método que convierte una lectura de tipo DTO a tipo Colección.
@@ -145,35 +164,6 @@ public class LecturaService {
      * @return La lectura de tipo Colección.
      */
     private Lectura conversorLecturaDTOColeccion(LecturaDTO lecturaDTO) throws LecturasException {
-        SensorRespuesta sensorRespuestaGRPC;
-        String idInvernadero = "N/A";
-        String nombreInvernadero = "N/A";
-        String sector = "N/A";
-        String fila = "N/A";
-        boolean estado = false;
-        
-        try {
-            sensorRespuestaGRPC = clienteGRPC.obtenerSensor(
-                    SensorLectura.newBuilder()
-                            .setIdSensor(lecturaDTO.getIdSensor())
-                            .setMacAddress(lecturaDTO.getMacAddress())
-                            .setMarca(lecturaDTO.getMarca())
-                            .setModelo(lecturaDTO.getModelo())
-                            .setMagnitud(lecturaDTO.getMagnitud())
-                            .setUnidad(lecturaDTO.getUnidad())
-                            .setEstado(lecturaDTO.isEstado())
-                            .build());
-            
-            idInvernadero = sensorRespuestaGRPC.getIdInvernadero();
-            nombreInvernadero = sensorRespuestaGRPC.getNombreInvernadero();
-            sector = sensorRespuestaGRPC.getSector();
-            fila = sensorRespuestaGRPC.getFila();
-            estado = sensorRespuestaGRPC.getEstado();
-        } catch (StatusRuntimeException sre) {
-            System.err.println("No se pudo conectar al microservicio de gestión de sensores: " + sre.getMessage());
-            // Puedes optar por lanzar una excepción controlada o continuar con valores por defecto
-           throw new LecturasException("Error al obtener datos del sensor que emitió la lectura.");
-        }
 
         return new Lectura(
                 lecturaDTO.getIdSensor(),
@@ -184,11 +174,58 @@ public class LecturaService {
                 lecturaDTO.getUnidad(),
                 lecturaDTO.getValor(),
                 lecturaDTO.getFechaHora(),
-                idInvernadero,
-                nombreInvernadero,
-                sector,
-                fila,
-                estado
+                lecturaDTO.getIdInvernadero(),
+                lecturaDTO.getNombreInvernadero(),
+                lecturaDTO.getSector(),
+                lecturaDTO.getFila(),
+                lecturaDTO.isEstado()
         );
     }
+//    private Lectura conversorLecturaDTOColeccion(LecturaDTO lecturaDTO) throws LecturasException {
+//        SensorRespuesta sensorRespuestaGRPC;
+//        String idInvernadero = "N/A";
+//        String nombreInvernadero = "N/A";
+//        String sector = "N/A";
+//        String fila = "N/A";
+//        boolean estado = false;
+//
+//        try {
+//            sensorRespuestaGRPC = clienteGRPC.obtenerSensor(
+//                    SensorLectura.newBuilder()
+//                            .setIdSensor(lecturaDTO.getIdSensor())
+//                            .setMacAddress(lecturaDTO.getMacAddress())
+//                            .setMarca(lecturaDTO.getMarca())
+//                            .setModelo(lecturaDTO.getModelo())
+//                            .setMagnitud(lecturaDTO.getMagnitud())
+//                            .setUnidad(lecturaDTO.getUnidad())
+//                            .setEstado(lecturaDTO.isEstado())
+//                            .build());
+//
+//            idInvernadero = sensorRespuestaGRPC.getIdInvernadero();
+//            nombreInvernadero = sensorRespuestaGRPC.getNombreInvernadero();
+//            sector = sensorRespuestaGRPC.getSector();
+//            fila = sensorRespuestaGRPC.getFila();
+//            estado = sensorRespuestaGRPC.getEstado();
+//        } catch (StatusRuntimeException sre) {
+//            System.err.println("No se pudo conectar al microservicio de gestión de sensores: " + sre.getMessage());
+//            // Puedes optar por lanzar una excepción controlada o continuar con valores por defecto
+//           throw new LecturasException("Error al obtener datos del sensor que emitió la lectura.");
+//        }
+//
+//        return new Lectura(
+//                lecturaDTO.getIdSensor(),
+//                lecturaDTO.getMacAddress(),
+//                lecturaDTO.getMarca(),
+//                lecturaDTO.getModelo(),
+//                lecturaDTO.getMagnitud(),
+//                lecturaDTO.getUnidad(),
+//                lecturaDTO.getValor(),
+//                lecturaDTO.getFechaHora(),
+//                idInvernadero,
+//                nombreInvernadero,
+//                sector,
+//                fila,
+//                estado
+//        );
+//    }
 }

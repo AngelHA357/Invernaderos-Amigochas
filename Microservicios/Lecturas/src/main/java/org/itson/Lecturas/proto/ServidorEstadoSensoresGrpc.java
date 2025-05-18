@@ -15,9 +15,9 @@ public class ServidorEstadoSensoresGrpc extends EstadoSensoresServidorGrpc.Estad
 
     @Override
     public void actualizarEstados(Empty request, StreamObserver<Empty> responseObserver) {
-        receptor.actualizarEstados();
-
-        responseObserver.onNext(Empty.newBuilder().build());
-        responseObserver.onCompleted();
+//        receptor.actualizarEstados();
+//
+//        responseObserver.onNext(Empty.newBuilder().build());
+//        responseObserver.onCompleted();
     }
 }

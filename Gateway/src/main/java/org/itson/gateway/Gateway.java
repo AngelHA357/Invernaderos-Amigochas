@@ -27,7 +27,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class Gateway {
 
-    private static final String QUEUE_NAME = "lecturas_crudas";
+    private static final String QUEUE_NAME = "lecturas";
     private static final String ID_INVERNADERO = "INV-0101";
     private static final String NOMBRE_INVERNADERO = "Invernadero 1";
 
@@ -93,6 +93,7 @@ public class Gateway {
                             lecturaEnriquecida.setModelo(lectura.getModelo());
                             lecturaEnriquecida.setMagnitud(lectura.getMagnitud());
                             lecturaEnriquecida.setUnidad(lectura.getUnidad());
+                            lecturaEnriquecida.setValor(lectura.getValor());
                             lecturaEnriquecida.setFechaHora(lectura.getFechaHora());
 
                             // Publicar en RabbitMQ
