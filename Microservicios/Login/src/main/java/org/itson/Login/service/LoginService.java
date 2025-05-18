@@ -10,6 +10,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class LoginService {
 
@@ -37,10 +40,20 @@ public class LoginService {
                 );
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        
-        // Generar token JWT después de autenticar correctamente
+          // Generar token JWT después de autenticar correctamente
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String jwtToken = jwtService.generateToken(userDetails);
+        
+        // Añadir el rol al token, obteniéndolo de las autoridades del usuario
+        String role = userDetails.getAuthorities().isEmpty() ? 
+                      "USER" : 
+                      userDetails.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
+        
+        // Crear los claims adicionales con el rol
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role);
+        
+        // Generar el token con los claims adicionales
+        String jwtToken = jwtService.generateToken(claims, userDetails);
 
         return new LoginResponseDTO("Usuario autenticado exitosamente!", jwtToken);
     }

@@ -1,4 +1,4 @@
-package java.org.itson.Autenticacion.servicio;
+package org.itson.Autenticacion.servicio;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
