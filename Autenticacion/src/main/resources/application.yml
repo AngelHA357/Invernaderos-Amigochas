@@ -3,3 +3,8 @@ spring:
     name: svc-autenticacion
   config:
     import: optional:configserver:http://localhost:8888
+
+# Configuración del servidor gRPC
+grpc:
+  server:
+    port: 9090

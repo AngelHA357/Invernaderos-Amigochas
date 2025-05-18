@@ -1,4 +1,4 @@
-package java.org.itson.Autenticacion;
+package org.itson.Autenticacion;
 
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;

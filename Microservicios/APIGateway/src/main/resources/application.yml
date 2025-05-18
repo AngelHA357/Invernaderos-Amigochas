@@ -4,6 +4,13 @@ spring:
   config:
     import: optional:configserver:http://localhost:8888
 
+# Configuración del cliente gRPC
+grpc:
+  client:
+    autenticacion-service:
+      address: static://localhost:9091
+      negotiationType: plaintext
+
 logging:
   level:
     org.springframework.cloud.gateway: TRACE

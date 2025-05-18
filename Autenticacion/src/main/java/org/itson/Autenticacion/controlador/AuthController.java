@@ -1,7 +1,7 @@
-package java.org.itson.Autenticacion.controlador;
+package org.itson.Autenticacion.controlador;
 
 import io.jsonwebtoken.Claims;
-import java.org.itson.Autenticacion.servicio.JwtService;
+import org.itson.Autenticacion.servicio.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

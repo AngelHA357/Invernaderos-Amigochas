@@ -9,4 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LoginResponseDTO {
     private String mensaje;
+    private String token;
+    
+    public LoginResponseDTO(String mensaje) {
+        this.mensaje = mensaje;
+    }
 }

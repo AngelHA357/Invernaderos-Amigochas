@@ -5,6 +5,10 @@ spring:
   application:
     name: svc-autenticacion
 
+grpc:
+  server:
+    port: 9091
+
 jwt:
   secret: "unaClaveSecretaMuyLargaYSeguraParaFirmarLosTokensJWT"
   expiration: 3600000  # 1 hora

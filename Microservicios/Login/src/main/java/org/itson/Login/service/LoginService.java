@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,9 @@ public class LoginService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+    
+    @Autowired
+    private JwtService jwtService;
 
     /**
      * Intenta autenticar a un usuario usando el AuthenticationManager de Spring Security.
@@ -33,7 +37,11 @@ public class LoginService {
                 );
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        
+        // Generar token JWT después de autenticar correctamente
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String jwtToken = jwtService.generateToken(userDetails);
 
-        return new LoginResponseDTO("Usuario autenticado exitosamente!");
+        return new LoginResponseDTO("Usuario autenticado exitosamente!", jwtToken);
     }
 }

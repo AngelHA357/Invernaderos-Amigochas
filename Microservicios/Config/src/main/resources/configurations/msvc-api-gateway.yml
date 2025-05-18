@@ -9,43 +9,59 @@ spring:
       discovery:
         locator:
           enabled: true
-      routes:        
+      routes:
         - id: svc-autenticacion   
           uri: lb://svc-autenticacion
           predicates:  
             - Path=/auth/**
+
         - id: msvc-gestion-sensores
           uri: lb://msvc-gestion-sensores
           predicates:
             - Path=/api/v1/gestionSensores/**
+          filters:
+            - AuthenticationFilter
+
         - id: msvc-alarmas
           uri: lb://msvc-alarmas
           predicates:
             - Path=/api/v1/alarmas/**
+          filters:
+            - AuthenticationFilter
+
         - id: msvc-lecturas
           uri: lb://msvc-lecturas
           predicates:
             - Path=/api/v1/lecturas/**
+          filters:
+            - AuthenticationFilter
+
         - id: msvc-reportes-anomalias
           uri: lb://msvc-reportes-anomalias
           predicates:
             - Path=/api/v1/reportesAnomalias/**
+          filters:
+            - AuthenticationFilter
+
         - id: msvc-informes
           uri: lb://msvc-informes
           predicates:
             - Path=/api/v1/informes/**
+          filters:
+            - AuthenticationFilter
+
         - id: msvc-login
-          uri: lb://MSVC-LOGIN
+          uri: lb://msvc-login
           predicates:
             - Path=/api/v1/login
 
-#      globalcors:
-#        cors-configurations:
-#          '[/**]':
-#            allowedOrigins: "http://localhost:5174"
-#            allowedMethods: "*"
-#            allowedHeaders: "*"
-#            allowCredentials: true
+#  globalcors:
+#    cors-configurations:
+#      '[/**]':
+#        allowedOrigins: "http://localhost:5174"
+#        allowedMethods: "*"
+#        allowedHeaders: "*"
+#        allowCredentials: true
 
 management:
   tracing:

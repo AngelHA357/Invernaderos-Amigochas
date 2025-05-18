@@ -9,6 +9,10 @@ spring:
       database: usuarios_bd
       uri: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
 
+jwt:
+  secret: "unaClaveSecretaMuyLargaYSeguraParaFirmarLosTokensJWT"
+  expiration: 3600000  # 1 hora
+
 management:
   tracing:
     sampling:

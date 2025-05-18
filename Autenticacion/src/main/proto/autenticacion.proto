@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package org.itson.autenticacion;
+
+option java_multiple_files = true;
+option java_package = "org.itson.grpc.autenticacion";
+option java_outer_classname = "AutenticacionGrpcProto";
+
+// Servicio de autenticación
+service AutenticacionServicio {
+  // Valida un token JWT
+  rpc ValidarToken (TokenRequest) returns (TokenValidationResponse);
+}
+
+// Solicitud para validar token
+message TokenRequest {
+  string token = 1;
+}
+
+// Respuesta con el resultado de la validación del token
+message TokenValidationResponse {
+  bool valido = 1;
+  string userId = 2;
+  string role = 3;
+  string mensaje = 4;
+}
