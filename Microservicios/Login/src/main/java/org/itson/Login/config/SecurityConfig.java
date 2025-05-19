@@ -44,16 +44,22 @@ public class SecurityConfig {
 
     /**
      * Define el Bean para obtener los detalles del usuario desde la BD.
-     */
-    @Bean
+     */    @Bean
     public UserDetailsService userDetailsService() {
         return username -> {
             return usuarioRepository.findByUsername(username)
-                    .map(usuario -> new User(
-                            usuario.getUsername(),
-                            usuario.getPassword(),
-                            List.of(new SimpleGrantedAuthority("ROLE_USER"))
-                    ))
+                    .map(usuario -> {
+                        // Usar el rol específico del usuario o asignar USER como predeterminado
+                        String role = usuario.getRole() != null && !usuario.getRole().isEmpty() 
+                                    ? usuario.getRole() 
+                                    : "USER";
+                        
+                        return new User(
+                                usuario.getUsername(),
+                                usuario.getPassword(),
+                                List.of(new SimpleGrantedAuthority("ROLE_" + role))
+                        );
+                    })
                     .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
         };
     }

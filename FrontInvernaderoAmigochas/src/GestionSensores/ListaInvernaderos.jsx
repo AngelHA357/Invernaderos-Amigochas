@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
+import { useApiService } from '../services/ApiService';
 import { obtenerInvernaderos } from '../services/sensorService';
+import { useAuth } from '../context/AuthContext';
 
 function ListaInvernaderos() {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const [invernaderos, setInvernaderos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
   useEffect(() => {
     const cargarInvernaderos = async () => {
       try {
@@ -17,15 +19,21 @@ function ListaInvernaderos() {
         setInvernaderos(data);
         setError('');
       } catch (err) {
-        setError('Error al cargar los invernaderos. Por favor, intente de nuevo más tarde.');
-        console.error(err);
+        if (err.message.includes('Sesión expirada')) {
+          // Si la sesión expiró, cerrar sesión y redirigir a login
+          logout();
+          navigate('/login', { state: { message: 'Su sesión ha expirado. Por favor, inicie sesión nuevamente.' } });
+        } else {
+          setError('Error al cargar los invernaderos. Por favor, intente de nuevo más tarde.');
+          console.error(err);
+        }
       } finally {
         setLoading(false);
       }
     };
 
     cargarInvernaderos();
-  }, []);
+  }, [logout, navigate]);
 
   const handleVerSensores = (invernadero) => {
     sessionStorage.setItem('invernaderoSeleccionado', JSON.stringify(invernadero));
@@ -47,9 +55,7 @@ function ListaInvernaderos() {
         </div>
       </>
     );
-  }
-
-  return (
+  }  return (
     <>
       <BarraNavegacion />
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white p-6">

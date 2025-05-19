@@ -1,4 +1,6 @@
 // sensorService.js
+import { useApiService } from './ApiService';
+
 const API_BASE_URL = '/api/v1/gestionSensores';
 
 /**
@@ -6,10 +8,35 @@ const API_BASE_URL = '/api/v1/gestionSensores';
  * @returns {Promise<Array>} Array de invernaderos
  */
 export const obtenerInvernaderos = async () => {
+  // Si estamos en un componente con hooks, usaríamos useApiService()
+  // Pero como es una función independiente, necesitamos verificar si hay un token en localStorage
+  const authToken = localStorage.getItem('authToken');
+  
   try {
-    const response = await fetch(`${API_BASE_URL}/invernaderos`);
+    let response;
+    
+    if (authToken) {
+      // Si hay token, hacer petición autenticada
+      response = await fetch(`http://localhost:8080${API_BASE_URL}/invernaderos`, {
+        headers: {
+          'Authorization': `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        }
+      });
+    } else {
+      // Sin token, hacer petición normal (probablemente fallará)
+      response = await fetch(`http://localhost:8080${API_BASE_URL}/invernaderos`);
+    }
     
     if (!response.ok) {
+      if (response.status === 401) {
+        // Si es error de autorización, limpiar el token
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('username');
+        throw new Error('Sesión expirada. Por favor, inicie sesión nuevamente.');
+      }
+      
       const errorData = await response.json();
       throw new Error(errorData.mensaje || 'Error al obtener invernaderos');
     }

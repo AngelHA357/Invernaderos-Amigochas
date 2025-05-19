@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FaLeaf } from 'react-icons/fa'; 
+import { FaLeaf } from 'react-icons/fa';
+import { useAuth } from '../context/AuthContext';
 
 function BarraNavegacion() {
   const location = useLocation();
   const navigate = useNavigate();
   const path = location.pathname;
+  const { isAuthenticated, username, userRole, canAccess, logout } = useAuth();
   
   const isActive = (route) => {
     if (route === "/" && path === "/") return true;
@@ -22,10 +24,15 @@ function BarraNavegacion() {
   };
 
   const handleLogout = () => {
+    logout(); // Usar la función de logout del contexto de autenticación
     console.log('Sesión cerrada');
     navigate('/');
   };
-  
+    // Si no está autenticado, no mostrar la barra de navegación
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
     <nav className="bg-zinc-800 text-white flex items-center justify-between p-4 shadow-lg">
       <div className="flex items-center">
@@ -36,21 +43,47 @@ function BarraNavegacion() {
       </div>
       
       <div className="flex items-center space-x-2">
+        {/* Siempre mostramos el enlace a Invernaderos para todos los usuarios */}
         <Link to="/invernaderos" className={navLinkClass("/invernaderos")}>
-          Sensores
+          Invernaderos
         </Link>
-        <Link to="/informes" className={navLinkClass("/informes")}>
-          Informes
-        </Link>
-        <Link to="/alarmas" className={navLinkClass("/alarmas")}>
-          Alarmas
-        </Link>
-        <Link to="/anomalias" className={navLinkClass("/anomalias")}>
-          Anomalías
-        </Link>
+        
+        {/* Sensores - Solo visible para ADMIN y OPERATOR */}
+        {canAccess('gestionSensores') && (
+          <Link to="/sensores" className={navLinkClass("/sensores")}>
+            Sensores
+          </Link>
+        )}
+        
+        {/* Alarmas - Solo visible para ADMIN y OPERATOR */}
+        {canAccess('alarmas') && (
+          <Link to="/alarmas" className={navLinkClass("/alarmas")}>
+            Alarmas
+          </Link>
+        )}
+        
+        {/* Informes - Solo visible para ADMIN y ANALYST */}
+        {canAccess('informes') && (
+          <Link to="/informes" className={navLinkClass("/informes")}>
+            Informes
+          </Link>
+        )}
+        
+        {/* Anomalías - Solo visible para ADMIN y ANALYST */}
+        {canAccess('anomalias') && (
+          <Link to="/anomalias" className={navLinkClass("/anomalias")}>
+            Anomalías
+          </Link>
+        )}
+        
+        {/* Mostrar información del usuario y rol */}
+        <span className="ml-2 px-3 py-1 bg-zinc-700 rounded-md text-sm">
+          {username} ({userRole})
+        </span>
+        
         <button
           onClick={handleLogout}
-          className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-600 transition-all duration-200 font-medium"
+          className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-all duration-200 font-medium"
         >
           Cerrar Sesión
         </button>

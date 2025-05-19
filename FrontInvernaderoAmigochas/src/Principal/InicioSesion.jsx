@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import logo from '../recursos/logo2.png';
 import fondo from '../recursos/fondo.png';
 
 function InicioSesion() {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [formData, setFormData] = useState({ usuario: '', contrasena: '' });
     const [formErrors, setFormErrors] = useState({});
     const [loading, setLoading] = useState(false);
@@ -38,9 +40,7 @@ function InicioSesion() {
         const loginEndpoint = '/api/v1/login';
         const url = `${gatewayUrl}${loginEndpoint}`;
 
-        console.log(`Intentando login a: ${url} con usuario: ${formData.usuario}`);
-
-        try {
+        console.log(`Intentando login a: ${url} con usuario: ${formData.usuario}`);        try {
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -68,8 +68,18 @@ function InicioSesion() {
                 }
                 throw new Error(errorMsg); // Lanza el error para el .catch()
             }
-        
-            console.log('Inicio de sesión exitoso (Respuesta 200 OK recibida)');
+            
+            // Parsear la respuesta y guardar el token
+            const data = await response.json();
+            
+            // Verificar que la respuesta contenga un token
+            if (!data.token) {
+                throw new Error('No se recibió un token de autenticación');
+            }
+              // Usar la función login del contexto de autenticación
+            login(data.token);
+            
+            console.log('Inicio de sesión exitoso (Token recibido y guardado)');
             navigate('/invernaderos');
         
         } catch (error) {

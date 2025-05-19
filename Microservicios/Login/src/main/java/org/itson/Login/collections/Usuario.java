@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "usuarios")
@@ -23,5 +24,13 @@ public class Usuario {
     private String username;
 
     private String password;
+    
+    private String role;  // ADMIN, OPERATOR, ANALYST
+    
+    private String nombre;
+    
+    private String apellido;
+    
+    private String email;
 
 }
