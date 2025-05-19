@@ -13,11 +13,16 @@ spring:
 grpc:
   server:
     port: 9093
+    security:
+      enabled: true
+      certificate-chain: classpath:certs/localhost.crt
+      private-key: classpath:certs/localhost.pem
   client:
     anomalyzer:
-      address: static://localhost:50054
-      negotiation-type: plaintext
-      enable-keep-alive: true
+      address: static://localhost:9094
+      negotiation-type: TLS
+      security:
+        trust-cert-collection: classpath:certs/localhost.cert.pem
     alarmator:
       address: static://localhost:50057
       negotiation-type: plaintext

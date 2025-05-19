@@ -2,6 +2,8 @@ package org.itson.Alarmas.proto;
 
 
 import io.grpc.stub.StreamObserver;
+import lombok.extern.slf4j.Slf4j;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.bson.types.ObjectId;
 import org.itson.Alarma.Alarmas;
 import org.itson.Alarma.AlarmasServidorGrpc;
@@ -13,7 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@GrpcService
+@Slf4j
 public class ServidorAlarmasGrpc extends AlarmasServidorGrpc.AlarmasServidorImplBase {
     @Autowired
     private AlarmasService alarmasService;

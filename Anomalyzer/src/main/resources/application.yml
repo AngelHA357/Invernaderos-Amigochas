@@ -12,11 +12,16 @@ spring:
 grpc:
   server:
     port: 9094
+    security:
+      enabled: true
+      certificate-chain: classpath:certs/localhost.crt
+      private-key: classpath:certs/localhost.pem
   client:
     alarmas:
-      address: static://localhost:50053
-      negotiation-type: plaintext
-      enable-keep-alive: true
+      address: static://localhost:9093
+      negotiation-type: TLS
+      security:
+        trust-cert-collection: classpath:certs/localhost.cert.pem
 
 management:
   tracing:

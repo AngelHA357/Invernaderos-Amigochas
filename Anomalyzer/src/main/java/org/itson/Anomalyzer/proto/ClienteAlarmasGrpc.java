@@ -1,24 +1,19 @@
 package org.itson.Anomalyzer.proto;
 
+import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.itson.Alarma.Alarmas;
 import org.itson.Alarma.AlarmasServidorGrpc;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
+@Slf4j
 public class ClienteAlarmasGrpc {
-    private AlarmasServidorGrpc.AlarmasServidorBlockingStub stub;
-
-    /**
-     * Constructor que inyecta el cliente gRPC.
-     *
-     * @param stub Cliente gRPC para comunicarse con el servidor de alarmas.
-     */
-    public ClienteAlarmasGrpc(@GrpcClient("alarmas") AlarmasServidorGrpc.AlarmasServidorBlockingStub stub) {
-        this.stub = stub;
-    }
+    @GrpcClient("alarmas")
+    AlarmasServidorGrpc.AlarmasServidorBlockingStub stub;
 
     public List<Alarmas.AlarmaDTO> obtenerAlarmas() {
         // Crear el mensaje vacío

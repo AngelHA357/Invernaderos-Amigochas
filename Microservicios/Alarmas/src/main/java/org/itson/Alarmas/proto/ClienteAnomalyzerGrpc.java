@@ -11,11 +11,8 @@ import java.util.List;
 
 @Component
 public class ClienteAnomalyzerGrpc {
-    private AnomalyzerServidorGrpc.AnomalyzerServidorBlockingStub stub;
-
-    public ClienteAnomalyzerGrpc(@GrpcClient("anomalyzer") AnomalyzerServidorGrpc.AnomalyzerServidorBlockingStub stub) {
-        this.stub = stub;
-    }
+    @GrpcClient("anomalyzer")
+    AnomalyzerServidorGrpc.AnomalyzerServidorBlockingStub stub;
 
     public void registrarAlarma(AlarmaDTO alarmaDTO) {
         Anomalyzer.AlarmaDTO alarmaNueva = Anomalyzer.AlarmaDTO.newBuilder()
