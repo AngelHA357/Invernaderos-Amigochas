@@ -54,14 +54,19 @@ spring:
           uri: lb://msvc-login
           predicates:
             - Path=/api/v1/login
-
-#  globalcors:
-#    cors-configurations:
-#      '[/**]':
-#        allowedOrigins: "http://localhost:5174"
-#        allowedMethods: "*"
-#        allowedHeaders: "*"
-#        allowCredentials: true
+  cors:
+    corsConfigurations:
+      '[/**]':
+        allowedOrigins: 
+          - "http://localhost:5173"
+        allowedMethods: 
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - OPTIONS
+        allowedHeaders: "*"
+        allowCredentials: true
 
 management:
   tracing:

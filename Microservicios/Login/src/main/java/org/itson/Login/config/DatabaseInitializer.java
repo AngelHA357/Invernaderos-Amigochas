@@ -21,15 +21,22 @@ public class DatabaseInitializer implements CommandLineRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;    @Override
     public void run(String... args) throws Exception {
-        // Primero eliminar usuarios simples sin rol
-        usuarioRepository.findAll().stream()
-            .filter(user -> user.getRole() == null || user.getRole().isEmpty())
-            .forEach(user -> usuarioRepository.delete(user));
+        // Eliminar todos los usuarios para inicializar de forma fresca
+        usuarioRepository.deleteAll();
+        System.out.println("🗑️ Base de datos de usuarios limpiada.");
             
-        // Siempre inicializar los usuarios con roles
+        // Inicializar los usuarios con roles
         initializeUsers();
         
-        System.out.println("👤 Usuarios disponibles actualizados.");
+        // Mostrar todos los usuarios en la base de datos para verificar
+        System.out.println("\n🔍 Verificando usuarios en la base de datos:");
+        usuarioRepository.findAll().forEach(user -> {
+            System.out.println("   Usuario: " + user.getUsername() + 
+                             " | Rol: " + user.getRole() + 
+                             " | Password (hash): " + user.getPassword().substring(0, 15) + "...");
+        });
+        
+        System.out.println("👤 Total de usuarios: " + usuarioRepository.count());
     }
 
     private void initializeUsers() {

@@ -23,9 +23,7 @@ function InicioSesion() {
         if (!formData.contrasena) newErrors.contrasena = 'La contraseña es obligatoria.';
         setFormErrors(newErrors);
         return Object.keys(newErrors).length === 0;
-    };
-
-    const handleSubmit = async (e) => {
+    };    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!validateForm()) {
@@ -39,17 +37,24 @@ function InicioSesion() {
         const gatewayUrl = 'http://localhost:8080';
         const loginEndpoint = '/api/v1/login';
         const url = `${gatewayUrl}${loginEndpoint}`;
-
-        console.log(`Intentando login a: ${url} con usuario: ${formData.usuario}`);        try {
+        console.log(`Intentando login a: ${url} con usuario: ${formData.usuario}`);
+        
+        const requestData = {
+            username: formData.usuario,
+            password: formData.contrasena
+        };
+        
+        console.log('Datos enviados:', requestData);
+        
+        try {
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
-                body: JSON.stringify({
-                    username: formData.usuario,
-                    password: formData.contrasena
-                }),
+                body: JSON.stringify(requestData),
+                credentials: 'same-origin' // Cambiado de 'include' a 'same-origin'
             });
         
             if (!response.ok) {

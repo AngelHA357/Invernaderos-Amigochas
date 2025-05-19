@@ -24,6 +24,17 @@ public class JwtService {
     @Value("${jwt.expiration}")
     private Long jwtExpiration;
     
+    // Constructor para verificar que las propiedades se inicialicen correctamente
+    public JwtService() {
+        System.out.println("JwtService: Se está creando una instancia");
+    }
+      // Método que será llamado después de que todos los valores se inyecten
+    @jakarta.annotation.PostConstruct
+    public void init() {
+        System.out.println("JWT Secret length: " + (jwtSecret != null ? jwtSecret.length() : "null"));
+        System.out.println("JWT Expiration: " + jwtExpiration);
+    }
+    
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }

@@ -47,6 +47,8 @@ public class SecurityConfig {
      */    @Bean
     public UserDetailsService userDetailsService() {
         return username -> {
+            System.out.println("Buscando usuario por username: " + username);
+            
             return usuarioRepository.findByUsername(username)
                     .map(usuario -> {
                         // Usar el rol específico del usuario o asignar USER como predeterminado
@@ -54,13 +56,20 @@ public class SecurityConfig {
                                     ? usuario.getRole() 
                                     : "USER";
                         
+                        System.out.println("Usuario encontrado: " + usuario.getUsername());
+                        System.out.println("Rol del usuario: " + role);
+                        System.out.println("Password (hash): " + usuario.getPassword().substring(0, 10) + "...");
+                        
                         return new User(
                                 usuario.getUsername(),
                                 usuario.getPassword(),
                                 List.of(new SimpleGrantedAuthority("ROLE_" + role))
                         );
                     })
-                    .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+                    .orElseThrow(() -> {
+                        System.out.println("Usuario NO encontrado: " + username);
+                        return new UsernameNotFoundException("Usuario no encontrado: " + username);
+                    });
         };
     }
 
@@ -70,15 +79,14 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    /**
+    }    /**
      * Define la cadena de filtros de seguridad HTTP.
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/v1/login/**").permitAll()
@@ -89,7 +97,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    /*
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -102,6 +109,5 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-    */
 
 }
