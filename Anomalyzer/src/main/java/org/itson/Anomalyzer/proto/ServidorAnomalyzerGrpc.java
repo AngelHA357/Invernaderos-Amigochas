@@ -2,10 +2,10 @@ package org.itson.Anomalyzer.proto;
 
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.itson.Anomalyzer.service.Analizador;
-import org.itson.Anomalyzer.Anomalyzer;
-import org.itson.Anomalyzer.AnomalyzerServidorGrpc;
 import org.itson.Anomalyzer.dtos.AlarmaDTO;
+import org.itson.Anomalyzer.service.Analizador;
+import org.itson.anomalyzer.Anomalyzer;
+import org.itson.anomalyzer.AnomalyzerServidorGrpc;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;

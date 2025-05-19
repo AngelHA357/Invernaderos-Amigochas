@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package org.itson.Anomalyzer;
+package org.itson.anomalyzer;
 
 // Servicio gRPC para manejar alarmas
 service AnomalyzerServidor {

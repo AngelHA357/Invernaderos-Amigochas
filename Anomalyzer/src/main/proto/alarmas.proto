@@ -1,10 +1,11 @@
 syntax = "proto3";
 
-package org.itson.Alarma;
+package org.itson.alarma;
 
 // Servicio gRPC para manejar alarmas
 service AlarmasServidor {
   rpc ObtenerAlarmas (Empty) returns (AlarmasList);
+  rpc DesactivarAlarma (AlarmaDTO) returns (Empty);
 }
 
 // Mensaje que representa una alarma

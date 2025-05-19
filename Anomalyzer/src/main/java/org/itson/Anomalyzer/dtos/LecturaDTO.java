@@ -3,9 +3,6 @@ package org.itson.Anomalyzer.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
-import org.itson.Anomalyzer.collections.Lectura;
-
 import java.util.Date;
 
 /**
@@ -15,6 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LecturaDTO {
+    private String _id;
     private String idSensor;
     private String macAddress;
     private String marca;
@@ -27,5 +25,4 @@ public class LecturaDTO {
     private String nombreInvernadero;
     private String sector;
     private String fila;
-
 }

@@ -57,8 +57,6 @@ public class Analizador {
                     }
                     coincidenciasAnomalias = true;
                     alarmaDetonadora = alarma;
-                } else {
-
                 }
             }
 
@@ -80,9 +78,8 @@ public class Analizador {
                 imprimirAnomalia(anomalia);
 
                 anomalyzerService.guardarAnomalia(anomalia);
-                anomalyzerService.enviarAnomalia(anomalia);
                 anomalyzerService.enviarNotificacion(alarmaDetonadora, anomalia);
-                lecturasAnomalasPorSensor.put(idSensor, 0); // Reiniciar el conteo de lecturas anómalas
+                anomalyzerService.desactivarAlarma(alarmaDetonadora);
             }
 
         } catch (Exception e) {
@@ -105,8 +102,8 @@ public class Analizador {
         return alarma.getSensores().contains(idSensor);
     }
 
-    public boolean verificarInvernadero(AlarmaDTO alarma, String invernadero) {
-        return alarma.getInvernadero().equals(invernadero);
+    public boolean verificarInvernadero(AlarmaDTO alarma, String nombreInvernadero) {
+        return alarma.getInvernadero().equals(nombreInvernadero);
     }
 
     public boolean verificarValor(AlarmaDTO alarma, float valor) {

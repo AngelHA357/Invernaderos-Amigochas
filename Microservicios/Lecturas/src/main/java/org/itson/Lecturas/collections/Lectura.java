@@ -32,11 +32,10 @@ public class Lectura {
     private String nombreInvernadero; // Agregado para guardar el nombre del invernadero
     private String sector;
     private String fila;
-    private boolean estado;
 
     public Lectura(String idSensor, String macAddress, String marca, String modelo, String magnitud, String unidad, 
                   float valor, Date fechaHora, String idInvernadero, String nombreInvernadero, String sector, 
-                  String fila, boolean estado) {
+                  String fila) {
         this.idSensor = idSensor;
         this.macAddress = macAddress;
         this.marca = marca;
@@ -49,6 +48,5 @@ public class Lectura {
         this.nombreInvernadero = nombreInvernadero;
         this.sector = sector;
         this.fila = fila;
-        this.estado = estado;
     }
 }

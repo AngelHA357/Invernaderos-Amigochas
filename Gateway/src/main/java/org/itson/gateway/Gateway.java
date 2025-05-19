@@ -29,7 +29,7 @@ public class Gateway {
 
     private static final String QUEUE_NAME = "lecturas";
     private static final String ID_INVERNADERO = "INV-0101";
-    private static final String NOMBRE_INVERNADERO = "Invernadero 1";
+    private static final String NOMBRE_INVERNADERO = "Invernadero A";
 
     public static void main(String[] args) {
         try {

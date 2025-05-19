@@ -19,7 +19,7 @@ public class LecturaConsumer {
     @Autowired
     Analizador analizador;
 
-    private static final String QUEUE_RECEIVE = "lecturas_enriquecidas";
+    private static final String QUEUE_RECEIVE = "lecturas";
     private final Gson gson = new Gson();
 
 
@@ -36,9 +36,9 @@ public class LecturaConsumer {
 
                 DeliverCallback deliverCallback = (consumerTag, delivery) -> {
                     String mensaje = new String(delivery.getBody(), StandardCharsets.UTF_8);
-                    LecturaDTO lecturaEnriquecida = gson.fromJson(mensaje, LecturaDTO.class);
+                    LecturaDTO lectura = gson.fromJson(mensaje, LecturaDTO.class);
 
-                    analizador.procesarLectura(lecturaEnriquecida);
+                    analizador.procesarLectura(lectura);
                 };
 
                 channel.basicConsume(QUEUE_RECEIVE, true, deliverCallback, consumerTag -> {});

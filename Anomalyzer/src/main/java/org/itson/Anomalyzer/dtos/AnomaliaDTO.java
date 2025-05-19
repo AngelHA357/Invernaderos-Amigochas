@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnomaliaDTO extends LecturaDTO{
+public class AnomaliaDTO extends LecturaDTO {
     private String causa;
 
     public AnomaliaDTO(LecturaDTO lectura) {
-        super(lectura.getIdSensor(), lectura.getMacAddress(), lectura.getMarca(), lectura.getModelo(),
+        super(lectura.get_id(), lectura.getIdSensor(), lectura.getMacAddress(), lectura.getMarca(), lectura.getModelo(),
                 lectura.getMagnitud(), lectura.getUnidad(), lectura.getValor(), lectura.getFechaHora(),
                 lectura.getIdInvernadero(), lectura.getNombreInvernadero(), lectura.getSector(), lectura.getFila());
     }

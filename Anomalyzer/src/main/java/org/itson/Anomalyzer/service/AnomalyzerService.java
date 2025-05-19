@@ -5,14 +5,13 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import jakarta.annotation.PostConstruct;
-import org.bson.types.ObjectId;
-import org.itson.Alarma.Alarmas;
 import org.itson.Anomalyzer.collections.Anomalia;
 import org.itson.Anomalyzer.dtos.AlarmaAnomaliaDTO;
 import org.itson.Anomalyzer.dtos.AlarmaDTO;
 import org.itson.Anomalyzer.dtos.AnomaliaDTO;
 import org.itson.Anomalyzer.persistence.IAnomaliasRepository;
 import org.itson.Anomalyzer.proto.ClienteAlarmasGrpc;
+import org.itson.alarma.Alarmas;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,16 +75,6 @@ public class AnomalyzerService {
         System.out.println("Anomalia guardada con éxito en la base de datos.");
     }
 
-    public void enviarAnomalia(AnomaliaDTO anomalia) {
-        String json = gson.toJson(anomalia);
-        try {
-            channel.queueDeclare(QUEUE_ANOMALIAS, false, false, false, null);
-            channel.basicPublish("", QUEUE_ANOMALIAS, null, json.getBytes());
-        } catch (IOException e) {
-            System.out.println("Error al enviar la anomalía: " + e.getMessage());
-        }
-    }
-
     private Anomalia convertirAnomalia(AnomaliaDTO anomaliaDTO) {
         Anomalia anomalia = new Anomalia(
                 anomaliaDTO.getIdSensor(),
@@ -96,7 +85,7 @@ public class AnomalyzerService {
                 anomaliaDTO.getUnidad(),
                 anomaliaDTO.getValor(),
                 anomaliaDTO.getFechaHora(),
-                new ObjectId(anomaliaDTO.getIdInvernadero()),
+                anomaliaDTO.getIdInvernadero(),
                 anomaliaDTO.getNombreInvernadero(),
                 anomaliaDTO.getSector(),
                 anomaliaDTO.getFila(),
@@ -114,5 +103,9 @@ public class AnomalyzerService {
         } catch (IOException e) {
             System.out.println("Error al enviar la anomalía: " + e.getMessage());
         }
+    }
+
+    public void desactivarAlarma(AlarmaDTO alarmaDetonadora) {
+        clienteAlarmasGrpc.desactivarAlarma(alarmaDetonadora);
     }
 }
