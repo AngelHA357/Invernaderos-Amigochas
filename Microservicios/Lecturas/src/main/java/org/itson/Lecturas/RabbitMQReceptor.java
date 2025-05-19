@@ -11,6 +11,7 @@ import org.itson.Lecturas.encriptadores.EncriptadorRSA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,7 +42,8 @@ public class RabbitMQReceptor {
 
                 DeliverCallback deliverCallback = (consumerTag, delivery) -> {
                     try {
-                        PrivateKey llavePrivada = EncriptadorRSA.loadPrivateKey("src\\main\\resources\\keys\\clave_privada_lecturas.pem");
+                        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("keys/clave_privada_lecturas.pem");
+                        PrivateKey llavePrivada = EncriptadorRSA.loadPrivateKey(inputStream);
 
                         String mensaje = EncriptadorRSA.decrypt(delivery.getBody(), llavePrivada);
 

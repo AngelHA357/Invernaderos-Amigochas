@@ -81,21 +81,21 @@ public class Gateway {
                         try {
                             PrivateKey llavePrivada = EncriptadorRSA.loadPrivateKey("src\\main\\resources\\keys\\clave_privada_gateway.pem");
                             String payload = EncriptadorRSA.decrypt(message.getPayload(), llavePrivada);
-                            
+
                             System.out.println("Mensaje recibido en " + topic + ": " + payload);
 
                             // Deserializar JSON
                             LecturaDTO lectura = gson.fromJson(payload, LecturaDTO.class);
-                            
+
                             //Se agregan los datos del invernadero a la lectura
                             LecturaEnriquecidaDTO lecturaEnriquecida = new LecturaEnriquecidaDTO();
-                            
+
                             lecturaEnriquecida.setIdInvernadero(ID_INVERNADERO);
                             lecturaEnriquecida.setNombreInvernadero(NOMBRE_INVERNADERO);
                             lecturaEnriquecida.setIdSensor(lectura.getIdSensor());
                             lecturaEnriquecida.setMacAddress(lectura.getMacAddress());
                             lecturaEnriquecida.setMarca(lectura.getMarca());
-                        lecturaEnriquecida.setModelo(lectura.getModelo());
+                            lecturaEnriquecida.setModelo(lectura.getModelo());
                             lecturaEnriquecida.setMagnitud(lectura.getMagnitud());
                             lecturaEnriquecida.setUnidad(lectura.getUnidad());
                             lecturaEnriquecida.setValor(lectura.getValor());
@@ -106,7 +106,7 @@ public class Gateway {
 
                             PublicKey llavePublica = EncriptadorRSA.loadPublicKey("src\\main\\resources\\keys\\clave_publica_lecturas.pem");
 
-                            byte[] jsonEncriptado = EncriptadorRSA.encrypt(payload, llavePublica);
+                            byte[] jsonEncriptado = EncriptadorRSA.encrypt(json, llavePublica);
 
                             channel.basicPublish("", QUEUE_NAME, null, jsonEncriptado);
 

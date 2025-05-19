@@ -10,6 +10,8 @@ import org.bouncycastle.util.io.pem.PemReader;
 
 import javax.crypto.Cipher;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
@@ -39,8 +41,8 @@ public class EncriptadorRSA {
     }
 
     // Cargar clave privada desde archivo PEM
-    public static PrivateKey loadPrivateKey(String filepath) throws Exception {
-        try (PemReader reader = new PemReader(new FileReader(filepath))) {
+    public static PrivateKey loadPrivateKey(InputStream filepath) throws Exception {
+        try (PemReader reader = new PemReader(new InputStreamReader(filepath))) {
             PemObject pemObject = reader.readPemObject();
             byte[] content = pemObject.getContent();
             PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(content);
