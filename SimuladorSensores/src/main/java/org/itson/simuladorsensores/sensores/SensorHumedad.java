@@ -1,6 +1,8 @@
 package org.itson.simuladorsensores.sensores;
 
 import com.google.gson.Gson;
+import encriptadores.EncriptadorRSA;
+import java.security.PublicKey;
 import java.util.Date;
 import java.util.Random;
 import java.util.logging.Level;
@@ -50,14 +52,20 @@ public class SensorHumedad extends Sensor implements Runnable {
 
             // Convertimos a JSON
             String payload = gson.toJson(lectura);
+            
+            PublicKey llavePublica = EncriptadorRSA.loadPublicKey("src\\main\\resources\\keys\\clave_publica_gateway.pem");
+            
+            byte[] payloadEncriptado = EncriptadorRSA.encrypt(payload, llavePublica);
 
-            MqttMessage message = new MqttMessage(payload.getBytes());
+            MqttMessage message = new MqttMessage(payloadEncriptado);
             message.setQos(0);
             client.publish(topic, message);
 
             System.out.println(contador + " - DTO publicado: " + payload);
             contador++;
         } catch (MqttException ex) {
+            Logger.getLogger(SensorHumedad.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             Logger.getLogger(SensorHumedad.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

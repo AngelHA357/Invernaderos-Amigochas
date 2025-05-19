@@ -9,7 +9,10 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import dtos.LecturaDTO;
 import dtos.LecturaEnriquecidaDTO;
+import encriptadores.EncriptadorRSA;
 import java.io.IOException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
@@ -76,7 +79,9 @@ public class Gateway {
                      */
                     executor.submit(() -> {
                         try {
-                            String payload = new String(message.getPayload());
+                            PrivateKey llavePrivada = EncriptadorRSA.loadPrivateKey("src\\main\\resources\\keys\\clave_privada_gateway.pem");
+                            String payload = EncriptadorRSA.decrypt(message.getPayload(), llavePrivada);
+                            
                             System.out.println("Mensaje recibido en " + topic + ": " + payload);
 
                             // Deserializar JSON
@@ -90,7 +95,7 @@ public class Gateway {
                             lecturaEnriquecida.setIdSensor(lectura.getIdSensor());
                             lecturaEnriquecida.setMacAddress(lectura.getMacAddress());
                             lecturaEnriquecida.setMarca(lectura.getMarca());
-                            lecturaEnriquecida.setModelo(lectura.getModelo());
+                        lecturaEnriquecida.setModelo(lectura.getModelo());
                             lecturaEnriquecida.setMagnitud(lectura.getMagnitud());
                             lecturaEnriquecida.setUnidad(lectura.getUnidad());
                             lecturaEnriquecida.setValor(lectura.getValor());
@@ -98,7 +103,12 @@ public class Gateway {
 
                             // Publicar en RabbitMQ
                             String json = gson.toJson(lecturaEnriquecida);
-                            channel.basicPublish("", QUEUE_NAME, null, json.getBytes());
+
+                            PublicKey llavePublica = EncriptadorRSA.loadPublicKey("src\\main\\resources\\keys\\clave_publica_lecturas.pem");
+
+                            byte[] jsonEncriptado = EncriptadorRSA.encrypt(payload, llavePublica);
+
+                            channel.basicPublish("", QUEUE_NAME, null, jsonEncriptado);
 
                             System.out.println("Mensaje publicado en RabbitMQ con éxito.");
                         } catch (IOException e) {

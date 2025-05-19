@@ -7,10 +7,12 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 import jakarta.annotation.PostConstruct;
 import org.itson.Lecturas.dtos.LecturaDTO;
+import org.itson.Lecturas.encriptadores.EncriptadorRSA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
+import java.security.PrivateKey;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
@@ -38,10 +40,17 @@ public class RabbitMQReceptor {
                 System.out.println("Esperando lecturas...");
 
                 DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-                    String mensaje = new String(delivery.getBody(), StandardCharsets.UTF_8);
-                    LecturaDTO lectura = gson.fromJson(mensaje, LecturaDTO.class);
-                    System.out.println("Lectura recibida de la cola 'lecturas' para sensor: " + lectura.getIdSensor());
-                    lecturasPorSensor.put(lectura.getIdSensor(), lectura);
+                    try {
+                        PrivateKey llavePrivada = EncriptadorRSA.loadPrivateKey("src\\main\\resources\\keys\\clave_privada_lecturas.pem");
+
+                        String mensaje = EncriptadorRSA.decrypt(delivery.getBody(), llavePrivada);
+
+                        LecturaDTO lectura = gson.fromJson(mensaje, LecturaDTO.class);
+                        System.out.println("Lectura recibida de la cola 'lecturas' para sensor: " + lectura.getIdSensor());
+                        lecturasPorSensor.put(lectura.getIdSensor(), lectura);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 };
 
                 channel.basicConsume(QUEUE_RECEIVE, true, deliverCallback, consumerTag -> {
