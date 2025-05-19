@@ -18,6 +18,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.Deflater;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -80,6 +81,7 @@ public class Gateway {
                     executor.submit(() -> {
                         try {
                             PrivateKey llavePrivada = EncriptadorRSA.loadPrivateKey("src\\main\\resources\\keys\\clave_privada_gateway.pem");
+                            
                             String payload = EncriptadorRSA.decrypt(message.getPayload(), llavePrivada);
 
                             System.out.println("Mensaje recibido en " + topic + ": " + payload);
@@ -106,9 +108,9 @@ public class Gateway {
 
                             PublicKey llavePublica = EncriptadorRSA.loadPublicKey("src\\main\\resources\\keys\\clave_publica_lecturas.pem");
 
-                            byte[] jsonEncriptado = EncriptadorRSA.encrypt(json, llavePublica);
+                            String jsonEncriptado = EncriptadorRSA.encryptHybrid(json, llavePublica);
 
-                            channel.basicPublish("", QUEUE_NAME, null, jsonEncriptado);
+                            channel.basicPublish("", QUEUE_NAME, null, jsonEncriptado.getBytes());
 
                             System.out.println("Mensaje publicado en RabbitMQ con éxito.");
                         } catch (IOException e) {

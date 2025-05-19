@@ -6,12 +6,15 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 import jakarta.annotation.PostConstruct;
+import org.itson.Anomalyzer.encriptadores.EncriptadorRSA;
 import org.itson.Anomalyzer.service.Analizador;
 import org.itson.Anomalyzer.dtos.LecturaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.security.PrivateKey;
 import java.util.concurrent.CountDownLatch;
 
 @Component
@@ -35,13 +38,23 @@ public class LecturaConsumer {
                 System.out.println("Esperando lecturas enriquecidas...");
 
                 DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-                    String mensaje = new String(delivery.getBody(), StandardCharsets.UTF_8);
-                    LecturaDTO lectura = gson.fromJson(mensaje, LecturaDTO.class);
+                    try {
+                        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("keys/clave_privada_anomalyzer.pem");
 
-                    analizador.procesarLectura(lectura);
+                        PrivateKey llavePrivada = EncriptadorRSA.loadPrivateKey(inputStream);
+
+                        String mensaje = EncriptadorRSA.decryptHybrid(new String(delivery.getBody()), llavePrivada);
+
+                        LecturaDTO lectura = gson.fromJson(mensaje, LecturaDTO.class);
+                        analizador.procesarLectura(lectura);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+
                 };
 
-                channel.basicConsume(QUEUE_RECEIVE, true, deliverCallback, consumerTag -> {});
+                channel.basicConsume(QUEUE_RECEIVE, true, deliverCallback, consumerTag -> {
+                });
                 latch.await(); // mantiene el hilo vivo
             } catch (Exception e) {
                 System.err.println("Error en el receptor de lecturas enriquecidas: " + e.getMessage());

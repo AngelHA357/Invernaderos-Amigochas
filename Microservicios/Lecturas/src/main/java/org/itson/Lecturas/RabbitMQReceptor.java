@@ -45,7 +45,7 @@ public class RabbitMQReceptor {
                         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("keys/clave_privada_lecturas.pem");
                         PrivateKey llavePrivada = EncriptadorRSA.loadPrivateKey(inputStream);
 
-                        String mensaje = EncriptadorRSA.decrypt(delivery.getBody(), llavePrivada);
+                        String mensaje = EncriptadorRSA.decryptHybrid(new String(delivery.getBody()), llavePrivada);
 
                         LecturaDTO lectura = gson.fromJson(mensaje, LecturaDTO.class);
                         System.out.println("Lectura recibida de la cola 'lecturas' para sensor: " + lectura.getIdSensor());
