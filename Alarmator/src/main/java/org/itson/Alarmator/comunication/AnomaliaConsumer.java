@@ -45,7 +45,7 @@ public class AnomaliaConsumer {
 
                         PrivateKey llavePrivada = EncriptadorRSA.loadPrivateKey(inputStream);
 
-                        String mensaje = EncriptadorRSA.decrypt(delivery.getBody(), llavePrivada);
+                        String mensaje = EncriptadorRSA.decryptHybrid(new String(delivery.getBody()), llavePrivada);
 
                         AlarmaAnomaliaDTO alarmaAnomalia = gson.fromJson(mensaje, AlarmaAnomaliaDTO.class);
                         imprimirAnomalia(alarmaAnomalia.getAnomalia());

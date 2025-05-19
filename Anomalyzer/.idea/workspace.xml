@@ -5,24 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9879af79-ecd7-44bc-bb39-f33813800b81" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/service/EmailService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/service/SmsService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/controller/ExposicionDatosController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/exceptions/ExposicionDatosException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/service/ExposicionDatosService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Alarmator/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Alarmator/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/service/AlarmatorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/service/AlarmatorService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Alarmator/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Alarmator/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/Analizador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/Analizador.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/AnomalyzerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/AnomalyzerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-exposicion-datos.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-exposicion-datos.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/collections/Lectura.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/collections/Lectura.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/comunicacion/RabbitMQReceptor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/dtos/LecturaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/dtos/LecturaDTO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +94,7 @@
       <command value="mvn depenency-tree" />
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.AnomalyzerApplication">
+  <component name="RunManager" selected="Application.AnomalyzerApplication">
     <configuration name="AnomalyzerApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.itson.Anomalyzer.AnomalyzerApplication" />
       <module name="Anomalyzer" />
