@@ -8,11 +8,14 @@ import com.rabbitmq.client.DeliverCallback;
 import jakarta.annotation.PostConstruct;
 import org.itson.Alarmator.dtos.AlarmaAnomaliaDTO;
 import org.itson.Alarmator.dtos.AnomaliaDTO;
+import org.itson.Alarmator.encriptadores.EncriptadorRSA;
 import org.itson.Alarmator.service.AlarmatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.security.PrivateKey;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -37,11 +40,20 @@ public class AnomaliaConsumer {
                 System.out.println("Esperando anomalías...");
 
                 DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-                    String mensaje = new String(delivery.getBody(), StandardCharsets.UTF_8);
-                    AlarmaAnomaliaDTO alarmaAnomalia = gson.fromJson(mensaje, AlarmaAnomaliaDTO.class);
-                    imprimirAnomalia(alarmaAnomalia.getAnomalia());
+                    try {
+                        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("keys/clave_privada_alarmator.pem");
 
-                    alarmatorService.dispararAlarma(alarmaAnomalia);
+                        PrivateKey llavePrivada = EncriptadorRSA.loadPrivateKey(inputStream);
+
+                        String mensaje = EncriptadorRSA.decrypt(delivery.getBody(), llavePrivada);
+
+                        AlarmaAnomaliaDTO alarmaAnomalia = gson.fromJson(mensaje, AlarmaAnomaliaDTO.class);
+                        imprimirAnomalia(alarmaAnomalia.getAnomalia());
+
+                        alarmatorService.dispararAlarma(alarmaAnomalia);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 };
 
                 channel.basicConsume(QUEUE_RECEIVE, true, deliverCallback, consumerTag -> {
