@@ -6,8 +6,11 @@ spring:
     name: anomalyzer
   data:
     mongodb:
-      database: anomalyzer_db
-      uri: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
+      anomalyzer:
+        uri: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/anomalyzer_db?retryWrites=true&w=majority&appName=InvernaderoAmigochas
+      alarmas:
+        uri: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/alarmas_db?retryWrites=true&w=majority&appName=InvernaderoAmigochas
+
 
 grpc:
   server:
@@ -22,6 +25,7 @@ grpc:
       negotiation-type: TLS
       security:
         trust-cert-collection: classpath:certs/localhost.cert.pem
+      enable-keep-alive: true
 
 management:
   tracing:

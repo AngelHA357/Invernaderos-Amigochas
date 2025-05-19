@@ -4,7 +4,6 @@ package org.itson.alarma;
 
 // Servicio gRPC para manejar alarmas
 service AlarmasServidor {
-  rpc ObtenerAlarmas (Empty) returns (AlarmasList);
   rpc DesactivarAlarma (AlarmaDTO) returns (Empty);
 }
 
@@ -19,11 +18,6 @@ message AlarmaDTO {
   string unidad = 7;
   string medioNotificacion = 8;
   bool activo = 9;
-}
-
-// Mensaje para la lista de alarmas
-message AlarmasList {
-  repeated AlarmaDTO alarmas = 1;
 }
 
 message Empty {} // Mensaje vacío, utilizado para no pasar parámetros

@@ -23,6 +23,7 @@ grpc:
       negotiation-type: TLS
       security:
         trust-cert-collection: classpath:certs/localhost.cert.pem
+      enable-keep-alive: true
     alarmator:
       address: static://localhost:50057
       negotiation-type: plaintext

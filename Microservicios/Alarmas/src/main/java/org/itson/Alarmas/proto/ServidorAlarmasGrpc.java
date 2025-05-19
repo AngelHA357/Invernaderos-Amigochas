@@ -19,34 +19,6 @@ public class ServidorAlarmasGrpc extends AlarmasServidorGrpc.AlarmasServidorImpl
     private AlarmasService alarmasService;
 
     @Override
-    public void obtenerAlarmas(Alarmas.Empty request, StreamObserver<Alarmas.AlarmasList> responseObserver) {
-        List<AlarmaDTO> listaAlarmas = alarmasService.obtenerTodasLasAlarmas();
-
-        Alarmas.AlarmasList.Builder responseBuilder = Alarmas.AlarmasList.newBuilder();
-
-        for (AlarmaDTO alarmaPojo : listaAlarmas) {
-            // Construir el mensaje gRPC
-            Alarmas.AlarmaDTO grpcAlarma = Alarmas.AlarmaDTO.newBuilder()
-                    .setIdAlarma(alarmaPojo.getIdAlarma())
-                    .setMagnitud(alarmaPojo.getMagnitud())
-                    .addAllIdSensores(alarmaPojo.getSensores())
-                    .setInvernadero(alarmaPojo.getInvernadero())
-                    .setValorMinimo(alarmaPojo.getValorMinimo())
-                    .setValorMaximo(alarmaPojo.getValorMaximo())
-                    .setUnidad(alarmaPojo.getUnidad())
-                    .setMedioNotificacion(alarmaPojo.getMedioNotificacion())
-                    .setActivo(alarmaPojo.isActivo())
-                    .build();
-
-            // Agregar a la lista de respuesta
-            responseBuilder.addAlarmas(grpcAlarma);
-        }
-
-        responseObserver.onNext(responseBuilder.build());
-        responseObserver.onCompleted();
-    }
-
-    @Override
     public void desactivarAlarma(Alarmas.AlarmaDTO request, StreamObserver<Alarmas.Empty> responseObserver) {
         // Convertimos de request DTO a DTO normalita
         AlarmaDTO alarmaDTO = new AlarmaDTO(
@@ -61,5 +33,8 @@ public class ServidorAlarmasGrpc extends AlarmasServidorGrpc.AlarmasServidorImpl
                 false);
         // Desactivamos la alarma
         alarmasService.editarAlarma(alarmaDTO);
+
+        responseObserver.onNext(Alarmas.Empty.newBuilder().build());
+        responseObserver.onCompleted();
     }
 }

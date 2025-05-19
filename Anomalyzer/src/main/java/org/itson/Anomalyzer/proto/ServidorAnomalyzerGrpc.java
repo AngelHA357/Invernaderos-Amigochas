@@ -73,31 +73,4 @@ public class ServidorAnomalyzerGrpc extends AnomalyzerServidorGrpc.AnomalyzerSer
         responseObserver.onNext(Anomalyzer.Empty.newBuilder().build());
         responseObserver.onCompleted();
     }
-
-    @Override
-    public void actualizarAlarmas(Anomalyzer.AlarmasList request, StreamObserver<Anomalyzer.Empty> responseObserver) {
-        System.out.println("Actualizando TODAS las alarmas");
-
-        List<Anomalyzer.AlarmaDTO> alarmas = request.getAlarmasList();
-        List<AlarmaDTO> alarmasDTO = new ArrayList<>();
-        for (Anomalyzer.AlarmaDTO alarma : alarmas) {
-            AlarmaDTO alarmaDTO = new AlarmaDTO(
-                    alarma.getIdAlarma(),
-                    alarma.getIdSensoresList(),
-                    alarma.getInvernadero(),
-                    alarma.getValorMinimo(),
-                    alarma.getValorMaximo(),
-                    alarma.getMagnitud(),
-                    alarma.getUnidad(),
-                    alarma.getMedioNotificacion(),
-                    alarma.getActivo()
-            );
-            alarmasDTO.add(alarmaDTO);
-        }
-
-        analizador.actualizarAlarmas(alarmasDTO);
-
-        responseObserver.onNext(Anomalyzer.Empty.newBuilder().build());
-        responseObserver.onCompleted();
-    }
 }

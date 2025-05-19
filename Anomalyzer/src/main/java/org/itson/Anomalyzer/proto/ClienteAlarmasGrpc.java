@@ -15,18 +15,6 @@ public class ClienteAlarmasGrpc {
     @GrpcClient("alarmas")
     AlarmasServidorGrpc.AlarmasServidorBlockingStub stub;
 
-
-    public List<Alarmas.AlarmaDTO> obtenerAlarmas() {
-        // Crear el mensaje vacío
-        Alarmas.Empty request = Alarmas.Empty.newBuilder().build();
-
-        // Llamar al stub gRPC
-        Alarmas.AlarmasList response = stub.obtenerAlarmas(request);
-
-        // Regresar la lista de alarmas
-        return response.getAlarmasList();
-    }
-
     public void desactivarAlarma(AlarmaDTO alarma) {
         // Crear el mensaje con el ID de la alarma
         Alarmas.AlarmaDTO request = Alarmas.AlarmaDTO.newBuilder().

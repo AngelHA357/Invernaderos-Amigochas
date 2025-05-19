@@ -45,7 +45,7 @@ public class ClienteAnomalyzerGrpc {
                 .build();
 
         stub.actualizarAlarma(alarmaNueva);
-        System.out.println("Alarma registrada correctamente.");
+        System.out.println("Alarma actualizada correctamente.");
     }
 
     public void eliminarAlarma(String idAlarma) {
@@ -55,30 +55,6 @@ public class ClienteAnomalyzerGrpc {
                 .build();
 
         stub.eliminarAlarma(alarmaDTO);
-        System.out.println("Alarma registrada correctamente.");
-    }
-
-    public void actualizarAlarmas(List<AlarmaDTO> alarmas) {
-        List<Anomalyzer.AlarmaDTO> alarmasGrpc = new ArrayList<>();
-        for (AlarmaDTO alarma : alarmas) {
-            alarmasGrpc.add(
-                    Anomalyzer.AlarmaDTO.newBuilder()
-                            .setIdAlarma(alarma.getIdAlarma())
-                            .addAllIdSensores(alarma.getSensores())
-                            .setInvernadero(alarma.getInvernadero())
-                            .setValorMinimo(alarma.getValorMinimo())
-                            .setValorMaximo(alarma.getValorMaximo())
-                            .setMagnitud(alarma.getMagnitud())
-                            .setUnidad(alarma.getUnidad())
-                            .setMedioNotificacion(alarma.getMedioNotificacion())
-                            .setActivo(alarma.isActivo())
-                            .build()
-            );
-        }
-        Anomalyzer.AlarmasList alarmasList = Anomalyzer.AlarmasList.newBuilder()
-                .addAllAlarmas(alarmasGrpc)
-                .build();
-
-        stub.actualizarAlarmas(alarmasList);
+        System.out.println("Alarma eliminada correctamente.");
     }
 }

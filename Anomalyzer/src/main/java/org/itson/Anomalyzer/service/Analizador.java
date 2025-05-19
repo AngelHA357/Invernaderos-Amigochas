@@ -14,6 +14,8 @@ import java.util.*;
 public class Analizador {
     @Autowired
     AnomalyzerService anomalyzerService;
+    @Autowired
+    AlarmaService alarmaService;
 
     // Lista de alarmas.
     private List<AlarmaDTO> alarmas = new ArrayList<>();
@@ -26,7 +28,7 @@ public class Analizador {
 
     @PostConstruct
     public void inicializarAlarmas() {
-        List<AlarmaDTO> alarmasObtenidas = anomalyzerService.obtenerAlarmas();
+        List<AlarmaDTO> alarmasObtenidas = alarmaService.obtenerAlarmas();
         agregarAlarmas(alarmasObtenidas);
     }
 
@@ -79,6 +81,7 @@ public class Analizador {
 
                 anomalyzerService.guardarAnomalia(anomalia);
                 anomalyzerService.enviarNotificacion(alarmaDetonadora, anomalia);
+                lecturasAnomalasPorSensor.put(idSensor, 0);
                 anomalyzerService.desactivarAlarma(alarmaDetonadora);
             }
 

@@ -5,20 +5,20 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import jakarta.annotation.PostConstruct;
+import org.itson.Anomalyzer.collections.Alarma;
 import org.itson.Anomalyzer.collections.Anomalia;
 import org.itson.Anomalyzer.dtos.AlarmaAnomaliaDTO;
 import org.itson.Anomalyzer.dtos.AlarmaDTO;
 import org.itson.Anomalyzer.dtos.AnomaliaDTO;
-import org.itson.Anomalyzer.persistence.IAnomaliasRepository;
+import org.itson.Anomalyzer.persistence.anomalias.IAnomaliasRepository;
+import org.itson.Anomalyzer.persistence.alarmas.IAlarmasRepository;
 import org.itson.Anomalyzer.proto.ClienteAlarmasGrpc;
-import org.itson.alarma.Alarmas;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 @Service
 public class AnomalyzerService {
@@ -28,7 +28,9 @@ public class AnomalyzerService {
     @Autowired
     IAnomaliasRepository anomaliasRepository;
 
-    private static final String QUEUE_ANOMALIAS = "anomalias";
+    @Autowired
+    IAlarmasRepository alarmasRepository;
+
     private static final String QUEUE_ALARMAS = "alarmas";
 
     private final Gson gson = new Gson();
@@ -46,27 +48,6 @@ public class AnomalyzerService {
             System.err.println("Error al crear la cola: " + e.getMessage());
             e.printStackTrace();
         }
-    }
-
-    public List<AlarmaDTO> obtenerAlarmas() {
-        List<Alarmas.AlarmaDTO> alarmasObtenidasGrpc = clienteAlarmasGrpc.obtenerAlarmas();
-        List<AlarmaDTO> alarmasDTO = new ArrayList<>();
-        for (Alarmas.AlarmaDTO alarmaGrpc : alarmasObtenidasGrpc) {
-            AlarmaDTO alarmaDTO = new AlarmaDTO();
-            alarmaDTO.setIdAlarma(alarmaGrpc.getIdAlarma());
-            alarmaDTO.setSensores(alarmaGrpc.getIdSensoresList());
-            alarmaDTO.setInvernadero(alarmaGrpc.getInvernadero());
-            alarmaDTO.setValorMinimo(alarmaGrpc.getValorMinimo());
-            alarmaDTO.setValorMaximo(alarmaGrpc.getValorMaximo());
-            alarmaDTO.setMagnitud(alarmaGrpc.getMagnitud());
-            alarmaDTO.setUnidad(alarmaGrpc.getUnidad());
-            alarmaDTO.setMedioNotificacion(alarmaGrpc.getMedioNotificacion());
-            alarmaDTO.setActivo(alarmaGrpc.getActivo());
-
-            alarmasDTO.add(alarmaDTO);
-        }
-
-        return alarmasDTO;
     }
 
     public void guardarAnomalia(AnomaliaDTO anomaliaDTO) {
