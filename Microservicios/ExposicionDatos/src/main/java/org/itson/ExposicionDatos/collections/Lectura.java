@@ -13,7 +13,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Lectura {
-
     @Id
     private ObjectId _id;
     private String idSensor;
@@ -28,22 +27,4 @@ public class Lectura {
     private String nombreInvernadero;
     private String sector;
     private String fila;
-    private boolean estado;
-
-    public Lectura(String idSensor, String macAddress, String marca, String modelo, String magnitud, String unidad, float valor, Date fechaHora, String idInvernadero, String nombreInvernadero, String sector, String fila, boolean estado) {
-        this.idSensor = idSensor;
-        this.macAddress = macAddress;
-        this.marca = marca;
-        this.modelo = modelo;
-        this.magnitud = magnitud;
-        this.unidad = unidad;
-        this.valor = valor;
-        this.fechaHora = fechaHora;
-        this.idInvernadero = idInvernadero;
-        this.nombreInvernadero = nombreInvernadero;
-        this.sector = sector;
-        this.fila = fila;
-        this.estado = estado;
-    }
-
 }

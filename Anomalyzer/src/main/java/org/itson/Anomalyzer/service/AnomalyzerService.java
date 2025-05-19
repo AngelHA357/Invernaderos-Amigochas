@@ -10,6 +10,7 @@ import org.itson.Anomalyzer.collections.Anomalia;
 import org.itson.Anomalyzer.dtos.AlarmaAnomaliaDTO;
 import org.itson.Anomalyzer.dtos.AlarmaDTO;
 import org.itson.Anomalyzer.dtos.AnomaliaDTO;
+import org.itson.Anomalyzer.encriptadores.EncriptadorRSA;
 import org.itson.Anomalyzer.persistence.anomalias.IAnomaliasRepository;
 import org.itson.Anomalyzer.persistence.alarmas.IAlarmasRepository;
 import org.itson.Anomalyzer.proto.ClienteAlarmasGrpc;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,13 +78,20 @@ public class AnomalyzerService {
     }
 
     public void enviarNotificacion(AlarmaDTO alarmaDetonadora, AnomaliaDTO anomalia) {
-        AlarmaAnomaliaDTO alarmaAnomalia = new AlarmaAnomaliaDTO(alarmaDetonadora, anomalia);
-        String json = gson.toJson(alarmaAnomalia);
         try {
+            AlarmaAnomaliaDTO alarmaAnomalia = new AlarmaAnomaliaDTO(alarmaDetonadora, anomalia);
+            String json = gson.toJson(alarmaAnomalia);
+
+            PublicKey llavePublica = EncriptadorRSA.loadPublicKey("src/main/resources/keys/clave_publica_alarmator.pem");
+
+            String jsonEncriptado = EncriptadorRSA.encryptHybrid(json, llavePublica);
+
             channel.queueDeclare(QUEUE_ALARMAS, false, false, false, null);
-            channel.basicPublish("", QUEUE_ALARMAS, null, json.getBytes());
+            channel.basicPublish("", QUEUE_ALARMAS, null, jsonEncriptado.getBytes());
         } catch (IOException e) {
             System.out.println("Error al enviar la anomalía: " + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
