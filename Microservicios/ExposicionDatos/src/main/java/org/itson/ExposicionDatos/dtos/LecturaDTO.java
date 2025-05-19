@@ -10,7 +10,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LecturaDTO {
-
     private String _id;
     private String idSensor;
     private String macAddress;
@@ -24,6 +23,4 @@ public class LecturaDTO {
     private String nombreInvernadero;
     private String sector;
     private String fila;
-    private boolean estado;
-
 }

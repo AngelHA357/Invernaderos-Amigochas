@@ -6,7 +6,7 @@ spring:
     name: msvc-exposicion-datos
   data:
     mongodb:
-      database: exposicion_datos_db
+      database: lecturas_db
       uri: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
 
 management:

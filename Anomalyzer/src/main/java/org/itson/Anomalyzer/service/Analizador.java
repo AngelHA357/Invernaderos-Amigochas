@@ -130,6 +130,9 @@ public class Analizador {
                 alarma.setInvernadero(alarmaActualizada.getInvernadero());
                 alarma.setValorMinimo(alarmaActualizada.getValorMinimo());
                 alarma.setValorMaximo(alarmaActualizada.getValorMaximo());
+                alarma.setMagnitud(alarmaActualizada.getMagnitud());
+                alarma.setUnidad(alarmaActualizada.getUnidad());
+                alarma.setMedioNotificacion(alarmaActualizada.getMedioNotificacion());
                 alarma.setActivo(alarmaActualizada.isActivo());
                 break;
             }
