@@ -348,15 +348,21 @@ public class GestionSensoresService {
     }
 
     private List<String> obtenerDatosFaltantes(String idSensor) {
-        // Los vamos a buscar a la BD
-        Optional<Sensor> sensorObtenido = gestionSensoresRepository.findByIdSensor(idSensor);
-        if (!sensorObtenido.isPresent()) {
+        System.out.println("[GestionSensoresService DEBUG] Buscando datos faltantes para idSensor: " + idSensor); // Log ID de entrada
+        Optional<Sensor> sensorOpt = gestionSensoresRepository.findByIdSensor(idSensor);
+        if (sensorOpt.isPresent()) {
+            Sensor sensor = sensorOpt.get();
+            String sector = sensor.getSector();
+            String fila = sensor.getFila();
+            System.out.println("[GestionSensoresService DEBUG] Sensor encontrado: ID=" + sensor.getIdSensor() + ", SectorLeido=" + sector + ", FilaLeida=" + fila); // Log datos leídos
+
+            String sectorAEnviar = sector != null ? sector : "";
+            String filaAEnviar = fila != null ? fila : "";
+            System.out.println("[GestionSensoresService DEBUG] Enviando para ID=" + idSensor + ": Sector='" + sectorAEnviar + "', Fila='" + filaAEnviar + "'"); // Log datos a enviar
+            return Arrays.asList(sectorAEnviar, filaAEnviar);
+        } else {
+            System.out.println("[GestionSensoresService WARN] Sensor con ID '" + idSensor + "' no encontrado. Devolviendo datos vacíos para sector y fila.");
+            return Arrays.asList("", "");
         }
-        Sensor sensor = sensorObtenido.get();
-        String sector = sensor.getSector();
-        String fila = sensor.getFila();
-        // Creamos la lista con los datos y los mandamos
-        List<String> datos = Arrays.asList(sector, fila);
-        return datos;
     }
 }

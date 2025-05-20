@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,12 @@ public class GestionSensoresController {
             ResponseEntity<Map<String, String>> respuesta = new ResponseEntity<>(error, HttpStatus.NOT_FOUND); // Creamos la respuesta.
             return respuesta;
         }
+    }
+
+    @GetMapping("/magnitudes-disponibles-informes")
+    public ResponseEntity<List<String>> obtenerMagnitudesDisponiblesParaInformes() {
+        List<String> magnitudesFijas = Arrays.asList("Temperatura", "Humedad");
+        return ResponseEntity.ok(magnitudesFijas);
     }
 
     /**

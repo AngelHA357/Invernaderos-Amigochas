@@ -2,6 +2,7 @@ package org.itson.Informes.controller;
 
 // import org.itson.Informes.collections.InformeLectura; // Ya no se devuelve directamente si no se guarda
 import org.itson.Informes.dtos.InformeResponseDTO; // El nuevo DTO de respuesta
+import org.itson.Informes.dtos.InvernaderoBasicoDTO;
 import org.itson.Informes.service.InformeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -73,6 +74,21 @@ public class InformesController {
             error.put("mensaje", "Error interno inesperado al procesar la solicitud: " + e.getMessage());
             e.printStackTrace(); // Para depuración
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/invernaderos-desde-lecturas")
+    public ResponseEntity<?> obtenerListaInvernaderosDesdeLecturas() {
+        try {
+            List<InvernaderoBasicoDTO> invernaderos = informeService.obtenerInvernaderosDesdeLecturas();
+            if (invernaderos.isEmpty()) {
+                return ResponseEntity.noContent().build(); // O OK con lista vacía
+            }
+            return ResponseEntity.ok(invernaderos);
+        } catch (Exception e) {
+            // Loggear el error
+            System.err.println("Error al obtener invernaderos desde lecturas: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener lista de invernaderos desde lecturas.");
         }
     }
 
