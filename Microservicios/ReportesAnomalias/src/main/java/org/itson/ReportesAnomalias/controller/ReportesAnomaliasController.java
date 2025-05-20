@@ -21,6 +21,20 @@ public class ReportesAnomaliasController {
     @Autowired
     private ReportesAnomaliasService reportesAnomaliasService;
 
+    @GetMapping({"", "/"})
+    public ResponseEntity<?> obtenerTodasLasAnomalias() {
+        try {
+            List<AnomaliaDTO> anomalias = reportesAnomaliasService.obtenerAnomalias();
+            ResponseEntity<List<AnomaliaDTO>> response = new ResponseEntity<>(anomalias, HttpStatus.OK);
+            return response;
+        } catch (ReportesAnomaliasServiceException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("mensaje", e.getMessage()); // Se mapea el error del mensaje.
+            ResponseEntity<Map<String, String>> respuesta = new ResponseEntity<>(error, HttpStatus.NOT_FOUND); // Creamos la respuesta.
+            return respuesta;
+        }
+    }
+
     @GetMapping("/periodo/query")
     public ResponseEntity<?> obtenerAnomaliasPorPeriodo(
             @RequestParam("inicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date inicio,
@@ -71,20 +85,6 @@ public class ReportesAnomaliasController {
         try {
             List<AnomaliaDTO> anomalias = reportesAnomaliasService.obtenerAnomaliasPorMagnitud(magnitud);
             ResponseEntity<List<AnomaliaDTO>> response = new ResponseEntity<>(anomalias, HttpStatus.OK);
-            return response;
-        } catch (ReportesAnomaliasServiceException e) {
-            Map<String, String> error = new HashMap<>();
-            error.put("mensaje", e.getMessage()); // Se mapea el error del mensaje.
-            ResponseEntity<Map<String, String>> respuesta = new ResponseEntity<>(error, HttpStatus.NOT_FOUND); // Creamos la respuesta.
-            return respuesta;
-        }
-    }
-
-    @PostMapping("/registrarAnomalia")
-    public ResponseEntity<?> registrarAnomalia(@RequestBody AnomaliaDTO anomalia) {
-        try {
-            AnomaliaDTO anomaliaRegistrada = reportesAnomaliasService.registrarAnomalia(anomalia);
-            ResponseEntity<AnomaliaDTO> response = new ResponseEntity<>(anomaliaRegistrada, HttpStatus.OK);
             return response;
         } catch (ReportesAnomaliasServiceException e) {
             Map<String, String> error = new HashMap<>();

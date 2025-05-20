@@ -5,26 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9879af79-ecd7-44bc-bb39-f33813800b81" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/dtos/DatosFaltantesDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/dtos/DatosFaltantesDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/configurations/AnomaliaDBConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/configurations/MongoConfiguration.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/dtos/DatosFaltantesDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/proto/ClienteGestionSensoresGrpc.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/proto/lecturas.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/resources/certs/localhost.cert.pem" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/collections/Lectura.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/certs/localhost.cert.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/certs/localhost.crt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/certs/localhost.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-informes.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-informes.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/proto/ServidorLecturasGrpc.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/proto/ServidorLecturasGrpc.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-reportes-anomalias.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-reportes-anomalias.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/service/GestionSensoresService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/service/GestionSensoresService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/proto/lecturas.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/proto/lecturas.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/resources/certs/localhost.cert.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Informes/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/RabbitMQReceptor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/proto/ClienteGestionSensoresGrpc.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/proto/ClienteGestionSensoresGrpc.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/service/InformeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/service/InformeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/proto/lecturas.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Informes/src/main/proto/lecturas.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Informes/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/resources/certs/localhost.crt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/resources/certs/localhost.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/collections/Anomalia.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/collections/Anomalia.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/comunicacion/RabbitMQReceptor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/controller/ReportesAnomaliasController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/controller/ReportesAnomaliasController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/IAnomaliasRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/anomalias/IAnomaliasRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/IReportesAnomaliasRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/reportes/IReportesAnomaliasRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/service/ReportesAnomaliasService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/service/ReportesAnomaliasService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,7 +173,7 @@
       <workItem from="1747629140876" duration="8909000" />
       <workItem from="1747710263365" duration="2000" />
       <workItem from="1747710602808" duration="2070000" />
-      <workItem from="1747715713640" duration="1348000" />
+      <workItem from="1747715713640" duration="4627000" />
     </task>
     <servers />
   </component>

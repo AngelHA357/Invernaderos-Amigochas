@@ -6,8 +6,19 @@ spring:
     name: msvc-reportes-anomalias
   data:
     mongodb:
-      database: reportes_anomalias_db
-      uri: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
+      reportes:
+        uri: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/reportes_anomalias_db?retryWrites=true&w=majority&appName=InvernaderoAmigochas
+      anomalyzer:
+        uri: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/anomalyzer_db?retryWrites=true&w=majority&appName=InvernaderoAmigochas
+
+grpc:
+  client:
+    gestion-sensores-service:
+      address: static://localhost:9090
+      negotiation-type: TLS
+      security:
+        trust-cert-collection: classpath:certs/localhost.cert.pem
+      enable-keep-alive: true
 
 management:
   tracing:

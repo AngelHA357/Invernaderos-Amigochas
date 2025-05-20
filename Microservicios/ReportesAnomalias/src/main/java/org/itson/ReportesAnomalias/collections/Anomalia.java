@@ -24,13 +24,13 @@ public class Anomalia {
     private String unidad;
     private float valor;
     private Date fechaHora;
-    private ObjectId idInvernadero;
+    private String idInvernadero;
     private String nombreInvernadero;
     private String sector;
     private String fila;
     private String causa;
 
-    public Anomalia(String idSensor, String macAddress, String marca, String modelo, String magnitud, String unidad, float valor, Date fechaHora, ObjectId idInvernadero, String nombreInvernadero, String sector, String fila, String causa) {
+    public Anomalia(String idSensor, String macAddress, String marca, String modelo, String magnitud, String unidad, float valor, Date fechaHora, String idInvernadero, String nombreInvernadero, String sector, String fila, String causa) {
         this.idSensor = idSensor;
         this.macAddress = macAddress;
         this.marca = marca;

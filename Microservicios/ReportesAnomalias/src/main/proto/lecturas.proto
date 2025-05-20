@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option java_package = "org.itson.grpc.gestionInformes";
+option java_multiple_files = true;
+
+message DatosFaltantes {
+  string idSensor = 1;
+  string sector = 2;
+  string fila = 3;
+}
+
+message SolicitudDatos {
+  repeated string idSensor = 1;
+}
+
+message RespuestaDatos {
+  repeated DatosFaltantes datosFaltantes = 1;
+}
+
+service ServicioGestionLecturas {
+  rpc obtenerDatosFaltantes(SolicitudDatos) returns (RespuestaDatos);
+}

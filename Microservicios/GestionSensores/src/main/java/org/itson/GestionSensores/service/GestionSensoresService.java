@@ -135,7 +135,7 @@ public class GestionSensoresService {
      * @throws GestionSensoresException En caso de que ocurra un error durante la eliminación.
      */
     public void eliminarSensor(String id) throws GestionSensoresException {
-        Optional<Sensor> sensorObtenido = gestionSensoresRepository.findById(new ObjectId(id));
+        Optional<Sensor> sensorObtenido = gestionSensoresRepository.findByIdSensor(id);
         if (sensorObtenido.isPresent()) {
             gestionSensoresRepository.delete(sensorObtenido.get());
         } else {

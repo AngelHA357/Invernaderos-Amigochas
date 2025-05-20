@@ -1,4 +1,4 @@
-package org.itson.ReportesAnomalias.persistence;
+package org.itson.ReportesAnomalias.persistence.anomalias;
 
 import org.bson.types.ObjectId;
 import org.itson.ReportesAnomalias.collections.Anomalia;
