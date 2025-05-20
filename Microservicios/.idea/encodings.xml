@@ -2,22 +2,34 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/APIGateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/APIGateway/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Alarmas/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Alarmas/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Alarmas/target/generated-sources/protobuf/grpc-java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Alarmas/target/generated-sources/protobuf/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Config/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Config/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Eureka/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Eureka/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ExposicionDatos/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ExposicionDatos/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/GestionSensores/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/GestionSensores/src/main/proto" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/GestionSensores/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/GestionSensores/target/generated-sources/protobuf/grpc-java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/GestionSensores/target/generated-sources/protobuf/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Informes/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Informes/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Informes/target/generated-sources/protobuf/grpc-java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Informes/target/generated-sources/protobuf/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Lecturas/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Lecturas/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Lecturas/target/generated-sources/protobuf/grpc-java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Lecturas/target/generated-sources/protobuf/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Login/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Login/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ReportesAnomalias/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ReportesAnomalias/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>

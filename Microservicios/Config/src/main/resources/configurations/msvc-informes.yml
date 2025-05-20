@@ -6,8 +6,16 @@ spring:
     name: msvc-informes
   data:
     mongodb:
-      database: lecturas_informes_db
+      database: lecturas_db
       uri: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
+
+grpc:
+  client:
+    gestion-sensores-service:
+      address: static://localhost:9090
+      negotiation-type: TLS
+      security:
+        trust-cert-collection: classpath:certs/localhost.cert.pem
 
 management:
   tracing:

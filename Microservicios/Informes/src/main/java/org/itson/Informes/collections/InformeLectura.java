@@ -31,7 +31,6 @@ public class InformeLectura {
     private String nombreInvernadero;
     private String sector;
     private String fila;
-    private boolean estado;
 
     public InformeLectura(LecturaDTO dto) {
 
@@ -52,6 +51,5 @@ public class InformeLectura {
         this.nombreInvernadero = dto.getNombreInvernadero();
         this.sector = dto.getSector();
         this.fila = dto.getFila();
-        this.estado = dto.isEstado();
     }
 }

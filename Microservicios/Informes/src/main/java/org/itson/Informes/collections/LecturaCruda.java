@@ -1,16 +1,21 @@
-package org.itson.Informes.dtos;
+package org.itson.Informes.collections;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import java.util.Date;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LecturaDTO {
 
-    private String _id;
+public class LecturaCruda {
+
+    @Id
+    private ObjectId _id;
+
     private String idSensor;
     private String macAddress;
     private String marca;

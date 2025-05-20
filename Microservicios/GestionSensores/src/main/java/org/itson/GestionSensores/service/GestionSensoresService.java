@@ -9,7 +9,6 @@ import org.itson.GestionSensores.dtos.SensorDTO;
 import org.itson.GestionSensores.excepciones.GestionSensoresException;
 import org.itson.GestionSensores.persistence.IGestionSensoresRepository;
 import org.itson.GestionSensores.persistence.IInvernaderosRepository;
-import org.itson.GestionSensores.proto.ClienteEstadoSensoresGrpc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.itson.GestionSensores.dtos.InvernaderoBasicoDTO;
@@ -31,9 +30,6 @@ public class GestionSensoresService {
 
     @Autowired
     private IInvernaderosRepository invernaderosRepository;
-
-    @Autowired
-    ClienteEstadoSensoresGrpc clienteEstadoSensoresGrpc;
 
     /**
      * Método que obtiene todos los sensores.
@@ -91,12 +87,6 @@ public class GestionSensoresService {
         } catch (MongoWriteException mwe) {
             throw new GestionSensoresException("Error al guardar el sensor: " + mwe.getMessage());
         }
-        // Actualizar estados gRPC
-        try {
-            clienteEstadoSensoresGrpc.actualizarEstados();
-        } catch (Exception e) {
-            System.err.println("Error al actualizar estados gRPC: " + e.getMessage());
-        }
         // Convertir entidad a DTO y devolver
         return convertirSensorEntidadDTO(resultado);
     }
@@ -132,12 +122,6 @@ public class GestionSensoresService {
             } catch (MongoWriteException mwe) {
                 throw new GestionSensoresException("Ya hay un sensor con la dirección MAC: " + sensorDTO.getMacAddress() + ".");
             }
-            // Actualizar estados gRPC
-            try {
-                clienteEstadoSensoresGrpc.actualizarEstados();
-            } catch (Exception e) {
-                System.err.println("Error al actualizar estados gRPC: " + e.getMessage());
-            }
             // Convertir entidad a DTO y devolver
             return convertirSensorEntidadDTO(resultado);
         } else {
@@ -157,12 +141,6 @@ public class GestionSensoresService {
             gestionSensoresRepository.delete(sensorObtenido.get());
         } else {
             throw new GestionSensoresException("Sensor con ID " + id + " no encontrado.");
-        }
-        // Actualizar estados gRPC
-        try {
-            clienteEstadoSensoresGrpc.actualizarEstados();
-        } catch (Exception e) {
-            System.err.println("Error al actualizar estados gRPC: " + e.getMessage());
         }
     }
 

@@ -13,11 +13,10 @@ spring:
 grpc:
   server:
     port: 9090
-  client:
-    estado-sensores:
-      address: static://localhost:50051
-      negotiation-type: plaintext
-      enable-keep-alive: true
+    security:
+      enabled: true
+      certificate-chain: classpath:certs/localhost.crt
+      private-key: classpath:certs/localhost.pem
 
 management:
   tracing:
