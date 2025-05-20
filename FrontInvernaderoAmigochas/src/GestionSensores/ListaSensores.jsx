@@ -33,9 +33,13 @@ function ListaSensores() {
                 // Cargar sensores de la API usando el método actualizado
                 const sensoresData = await obtenerSensoresPorInvernadero(invernaderoId);
                 setSensores(sensoresData);
+                // No establecemos mensaje de error si no hay sensores, es una situación normal
             } catch (err) {
                 console.error('Error al cargar datos:', err);
-                setError('No pudimos cargar los sensores. Por favor, intenta de nuevo.');
+                // Solo establecemos error si es un problema de conexión u otro error grave
+                if (err.message.includes('Error de conexión') || err.message.includes('Error al obtener')) {
+                    setError('No pudimos cargar los sensores. Por favor, intenta de nuevo.');
+                }
             } finally {
                 setLoading(false);
             }
@@ -464,3 +468,4 @@ function ListaSensores() {
 }
 
 export default ListaSensores;
+

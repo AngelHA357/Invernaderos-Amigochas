@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
 import { registrarAlarma } from '../services/alarmaService';
@@ -21,6 +21,7 @@ function AgregarAlarma() {
   const [loadingInvernaderos, setLoadingInvernaderos] = useState(true);
   const [loadingSensores, setLoadingSensores] = useState(false);
   const [invernaderoSeleccionado, setInvernaderoSeleccionado] = useState(null);
+  const [ultimoInvernaderoConSensores, setUltimoInvernaderoConSensores] = useState(null);
 
   const formas_notificacion = [
     { id: 'SMS', name: 'Mensaje de texto' },
@@ -50,33 +51,76 @@ function AgregarAlarma() {
         try {
           const data = await obtenerSensoresPorInvernadero(formData.invernadero);
           setSensores(data);
+
           // Buscar el invernadero seleccionado para guardar su nombre
           const invernaderoObj = invernaderos.find(inv => inv.id === formData.invernadero);
-          setInvernaderoSeleccionado(invernaderoObj);
-          // Limpiar sensores seleccionados si cambiamos de invernadero
-          setFormData((prev) => ({ ...prev, sensores: [] }));
+
+          if (invernaderoObj) {
+            // Si hay sensores, actualizamos el estado y guardamos este invernadero como el último válido
+            if (data.length > 0) {
+              setInvernaderoSeleccionado(invernaderoObj);
+              setUltimoInvernaderoConSensores(invernaderoObj);
+              // Limpiar sensores seleccionados si cambiamos de invernadero
+              setFormData((prev) => ({ ...prev, sensores: [] }));
+            } else {
+              // Si no hay sensores y tenemos un invernadero anterior con sensores, volver a ese
+              if (ultimoInvernaderoConSensores) {
+                alert(`No hay sensores disponibles en el invernadero ${invernaderoObj.name}. Seleccione otro invernadero.`);
+                setFormData(prev => ({
+                  ...prev,
+                  invernadero: ultimoInvernaderoConSensores.id
+                }));
+                setInvernaderoSeleccionado(ultimoInvernaderoConSensores);
+              } else {
+                setInvernaderoSeleccionado(invernaderoObj);
+                alert(`No hay sensores disponibles en el invernadero ${invernaderoObj.name}. Por favor, agregue sensores a este invernadero.`);
+              }
+            }
+          }
         } catch (err) {
-          alert('Error al cargar los sensores. Inténtalo de nuevo.');
+          console.error('Error al cargar sensores:', err);
+          setSensores([]);
         } finally {
           setLoadingSensores(false);
         }
       } else {
         setSensores([]);
         setInvernaderoSeleccionado(null);
-        setFormData((prev) => ({ ...prev, sensores: [] }));
       }
     };
     loadSensores();
-  }, [formData.invernadero, invernaderos]);
+  }, [formData.invernadero, invernaderos, ultimoInvernaderoConSensores]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Determinar el tipo de sensor seleccionado actualmente para restringir la selección
+  const tipoSensorSeleccionado = useMemo(() => {
+    // Si ya hay sensores seleccionados, obtener el tipo del primer sensor
+    if (formData.sensores.length > 0) {
+      const primerSensorId = formData.sensores[0];
+      const primerSensor = sensores.find(s => s.id === primerSensorId);
+      return primerSensor?.type || null;
+    }
+    return null; // No hay tipo seleccionado aún
+  }, [formData.sensores, sensores]);
+
   const handleSensorChange = (e) => {
     const selectedId = e.target.value;
     if (selectedId && !formData.sensores.includes(selectedId)) {
+      const sensorSeleccionado = sensores.find(s => s.id === selectedId);
+
+      // Verificar si ya hay un tipo de sensor seleccionado
+      if (formData.sensores.length > 0 && sensorSeleccionado) {
+        // Si el tipo del nuevo sensor es diferente, mostrar un mensaje y no agregarlo
+        if (tipoSensorSeleccionado !== sensorSeleccionado.type) {
+          alert(`Solo puede seleccionar sensores del mismo tipo (${tipoSensorSeleccionado}).`);
+          return;
+        }
+      }
+
       setFormData({ ...formData, sensores: [...formData.sensores, selectedId] });
     }
   };
@@ -308,4 +352,3 @@ function AgregarAlarma() {
 }
 
 export default AgregarAlarma;
-
