@@ -158,31 +158,37 @@ function EditarAlarma() {
     e.preventDefault();
     if (validateForm()) {
       try {
-        // Obtener magnitud y unidad del primer sensor seleccionado
-        const primerSensor = sensores.find((s) => s.id === formData.sensores[0]);
-        if (!primerSensor) {
-          alert('Error: No se encontró el sensor seleccionado.');
-          return;
+        // Intentar obtener magnitud y unidad del primer sensor seleccionado
+        // Si no hay un sensor correspondiente en la lista actual, usamos los valores guardados anteriormente
+        let magnitud = formData.magnitud;
+        let unidad = formData.unidad;
+
+        const primerSensorId = formData.sensores[0];
+        const primerSensor = sensores.find(s => s.id === primerSensorId);
+
+        if (primerSensor) {
+          magnitud = primerSensor.type;
+          unidad = primerSensor.magnitud;
         }
 
         const alarmaDTO = {
           idAlarma: formData.idAlarma,
-          magnitud: primerSensor.type,
+          magnitud: magnitud,
           sensores: formData.sensores,
           invernadero: formData.invernaderoNombre, // Usar el nombre del invernadero, no el ID
           valorMinimo: parseFloat(formData.valorMinimo),
           valorMaximo: parseFloat(formData.valorMaximo),
-          unidad: primerSensor.magnitud,
+          unidad: unidad,
           medioNotificacion: formData.medioNotificacion,
           activo: formData.activo,
         };
         
-        console.log('Enviando datos para actualizar:', alarmaDTO); // Depuración
+        console.log('Enviando datos para actualizar:', alarmaDTO);
         await editarAlarma(alarmaDTO);
         setShowModal(true);
       } catch (err) {
         console.error('Error al actualizar la alarma:', err);
-        alert('Error al actualizar la alarma. Inténtalo de nuevo.');
+        alert('Error al actualizar la alarma: ' + err.message);
       }
     }
   };
@@ -403,3 +409,4 @@ function EditarAlarma() {
 }
 
 export default EditarAlarma;
+

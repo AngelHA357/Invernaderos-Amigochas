@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
-import { useApiService } from '../services/ApiService';
 import { obtenerInvernaderos } from '../services/sensorService';
 import { useAuth } from '../context/AuthContext';
 

@@ -1,5 +1,4 @@
 // sensorService.js
-import { useApiService } from './ApiService';
 
 const API_BASE_URL = '/api/v1/gestionSensores';
 
@@ -65,27 +64,47 @@ export const obtenerSensoresPorInvernadero = async (invernaderoId) => {
       { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' } :
       { 'Content-Type': 'application/json' };
 
-    const response = await fetch(`http://localhost:8080${API_BASE_URL}/invernadero/${invernaderoId}/sensores`, {
-      headers
-    });
+    // Asegurarnos de que la URL coincide exactamente con la definida en el controlador del backend
+    const url = `http://localhost:8080${API_BASE_URL}/invernadero/${invernaderoId}/sensores`;
+    console.log(`Consultando sensores en: ${url}`);
+
+    const response = await fetch(url, { headers });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.mensaje || 'Error al obtener sensores del invernadero');
+      if (response.status === 401) {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('username');
+        throw new Error('Sesión expirada. Por favor, inicie sesión nuevamente.');
+      }
+
+      let errorMessage = 'Error al obtener sensores del invernadero';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.mensaje || errorMessage;
+      } catch (e) {
+        // Si no se puede parsear el error, usamos el mensaje genérico
+      }
+
+      throw new Error(errorMessage);
     }
     
     const data = await response.json();
     
-    // Transformar formato de respuesta para frontend
+    if (!data || !Array.isArray(data)) {
+      throw new Error('Formato de respuesta inesperado al obtener sensores');
+    }
+
+    // Transformar formato de respuesta para frontend según la estructura del DTO en el backend
     return data.map(sensor => ({
       id: sensor.idSensor,
       invernaderoId: sensor.idInvernadero,
-      type: sensor.tipoSensor,
-      status: sensor.estado ? 'Activo' : 'Inactivo',
+      type: sensor.tipoSensor || sensor.magnitud, // Manejar ambos posibles nombres de campo
+      status: sensor.estado === true || sensor.estado === 'true' ? 'Activo' : 'Inactivo',
       marca: sensor.marca,
       modelo: sensor.modelo,
       macAddress: sensor.macAddress,
-      magnitud: sensor.magnitud,
+      magnitud: sensor.unidad || sensor.magnitud, // Manejar ambos posibles nombres de campo
       sector: sensor.sector,
       fila: sensor.fila,
       _id: sensor._id  // Guardamos el ID de MongoDB

@@ -107,8 +107,9 @@ function AgregarAlarma() {
       try {
         // Obtener magnitud y unidad del primer sensor seleccionado
         const primerSensor = sensores.find((s) => s.id === formData.sensores[0]);
+
         if (!primerSensor) {
-          alert('Error: No se encontró el sensor seleccionado.');
+          alert('Error: No se encontró información del sensor seleccionado. Por favor, seleccione otro sensor.');
           return;
         }
 
@@ -123,10 +124,13 @@ function AgregarAlarma() {
           medioNotificacion: formData.medioNotificacion,
           activo: true,
         };
+
+        console.log("Enviando datos para registrar alarma:", alarmaDTO);
         await registrarAlarma(alarmaDTO);
         setShowModal(true);
       } catch (err) {
-        alert('Error al registrar la alarma. Inténtalo de nuevo.');
+        console.error('Error al registrar la alarma:', err);
+        alert(`Error al registrar la alarma: ${err.message}`);
       }
     }
   };
@@ -304,3 +308,4 @@ function AgregarAlarma() {
 }
 
 export default AgregarAlarma;
+
