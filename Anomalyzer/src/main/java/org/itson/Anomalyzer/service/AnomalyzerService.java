@@ -10,6 +10,7 @@ import org.itson.Anomalyzer.collections.Anomalia;
 import org.itson.Anomalyzer.dtos.AlarmaAnomaliaDTO;
 import org.itson.Anomalyzer.dtos.AlarmaDTO;
 import org.itson.Anomalyzer.dtos.AnomaliaDTO;
+import org.itson.Anomalyzer.dtos.AnomaliaResponseDTO;
 import org.itson.Anomalyzer.encriptadores.EncriptadorRSA;
 import org.itson.Anomalyzer.persistence.anomalias.IAnomaliasRepository;
 import org.itson.Anomalyzer.persistence.alarmas.IAlarmasRepository;
@@ -19,8 +20,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class AnomalyzerService {
@@ -97,5 +99,79 @@ public class AnomalyzerService {
 
     public void desactivarAlarma(AlarmaDTO alarmaDetonadora) {
         clienteAlarmasGrpc.desactivarAlarma(alarmaDetonadora);
+    }
+
+    public List<AnomaliaResponseDTO> obtenerAnomaliasPorFechas(String fechaInicioStr, String fechaFinStr) {
+        // Convertir strings de fecha a Date (el formato debe coincidir con lo que envía el frontend)
+        // El frontend envía YYYY-MM-DD. Necesitamos construir el rango del día completo.
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date fechaInicio;
+        Date fechaFin;
+        try {
+            Date inicio = sdf.parse(fechaInicioStr);
+            // Para el fin, tomamos el final del día
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(sdf.parse(fechaFinStr));
+            cal.set(Calendar.HOUR_OF_DAY, 23);
+            cal.set(Calendar.MINUTE, 59);
+            cal.set(Calendar.SECOND, 59);
+            cal.set(Calendar.MILLISECOND, 999);
+            fechaFin = cal.getTime();
+            fechaInicio = inicio; // Inicio del día ya está bien
+        } catch (ParseException e) {
+            System.err.println("Error al parsear fechas: " + e.getMessage());
+            // Considerar lanzar una excepción o devolver lista vacía con error
+            return Collections.emptyList();
+        }
+
+        System.out.println("[AnomalyzerService INFO] Buscando anomalías entre " + fechaInicio + " y " + fechaFin);
+        List<Anomalia> anomalias = anomaliasRepository.findByFechaHoraBetween(fechaInicio, fechaFin);
+        if (anomalias.isEmpty()) {
+            System.out.println("[AnomalyzerService INFO] No se encontraron anomalías para el rango de fechas.");
+            return Collections.emptyList();
+        }
+
+        List<AnomaliaResponseDTO> dtos = new ArrayList<>();
+        for (Anomalia anomalia : anomalias) {
+            // TODO: Determinar si la anomalía tiene reporte.
+            // Esto podría requerir una llamada a ReportesAnomaliasService
+            // o si ReportesAnomalias guarda el idAnomalia en su reporte.
+            // Por ahora, lo dejaremos como 'false'.
+            boolean tieneReporte = verificarSiAnomaliaTieneReporte(anomalia.get_id().toString());
+            // Necesitamos implementar esta lógica
+
+            dtos.add(convertirAnomaliaAAnomaliaResponseDTO(anomalia, tieneReporte));
+        }
+        System.out.println("[AnomalyzerService INFO] Encontradas " + dtos.size() + " anomalías.");
+        return dtos;
+    }
+
+    // Método helper para convertir Anomalia (entidad) a AnomaliaResponseDTO
+    private AnomaliaResponseDTO convertirAnomaliaAAnomaliaResponseDTO(Anomalia anomalia, boolean tieneReporte) {
+        return new AnomaliaResponseDTO(
+                anomalia.get_id().toString(),
+                anomalia.getIdSensor(),
+                anomalia.getMacAddress(),
+                anomalia.getMarca(),
+                anomalia.getModelo(),
+                anomalia.getMagnitud(),
+                anomalia.getUnidad(),
+                anomalia.getValor(),
+                anomalia.getFechaHora(),
+                anomalia.getIdInvernadero(),
+                anomalia.getNombreInvernadero(),
+                anomalia.getSector(),
+                anomalia.getFila(),
+                anomalia.getCausa(),
+                tieneReporte
+        );
+    }
+
+    private boolean verificarSiAnomaliaTieneReporte(String idAnomalia) {
+        System.out.println("[AnomalyzerService DEBUG] Verificando reporte para anomalía ID: " + idAnomalia + " (lógica no implementada, devolviendo false)");
+        // Ejemplo si ReportesAnomalias tuviera un endpoint o si hubiera una colección de reportes aquí:
+        // Reporte reporte = reporteRepository.findByIdAnomalia(idAnomalia);
+        // return reporte != null;
+        return false;
     }
 }

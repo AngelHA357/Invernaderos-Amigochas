@@ -5,23 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9879af79-ecd7-44bc-bb39-f33813800b81" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/configurations/AnomaliaDBConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/configurations/MongoConfiguration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/dtos/DatosFaltantesDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/proto/ClienteGestionSensoresGrpc.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/proto/lecturas.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/resources/certs/localhost.cert.pem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/controller/AnomalyzerController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/dtos/AnomaliaResponseDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-reportes-anomalias.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-reportes-anomalias.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/service/GestionSensoresService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/service/GestionSensoresService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/collections/Anomalia.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/collections/Anomalia.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/comunicacion/RabbitMQReceptor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/controller/ReportesAnomaliasController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/controller/ReportesAnomaliasController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/IAnomaliasRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/anomalias/IAnomaliasRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/IReportesAnomaliasRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/reportes/IReportesAnomaliasRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/service/ReportesAnomaliasService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/service/ReportesAnomaliasService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/persistence/anomalias/IAnomaliasRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/persistence/anomalias/IAnomaliasRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/AnomalyzerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/AnomalyzerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/Anomalias/AlertasRecientes.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/Anomalias/AlertasRecientes.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/Anomalias/TarjetaAlerta.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/Anomalias/TarjetaAlerta.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/src/main/java/org/itson/APIGateway/config/GatewayCorsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/APIGateway/src/main/java/org/itson/APIGateway/config/GatewayCorsConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-gestion-sensores.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-gestion-sensores.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +60,7 @@
     &quot;Maven.Anomalyzer [clean].executor&quot;: &quot;Run&quot;,
     &quot;Maven.Anomalyzer [compile].executor&quot;: &quot;Run&quot;,
     &quot;Maven.Anomalyzer [depenency-tree].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Anomalyzer [install].executor&quot;: &quot;Run&quot;,
     &quot;Maven.Anomalyzer [package].executor&quot;: &quot;Run&quot;,
     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
@@ -77,7 +71,7 @@
     &quot;Spring Boot.AnomalyzerApplication.executor&quot;: &quot;Run&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/ricar/OneDrive/Documentos/Sistemas Distribuidos/Invernaderos-Amigochas/Anomalyzer/src/main/resources/keys&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Dell/OneDrive/Documentos/GitHub/Invernaderos-Amigochas/Anomalyzer&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -143,8 +137,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.23774.435" />
+        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-IU-251.23774.435" />
       </set>
     </attachedChunks>
   </component>
@@ -174,6 +168,8 @@
       <workItem from="1747710263365" duration="2000" />
       <workItem from="1747710602808" duration="2070000" />
       <workItem from="1747715713640" duration="4627000" />
+      <workItem from="1747744191174" duration="5866000" />
+      <workItem from="1747768008167" duration="96000" />
     </task>
     <servers />
   </component>
