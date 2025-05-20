@@ -38,6 +38,20 @@ function App() {
                             <ListaSensores />
                         </ProtectedRoute>
                     } />
+
+                    {/* Rutas actualizadas para agregar/editar sensores */}
+                    <Route path="/invernaderos/:invernaderoId/sensores/agregar" element={
+                        <ProtectedRoute requiredResource="gestionSensores">
+                            <AgregarSensor />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/invernaderos/:invernaderoId/sensores/editar/:sensorId" element={
+                        <ProtectedRoute requiredResource="gestionSensores">
+                            <EditarSensor />
+                        </ProtectedRoute>
+                    } />
+
+                    {/* Mantener también las rutas antiguas para compatibilidad */}
                     <Route path="/sensores/agregar" element={
                         <ProtectedRoute requiredResource="gestionSensores">
                             <AgregarSensor />
@@ -48,6 +62,7 @@ function App() {
                             <EditarSensor />
                         </ProtectedRoute>
                     } />
+
                     <Route path="/alarmas" element={
                         <ProtectedRoute requiredResource="alarmas">
                             <ListaAlarmas />
@@ -90,3 +105,4 @@ function App() {
 }
 
 export default App;
+

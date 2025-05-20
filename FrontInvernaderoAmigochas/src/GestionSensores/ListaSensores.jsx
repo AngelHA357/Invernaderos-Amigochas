@@ -26,11 +26,11 @@ function ListaSensores() {
                 if (invernaderoData) {
                     setInvernadero(JSON.parse(invernaderoData));
                 } else {
-                    navigate('/');
+                    navigate('/invernaderos');
                     return;
                 }
                 
-                // Cargar sensores de la API
+                // Cargar sensores de la API usando el método actualizado
                 const sensoresData = await obtenerSensoresPorInvernadero(invernaderoId);
                 setSensores(sensoresData);
             } catch (err) {
@@ -49,12 +49,14 @@ function ListaSensores() {
     };
 
     const handleAgregarSensor = () => {
-        navigate('/sensores/agregar');
+        // Guardamos el ID del invernadero en sessionStorage para usarlo en el formulario de agregar
+        sessionStorage.setItem('invernaderoIdSeleccionado', invernaderoId);
+        navigate(`/invernaderos/${invernaderoId}/sensores/agregar`);
     };
 
     const handleEditarSensor = (sensor) => {
         sessionStorage.setItem('sensorSeleccionado', JSON.stringify(sensor));
-        navigate(`/sensores/editar/${sensor.id}`);
+        navigate(`/invernaderos/${invernaderoId}/sensores/editar/${sensor.id}`);
     };
 
     const handleEliminarSensor = (sensor) => {
@@ -65,13 +67,13 @@ function ListaSensores() {
     const confirmarEliminarSensor = async () => {
         try {
             setLoading(true);
-            // Usar el ID adecuado para eliminar (idSensor o _id dependiendo de tu API)
-            const idParaEliminar = sensorToDelete._id || sensorToDelete.id;
+            // Usar el ID adecuado para eliminar (preferimos _id de MongoDB)
+            const idParaEliminar = sensorToDelete._id;
             await eliminarSensor(idParaEliminar);
             
             // Actualizar el estado local eliminando el sensor
-            setSensores(prevSensores => prevSensores.filter(sensor => sensor.id !== sensorToDelete.id));
-            
+            setSensores(prevSensores => prevSensores.filter(sensor => sensor._id !== sensorToDelete._id));
+
             setShowDeleteModal(false);
             // Mostrar mensaje de éxito
             alert(`El sensor ${sensorToDelete?.id} ha sido eliminado correctamente`);
@@ -110,18 +112,11 @@ function ListaSensores() {
             setLoading(true);
             
             // Clonar el sensor actual y cambiar su estado
+            const nuevoEstado = sensor.status === 'Activo' ? 'Inactivo' : 'Activo';
+
             const sensorActualizado = {
-                _id: sensor._id,
-                idSensor: sensor.id,
-                macAddress: sensor.macAddress || '',
-                marca: sensor.marca || '',
-                modelo: sensor.modelo || '',
-                tipoSensor: sensor.type,
-                magnitud: sensor.magnitud || '',
-                idInvernadero: sensor.invernaderoId,
-                sector: sensor.sector || '',
-                fila: sensor.fila || '',
-                estado: sensor.status !== 'Activo' // Invertir el estado actual
+                ...sensor,
+                status: nuevoEstado
             };
             
             await editarSensor(sensorActualizado);
@@ -131,7 +126,7 @@ function ListaSensores() {
                 if (s.id === sensor.id) {
                     return {
                         ...s,
-                        status: s.status === 'Activo' ? 'Inactivo' : 'Activo'
+                        status: nuevoEstado
                     };
                 }
                 return s;
@@ -171,11 +166,11 @@ function ListaSensores() {
                                 <span className="text-2xl" role="img" aria-label="invernadero">🌱</span>
                             </div>
                             <div>
-                                <h1 className="text-2xl font-bold text-gray-800">{invernadero.name}</h1>
+                                <h1 className="text-2xl font-bold text-gray-800">{invernadero?.name}</h1>
                                 <div className="flex flex-wrap items-center gap-2 mt-1">
                                     <div className="flex items-center gap-1">
                                         <span className="text-sm text-green-600">Sectores:</span>
-                                        {invernadero.sectores && invernadero.sectores.length > 0 ? (
+                                        {invernadero?.sectores && invernadero.sectores.length > 0 ? (
                                             <div className="flex flex-wrap gap-1">
                                                 {invernadero.sectores.map((sector, idx) => (
                                                     <span key={idx} className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
@@ -189,7 +184,7 @@ function ListaSensores() {
                                     </div>
                                     <div className="flex items-center gap-1">
                                         <span className="text-sm text-green-600">Filas:</span>
-                                        {invernadero.filas && invernadero.filas.length > 0 ? (
+                                        {invernadero?.filas && invernadero.filas.length > 0 ? (
                                             <div className="flex flex-wrap gap-1">
                                                 {invernadero.filas.map((fila, idx) => (
                                                     <span key={idx} className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
@@ -204,7 +199,7 @@ function ListaSensores() {
                                 </div>
                             </div>
                         </div>
-                        <button 
+                        <button
                             onClick={volverAInvernaderos}
                             className="px-4 py-2 bg-green-100 rounded-md text-green-700 hover:bg-green-200 transition-colors duration-300 flex items-center shadow-sm">
                             <span className="mr-1">←</span> Volver a Invernaderos
@@ -226,8 +221,8 @@ function ListaSensores() {
                                 <span className="text-green-500 mr-2">📊</span>
                                 <h2 className="text-xl font-semibold text-gray-700">Sensores Disponibles</h2>
                             </div>
-                            <button 
-                                onClick={handleAgregarSensor} 
+                            <button
+                                onClick={handleAgregarSensor}
                                 className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300 flex items-center shadow-sm">
                                 <span className="mr-1">+</span> Agregar sensor
                             </button>
@@ -285,13 +280,13 @@ function ListaSensores() {
                                                     <div className="text-sm text-gray-500">{sensor.modelo || 'N/A'}</div>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
-                                                    <button 
-                                                        onClick={() => handleCambiarEstado(sensor)} 
-                                                        className={`relative inline-flex items-center h-6 rounded-full w-11 
+                                                    <button
+                                                        onClick={() => handleCambiarEstado(sensor)}
+                                                        className={`relative inline-flex items-center h-6 rounded-full w-11
                                                             ${sensor.status === 'Activo' ? 'bg-green-600' : 'bg-gray-400'}`}
                                                     >
                                                         <span className="sr-only">Cambiar estado</span>
-                                                        <span 
+                                                        <span
                                                             className={`inline-block w-4 h-4 transform transition ease-in-out duration-200 rounded-full bg-white
                                                                 ${sensor.status === 'Activo' ? 'translate-x-6' : 'translate-x-1'}`}
                                                         />
@@ -302,17 +297,17 @@ function ListaSensores() {
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                                     <div className="flex justify-center space-x-2">
-                                                        <button 
+                                                        <button
                                                             onClick={() => handleVerDetalle(sensor)}
                                                             className="text-blue-600 hover:text-blue-900 bg-blue-100 px-2 py-1 rounded-full">
                                                             <span className="mr-1">🔍</span> Detalles
                                                         </button>
-                                                        <button 
+                                                        <button
                                                             onClick={() => handleEditarSensor(sensor)}
                                                             className="text-green-600 hover:text-green-900 bg-green-100 px-2 py-1 rounded-full">
                                                             <span className="mr-1">✏️</span> Editar
                                                         </button>
-                                                        <button 
+                                                        <button
                                                             onClick={() => handleEliminarSensor(sensor)}
                                                             className="text-red-600 hover:text-red-900 bg-red-100 px-2 py-1 rounded-full">
                                                             <span className="mr-1">🗑️</span> Eliminar
@@ -329,8 +324,8 @@ function ListaSensores() {
                                 <div className="text-5xl mb-4">🌱</div>
                                 <p className="text-lg font-medium text-gray-700 mb-2">No hay sensores registrados</p>
                                 <p className="text-green-600 mb-4">Este invernadero aún no tiene sensores configurados.</p>
-                                <button 
-                                    onClick={handleAgregarSensor} 
+                                <button
+                                    onClick={handleAgregarSensor}
                                     className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300 inline-flex items-center">
                                     <span className="mr-1">+</span> Agregar sensor ahora
                                 </button>
@@ -358,6 +353,7 @@ function ListaSensores() {
                             <button
                                 onClick={() => setShowDeleteModal(false)}
                                 className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition-colors"
+                                disabled={loading}
                             >
                                 Cancelar
                             </button>
@@ -382,13 +378,13 @@ function ListaSensores() {
                                 <span className="text-3xl mr-3">{getIconoSensor(sensorDetalle.type)}</span>
                                 <h3 className="text-xl font-bold text-gray-800">Sensor {sensorDetalle.id}</h3>
                             </div>
-                            <button 
+                            <button
                                 onClick={() => setShowDetalleModal(false)}
                                 className="text-gray-400 hover:text-gray-600 transition-colors text-xl">
                                 ✕
                             </button>
                         </div>
-                        
+
                         <div className="bg-gray-50 p-4 rounded-lg mb-4">
                             <div className="grid grid-cols-2 gap-6">
                                 <div>
@@ -410,7 +406,7 @@ function ListaSensores() {
                                         </p>
                                     </div>
                                 </div>
-                                
+
                                 <div>
                                     <h4 className="text-md font-semibold text-gray-700 mb-3 border-b pb-2">Fabricante</h4>
                                     <div className="space-y-2">
@@ -430,7 +426,7 @@ function ListaSensores() {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div className="bg-green-50 p-4 rounded-lg">
                             <h4 className="text-md font-semibold text-gray-700 mb-3 border-b pb-2">Ubicación</h4>
                             <div className="grid grid-cols-2 gap-6">
@@ -452,9 +448,9 @@ function ListaSensores() {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div className="flex justify-end mt-6">
-                            <button 
+                            <button
                                 onClick={() => setShowDetalleModal(false)}
                                 className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
                                 Cerrar

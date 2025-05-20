@@ -48,13 +48,8 @@ function BarraNavegacion() {
           Invernaderos
         </Link>
         
-        {/* Sensores - Solo visible para ADMIN y OPERATOR */}
-        {canAccess('gestionSensores') && (
-          <Link to="/sensores" className={navLinkClass("/sensores")}>
-            Sensores
-          </Link>
-        )}
-        
+        {/* Se eliminó la sección de Sensores ya que ahora forma parte de invernaderos */}
+
         {/* Alarmas - Solo visible para ADMIN y OPERATOR */}
         {canAccess('alarmas') && (
           <Link to="/alarmas" className={navLinkClass("/alarmas")}>
@@ -93,3 +88,4 @@ function BarraNavegacion() {
 }
 
 export default BarraNavegacion;
+
