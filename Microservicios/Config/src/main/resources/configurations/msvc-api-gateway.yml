@@ -50,6 +50,13 @@ spring:
           filters:
             - AuthenticationFilter
 
+        - id: anomalyzer
+          uri: lb://anomalyzer
+          predicates:
+            - Path=/api/v1/anomalyzer/**
+          filters:
+            - AuthenticationFilter
+
         - id: msvc-login
           uri: lb://msvc-login
           predicates:
