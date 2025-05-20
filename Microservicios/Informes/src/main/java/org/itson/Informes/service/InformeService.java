@@ -2,12 +2,11 @@ package org.itson.Informes.service;
 
 import com.google.protobuf.Timestamp;
 import org.bson.types.ObjectId;
+import org.itson.Informes.dtos.DatosFaltantesDTO;
 import org.itson.Informes.dtos.InformeResponseDTO;
 import org.itson.Informes.dtos.LecturaDTO;
 import org.itson.Informes.collections.LecturaCruda;
 import org.itson.Informes.proto.ClienteGestionSensoresGrpc;
-import org.itson.grpc.gestioninformes.LecturaEnriquecida;
-import org.itson.grpc.gestioninformes.LecturaOriginal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -66,9 +65,9 @@ public class InformeService {
         queryLecturasCrudas.addCriteria(Criteria.where("magnitud").in(magnitudesFiltro));
         queryLecturasCrudas.addCriteria(Criteria.where("fechaHora").gte(fechaInicioFiltro).lte(fechaFinFiltro));
 
-        List<LecturaCruda> lecturasDesdeMongo = mongoTemplate.find(queryLecturasCrudas, LecturaCruda.class, "lecturas");
+        List<LecturaCruda> lecturasObtenidas = mongoTemplate.find(queryLecturasCrudas, LecturaCruda.class, "lecturas");
 
-        if (lecturasDesdeMongo.isEmpty()) {
+        if (lecturasObtenidas.isEmpty()) {
             System.out.println("InformeService: No se encontraron lecturas crudas para los filtros dados.");
             return new InformeResponseDTO(
                     "Informe Vacío - Sin Lecturas", new Date(),
@@ -76,58 +75,18 @@ public class InformeService {
                     new ArrayList<>()
             );
         }
-        System.out.println("InformeService: " + lecturasDesdeMongo.size() + " lecturas crudas obtenidas de MongoDB.");
+        System.out.println("InformeService: " + lecturasObtenidas.size() + " lecturas crudas obtenidas de MongoDB.");
 
-        List<LecturaOriginal> lecturasOriginalesProto = new ArrayList<>();
-        for (LecturaCruda lecturaMongo : lecturasDesdeMongo) {
-            LecturaOriginal.Builder protoBuilder = LecturaOriginal.newBuilder();
-
-            if (lecturaMongo.get_id() != null) protoBuilder.setIdLectura(lecturaMongo.get_id().toString());
-            if (lecturaMongo.getIdSensor() != null) protoBuilder.setIdSensor(lecturaMongo.getIdSensor());
-            if (lecturaMongo.getMagnitud() != null) protoBuilder.setMagnitud(lecturaMongo.getMagnitud());
-            protoBuilder.setValor(lecturaMongo.getValor());
-            if (lecturaMongo.getFechaHora() != null) {
-                protoBuilder.setFechaHora(convertDateToTimestamp(lecturaMongo.getFechaHora()));
-            }
-            if (lecturaMongo.getIdInvernadero() != null) protoBuilder.setIdInvernadero(lecturaMongo.getIdInvernadero());
-
-            lecturasOriginalesProto.add(protoBuilder.build());
+        List<String> idSensores = new ArrayList<>();
+        for (LecturaCruda lectura : lecturasObtenidas) {
+            idSensores.add(lectura.getIdSensor());
         }
 
-        List<LecturaEnriquecida> lecturasEnriquecidasProto = clienteGestionSensores.enriquecerLecturasConDetallesSensor(lecturasOriginalesProto);
+        List<DatosFaltantesDTO> listaDatosFaltantes = clienteGestionSensores.obtenerDatosFaltantes(idSensores);
 
-        if (lecturasEnriquecidasProto.isEmpty() && !lecturasOriginalesProto.isEmpty()) {
-            System.err.println("InformeService: No se pudieron enriquecer las lecturas desde GestionSensores.");
-        }
+        List<LecturaDTO> lecturasEnriquecidas = enriquecerLecturas(listaDatosFaltantes, lecturasObtenidas);
 
-        List<LecturaDTO> lecturasFinalesParaInforme = new ArrayList<>();
-        for (LecturaEnriquecida proto : lecturasEnriquecidasProto) {
-
-            LecturaCruda originalCorrespondiente = lecturasDesdeMongo.stream()
-                    .filter(lc -> lc.get_id().toString().equals(proto.getIdLectura()))
-                    .findFirst().orElse(null);
-
-            LecturaDTO dto = new LecturaDTO();
-            dto.set_id(proto.getIdLectura());
-            dto.setIdSensor(proto.getIdSensor());
-            dto.setMagnitud(proto.getMagnitud());
-            dto.setValor(proto.getValor());
-            dto.setFechaHora(convertTimestampToDate(proto.getFechaHora()));
-            dto.setIdInvernadero(proto.getIdInvernadero());
-            dto.setSector(proto.getSector()); // Dato enriquecido
-            dto.setFila(proto.getFila());     // Dato enriquecido
-
-            if (originalCorrespondiente != null) {
-                dto.setMacAddress(originalCorrespondiente.getMacAddress());
-                dto.setMarca(originalCorrespondiente.getMarca());
-                dto.setModelo(originalCorrespondiente.getModelo());
-                dto.setUnidad(originalCorrespondiente.getUnidad());
-                dto.setNombreInvernadero(originalCorrespondiente.getNombreInvernadero());
-            }
-
-            lecturasFinalesParaInforme.add(dto);
-        }
-        System.out.println("InformeService: " + lecturasFinalesParaInforme.size() + " lecturas procesadas y mapeadas a DTO para el informe.");
+        System.out.println("InformeService: " + lecturasEnriquecidas.size() + " lecturas procesadas y mapeadas a DTO para el informe.");
 
         String titulo = String.format("Informe de %s para Invernaderos (%s) del %tF al %tF",
                 String.join(", ", magnitudesFiltro),
@@ -143,8 +102,37 @@ public class InformeService {
                 fechaInicioFiltro,
                 fechaFinFiltro,
                 magnitudesFiltro,
-                lecturasFinalesParaInforme
+                lecturasEnriquecidas
         );
+    }
+
+    private List<LecturaDTO> enriquecerLecturas(List<DatosFaltantesDTO> listaDatosFaltantes, List<LecturaCruda> lecturasDesdeMongo) {
+        List<LecturaDTO> lecturasEnriquecidas = new ArrayList<>();
+        for (LecturaCruda lectura : lecturasDesdeMongo) {
+            for (DatosFaltantesDTO datosFaltantes : listaDatosFaltantes) {
+                if (lectura.getIdSensor().equals(datosFaltantes.getIdSensor())) {
+                    lectura.setSector(datosFaltantes.getSector());
+                    lectura.setFila(datosFaltantes.getFila());
+                    lecturasEnriquecidas.add(new LecturaDTO(
+                            lectura.get_id().toString(),
+                            lectura.getIdSensor(),
+                            lectura.getMacAddress(),
+                            lectura.getMarca(),
+                            lectura.getModelo(),
+                            lectura.getMagnitud(),
+                            lectura.getUnidad(),
+                            lectura.getValor(),
+                            lectura.getFechaHora(),
+                            lectura.getIdInvernadero(),
+                            lectura.getNombreInvernadero(),
+                            lectura.getSector(),
+                            lectura.getFila()
+                    ));
+                    break;
+                }
+            }
+        }
+        return lecturasEnriquecidas;
     }
 
     /**
@@ -155,24 +143,6 @@ public class InformeService {
     public List<String> obtenerMagnitudesDisponibles() {
         Query query = new Query();
         return mongoTemplate.findDistinct(query, "magnitud", "lecturas", String.class);
-    }
-
-    private Timestamp convertDateToTimestamp(Date date) {
-        if (date == null) {
-            return Timestamp.newBuilder().build();
-        }
-        Instant instant = date.toInstant();
-        return Timestamp.newBuilder()
-                .setSeconds(instant.getEpochSecond())
-                .setNanos(instant.getNano())
-                .build();
-    }
-
-    private Date convertTimestampToDate(Timestamp timestamp) {
-        if (timestamp == null || (timestamp.getSeconds() == 0 && timestamp.getNanos() == 0)) {
-            return null;
-        }
-        return Date.from(Instant.ofEpochSecond(timestamp.getSeconds(), timestamp.getNanos()));
     }
 }
 

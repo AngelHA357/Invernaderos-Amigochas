@@ -5,7 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9879af79-ecd7-44bc-bb39-f33813800b81" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/AnomalyzerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/AnomalyzerService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/dtos/DatosFaltantesDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/dtos/DatosFaltantesDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/collections/Lectura.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/certs/localhost.cert.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/certs/localhost.crt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/certs/localhost.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-informes.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-informes.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/proto/ServidorLecturasGrpc.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/proto/ServidorLecturasGrpc.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/service/GestionSensoresService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/service/GestionSensoresService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/proto/lecturas.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/proto/lecturas.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/resources/certs/localhost.cert.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Informes/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/RabbitMQReceptor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/proto/ClienteGestionSensoresGrpc.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/proto/ClienteGestionSensoresGrpc.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/service/InformeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/service/InformeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/proto/lecturas.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Informes/src/main/proto/lecturas.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Informes/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/resources/certs/localhost.crt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/resources/certs/localhost.pem" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,6 +143,14 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -147,6 +174,9 @@
       <workItem from="1746434796124" duration="92000" />
       <workItem from="1747627234697" duration="1866000" />
       <workItem from="1747629140876" duration="8909000" />
+      <workItem from="1747710263365" duration="2000" />
+      <workItem from="1747710602808" duration="2070000" />
+      <workItem from="1747715713640" duration="1348000" />
     </task>
     <servers />
   </component>

@@ -4,6 +4,7 @@ import com.mongodb.MongoWriteException;
 import org.bson.types.ObjectId;
 import org.itson.GestionSensores.collections.Invernadero;
 import org.itson.GestionSensores.collections.Sensor;
+import org.itson.GestionSensores.dtos.DatosFaltantesDTO;
 import org.itson.GestionSensores.dtos.InvernaderoDTO;
 import org.itson.GestionSensores.dtos.SensorDTO;
 import org.itson.GestionSensores.excepciones.GestionSensoresException;
@@ -12,11 +13,9 @@ import org.itson.GestionSensores.persistence.IInvernaderosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.itson.GestionSensores.dtos.InvernaderoBasicoDTO;
-import java.util.stream.Collectors;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Clase de servicio para la gestión de sensores. Contiene las reglas de negocio.
@@ -297,6 +296,7 @@ public class GestionSensoresService {
     /**
      * Obtiene una lista simplificada (ID como String y Nombre) de todos los invernaderos
      * registrados, ideal para poblar selectores en el frontend.
+     *
      * @return Lista de InvernaderoBasicoDTO.
      * @throws GestionSensoresException Si ocurre un error al consultar la base de datos.
      */
@@ -316,5 +316,47 @@ public class GestionSensoresService {
             System.err.println("Error al obtener invernaderos básicos: " + e.getMessage());
             throw new GestionSensoresException("No se pudieron obtener los invernaderos.");
         }
+    }
+
+    public List<DatosFaltantesDTO> obtenerDatosSensores(List<String> idsSensores) {
+        // Mapa que actúa como caché: idSensor → List(sector, fila)
+        Map<String, List<String>> datosSensores = new HashMap<>();
+
+        // Mapa para evitar duplicados: idSensor → DatosFaltantesDTO
+        Map<String, DatosFaltantesDTO> datosFaltantesUnicos = new HashMap<>();
+
+        for (String idSensor : idsSensores) {
+            // Solo procesamos si no lo hemos visto antes
+            if (!datosFaltantesUnicos.containsKey(idSensor)) {
+                List<String> datos;
+
+                if (datosSensores.containsKey(idSensor)) {
+                    datos = datosSensores.get(idSensor);
+                } else {
+                    datos = obtenerDatosFaltantes(idSensor);
+                    datosSensores.put(idSensor, datos);
+                }
+
+                DatosFaltantesDTO dto = new DatosFaltantesDTO(idSensor);
+                dto.setSector(datos.get(0));
+                dto.setFila(datos.get(datos.size() - 1));
+                datosFaltantesUnicos.put(idSensor, dto);
+            }
+        }
+        // Devolvemos solo los datos únicos
+        return new ArrayList<>(datosFaltantesUnicos.values());
+    }
+
+    private List<String> obtenerDatosFaltantes(String idSensor) {
+        // Los vamos a buscar a la BD
+        Optional<Sensor> sensorObtenido = gestionSensoresRepository.findByIdSensor(idSensor);
+        if (!sensorObtenido.isPresent()) {
+        }
+        Sensor sensor = sensorObtenido.get();
+        String sector = sensor.getSector();
+        String fila = sensor.getFila();
+        // Creamos la lista con los datos y los mandamos
+        List<String> datos = Arrays.asList(sector, fila);
+        return datos;
     }
 }

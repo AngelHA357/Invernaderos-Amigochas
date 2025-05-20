@@ -1,40 +1,22 @@
 syntax = "proto3";
 
-option java_package = "org.itson.grpc.gestioninformes";
+option java_package = "org.itson.grpc.gestionInformes";
 option java_multiple_files = true;
 
-import "google/protobuf/timestamp.proto";
-
-message LecturaOriginal {
-  string id_lectura = 1;
-  string id_sensor = 2;
-  string magnitud = 6;
-  float valor = 8;
-  google.protobuf.Timestamp fecha_hora = 9;
-  string id_invernadero = 10;
+message DatosFaltantes {
+  string idSensor = 1;
+  string sector = 2;
+  string fila = 3;
 }
 
-message LecturaEnriquecida {
-  string id_lectura = 1;
-  string id_sensor = 2;
-  string magnitud = 6;
-  float valor = 8;
-  google.protobuf.Timestamp fecha_hora = 9;
-  string id_invernadero = 10;
-  string sector = 12;
-  string fila = 13;
+message SolicitudDatos {
+  repeated string idSensor = 1;
 }
 
-message SolicitudEnriquecimiento {
-  repeated LecturaOriginal lecturas = 1;
-}
-
-message RespuestaEnriquecimiento {
-  repeated LecturaEnriquecida lecturas_enriquecidas = 1;
+message RespuestaDatos {
+  repeated DatosFaltantes datosFaltantes = 1;
 }
 
 service ServicioGestionLecturas {
-  rpc EnriquecerLecturas(SolicitudEnriquecimiento) returns (RespuestaEnriquecimiento);
+  rpc obtenerDatosFaltantes(SolicitudDatos) returns (RespuestaDatos);
 }
-
-message Empty {}
