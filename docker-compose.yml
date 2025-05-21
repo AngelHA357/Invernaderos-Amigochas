@@ -78,6 +78,25 @@ services:
     environment:
       SPRING_DATA_MONGODB_URI: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
 
+  autenticacion-app:
+    image: autenticacion-imagen
+    container_name: autenticacion-service
+    build:
+      context: Autenticacion
+      dockerfile: Dockerfile
+    ports:
+      - "8100:8100"
+      - "9100:9100"
+
+  api-gateway-app:
+    image: api-gateway-imagen
+    container_name: api-gateway-service
+    build:
+      context: APIGateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+
   simulador-app:
     image: simulador-imagen
     container_name: simulador

@@ -11,7 +11,9 @@ spring:
       globalcors:
         corsConfigurations:
           '[/**]':
-            allowedOrigins: "http://localhost:5173"
+            allowedOrigins:
+              - "http://localhost:5173"
+              - "http://192.168.1.69:5173"
             allowedMethods: "*"
             allowedHeaders: "*"
             allowCredentials: true
@@ -19,28 +21,48 @@ spring:
         locator:
           enabled: true
       routes:
+        - id: svc-autenticacion
+          uri: http://autenticacion-service:8100
+          predicates:
+            - Path=/auth/**
+
         - id: msvc-gestion-sensores
-          uri: http://localhost:8090
+          uri: http://gestion-sensores-service:8090
           predicates:
             - Path=/api/v1/gestionSensores/**
+          filters:
+            - AuthenticationFilter
+
         - id: msvc-alarmas
-          uri: http://localhost:8093
+          uri: http://alarmas-service:8093
           predicates:
             - Path=/api/v1/alarmas/**
+          filters:
+            - AuthenticationFilter
+
         - id: msvc-lecturas
-          uri: http://localhost:8091
+          uri: http://lecturas-service:8091
           predicates:
             - Path=/api/v1/lecturas/**
+          filters:
+            - AuthenticationFilter
+
         - id: msvc-reportes-anomalias
-          uri: http://localhost:8092
+          uri: http://reportes-anomalias-service:8092
           predicates:
             - Path=/api/v1/reportesAnomalias/**
+          filters:
+            - AuthenticationFilter
+
         - id: svc-informes
-          uri: http://localhost:8099
+          uri: http://informes-service:8099
           predicates:
             - Path=/api/v1/informes/**
+          filters:
+            - AuthenticationFilter
+
         - id: msvc-login
-          uri: http://localhost:8095
+          uri: http://login-service:8095
           predicates:
             - Path=/api/v1/login
 
@@ -53,8 +75,11 @@ management:
 grpc:
   client:
     autenticacion-service:
-      address: static://localhost:9091
-      negotiationType: plaintext
+      address: static://autenticacion-service:9100
+      negotiation-type: TLS
+      security:
+        trust-cert-collection: classpath:certs/autenticacion-service.cert.pem
+      enable-keep-alive: true
 
 logging:
   level:

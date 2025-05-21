@@ -1,5 +1,5 @@
 server:
-  port: 8097
+  port: 8100
 
 spring:
   application:
@@ -10,7 +10,11 @@ spring:
 
 grpc:
   server:
-    port: 9091
+    port: 9100
+  security:
+    enabled: true
+    certificate-chain: classpath:certs/autenticacion-service.crt
+    private-key: classpath:certs/autenticacion-service.pem
 
 jwt:
   secret: "unaClaveSecretaMuyLargaYSeguraParaFirmarLosTokensJWT"
@@ -20,12 +24,3 @@ management:
   tracing:
     sampling:
       probability: 1.0
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-    register-with-eureka: true
-    fetch-registry: true
-  instance:
-    prefer-ip-address: true

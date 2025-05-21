@@ -5,68 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dfe9d1f7-0936-49ba-a9d1-fb14c5ec73f6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../Alarmator/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/certs/alarmas-service.cert.pem" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/certs/anomalyzer-service.crt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/certs/anomalyzer-service.pem" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ExposicionDatos/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Informes/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Informes/src/main/resources/certs/gestion-sensores-service.cert.pem" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/Login/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Simulador/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Autenticacion/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../APIGateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../APIGateway/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/comunication/AnomaliaConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/comunication/AnomaliaConsumer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/encriptadores/EncriptadorRSA.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/encriptadores/EncriptadorRSA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Alarmator/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Alarmator/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/.gitattributes" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/comunication/LecturaConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/comunication/LecturaConsumer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/encriptadores/EncriptadorRSA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/encriptadores/EncriptadorRSA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/proto/ClienteAlarmasGrpc.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/proto/ClienteAlarmasGrpc.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/proto/ServidorAnomalyzerGrpc.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/proto/ServidorAnomalyzerGrpc.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/AnomalyzerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/AnomalyzerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/proto/anomalyzer.proto" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/proto/anomalyzer.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/certs/localhost.cert.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/certs/localhost.crt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/certs/localhost.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/itson/Anomalyzer/AnomalyzerApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/itson/Anomalyzer/AnomalyzerApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/src/main/java/org/itson/gateway/encriptadores/EncriptadorRSA.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Gateway/src/main/java/org/itson/gateway/encriptadores/EncriptadorRSA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/src/main/java/org/itson/gateway/logica/Gateway.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Gateway/src/main/java/org/itson/gateway/logica/Gateway.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Informes/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Informes/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Informes/src/main/resources/certs/localhost.cert.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/proto/ClienteAnomalyzerGrpc.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/proto/ClienteAnomalyzerGrpc.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/proto/anomalyzer.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/proto/anomalyzer.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/resources/certs/localhost.cert.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/resources/certs/localhost.crt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/resources/certs/localhost.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/docker-compose.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/DataLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/DataLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/collections/Sensor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/collections/Sensor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/dtos/SensorDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/dtos/SensorDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/service/GestionSensoresService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/service/GestionSensoresService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/resources/certs/localhost.crt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/resources/certs/localhost.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/RabbitMQReceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/RabbitMQReceptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/encriptadores/EncriptadorRSA.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/encriptadores/EncriptadorRSA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/resources/certs/localhost.cert.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/encriptadores/EncriptadorRSA.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/encriptadores/EncriptadorRSA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/sensores/SensorHumedad.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/sensores/SensorHumedad.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/sensores/SensorTemperatura.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/sensores/SensorTemperatura.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/service/Simulador.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/service/Simulador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Autenticacion/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Autenticacion/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Autenticacion/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Autenticacion/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DTOs/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DTOs/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DTOs/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DTOs/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DTOs/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DTOs/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DTOs/src/main/java/org/itson/dtos/LecturaDTO.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,9 +32,9 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2xOvqtPxB6OGEX5rP0PioxHIjCz" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -106,7 +55,7 @@
     "Spring Boot.AnomalyzerApplication.executor": "Run",
     "git-widget-placeholder": "Empresariales",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Familia/Documents/GitHub/Invernaderos-Amigochas/Microservicios",
+    "last_opened_file_path": "C:/Users/Familia/Documents/GitHub/Invernaderos-Amigochas/Anomalyzer",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -152,6 +101,7 @@
       <updated>1730182693366</updated>
       <workItem from="1730182694407" duration="403000" />
       <workItem from="1747822129832" duration="4367000" />
+      <workItem from="1747827869343" duration="826000" />
     </task>
     <servers />
   </component>
