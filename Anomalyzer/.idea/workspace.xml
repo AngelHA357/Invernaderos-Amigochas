@@ -5,15 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9879af79-ecd7-44bc-bb39-f33813800b81" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/configurations/RestTemplateConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/dtos/AnomaliaResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/dtos/AnomaliaResponseDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/AnomalyzerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/AnomalyzerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/Anomalias/AlertasRecientes.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/Anomalias/AlertasRecientes.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-gestion-sensores.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-gestion-sensores.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/controller/ReportesAnomaliasController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/controller/ReportesAnomaliasController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/reportes/IReportesAnomaliasRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/reportes/IReportesAnomaliasRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/service/ReportesAnomaliasService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/service/ReportesAnomaliasService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-informes.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-informes.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,7 +164,7 @@
       <workItem from="1747744191174" duration="5866000" />
       <workItem from="1747768008167" duration="96000" />
       <workItem from="1747768171615" duration="3534000" />
-      <workItem from="1747796418277" duration="3557000" />
+      <workItem from="1747796418277" duration="7870000" />
     </task>
     <servers />
   </component>
