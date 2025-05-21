@@ -1,9 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { verificarReporteExistente } from '../services/ReporteService';
 
 // Props: tipo (para color/icono), tieneReporte, y 'tiempo' es una descripción
 function TarjetaAlerta({ id, invernadero, descripcion, tipo, tiempo }) {
     const navigate = useNavigate();
+    const [tieneReporte, setTieneReporte] = useState(false);
+    const [cargando, setCargando] = useState(false);
+
+    // Verificar si la anomalía ya tiene un reporte asociado
+    useEffect(() => {
+        const verificarReporte = async () => {
+            setCargando(true);
+            try {
+                const reporteExiste = await verificarReporteExistente(id);
+                setTieneReporte(reporteExiste);
+            } catch (error) {
+                console.error('Error al verificar reporte existente:', error);
+            } finally {
+                setCargando(false);
+            }
+        };
+
+        verificarReporte();
+    }, [id]);
 
     let colorBorde = 'border-yellow-400'; // Default
     let colorFondoHover = 'hover:bg-yellow-50';
@@ -42,6 +62,7 @@ function TarjetaAlerta({ id, invernadero, descripcion, tipo, tiempo }) {
 
     const handleReporteClick = () => {
         localStorage.setItem('alertaSeleccionadaId', id); 
+        // Si tiene reporte, navegar a la vista de reporte, de lo contrario a crear uno
         navigate(`/anomalias/${id}`);
     };
     
@@ -60,11 +81,21 @@ function TarjetaAlerta({ id, invernadero, descripcion, tipo, tiempo }) {
             <button 
                 className={`px-3 py-1.5 border rounded-md text-xs font-medium ${colorBoton} active:bg-opacity-80 transition-all duration-150 focus:outline-none focus:ring-2 whitespace-nowrap`}
                 onClick={handleReporteClick}
+                disabled={cargando}
             >
-                Levantar reporte
+                {cargando ? (
+                    <span className="inline-flex items-center">
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Verificando...
+                    </span>
+                ) : tieneReporte ? 'Ver reporte' : 'Levantar reporte'}
             </button>
         </div>
     );
 }
 
 export default TarjetaAlerta;
+

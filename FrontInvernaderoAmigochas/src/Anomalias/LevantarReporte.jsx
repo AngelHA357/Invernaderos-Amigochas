@@ -1,126 +1,99 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
-import { obtenerDetallesAnomalia, enviarReporte } from '../services/ReporteService';
+import { obtenerDetallesAnomalia, enviarReporte, verificarReporteExistente, obtenerReporteDeAnomalia } from '../services/ReporteService';
 
 function LevantarReporte() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [alerta, setAlerta] = useState(null);
+    const [reporteExistente, setReporteExistente] = useState(null);
     const [acciones, setAcciones] = useState('');
     const [notas, setNotas] = useState('');
     const [loading, setLoading] = useState(true);
     const [enviado, setEnviado] = useState(false);
     const [error, setError] = useState(null);
+    const [modoVisualizacion, setModoVisualizacion] = useState(false);
 
     useEffect(() => {
+        // Función para mapear los datos del backend al formato esperado por el frontend
+        const mapearDatosAnomalia = (datos) => {
+            // Si ya tiene los campos esperados, no hacer nada
+            if (datos.descripcion && datos.invernadero && (datos.temperatura || datos.humedad || datos.co2)) {
+                return datos;
+            }
+            // Mapear campos del backend a los del frontend
+            let tipo = datos.magnitud || datos.tipo || '';
+            let valor = datos.valor;
+            let unidad = datos.unidad || (tipo === 'Temperatura' ? '°C' : tipo === 'Humedad' ? '%' : tipo === 'CO2' ? 'ppm' : '');
+            let fechaObj = datos.fechaHora ? new Date(datos.fechaHora) : null;
+            let fecha = fechaObj ? fechaObj.toLocaleDateString('es-MX') : '';
+            let hora = fechaObj ? fechaObj.toLocaleTimeString('es-MX') : '';
+
+            // Adaptar valores según el tipo de magnitud y redondear a dos decimales
+            let valorFormateado = valor !== null && valor !== undefined ? Number(valor).toFixed(2) : valor;
+            let temperaturaValue = tipo === 'Temperatura' ? `${valorFormateado}${unidad}` : undefined;
+            let humedadValue = tipo === 'Humedad' ? `${valorFormateado}${unidad}` : undefined;
+            let co2Value = tipo === 'CO2' ? `${valorFormateado}${unidad}` : undefined;
+
+            return {
+                id: datos._id || datos.id || '',
+                descripcion: datos.causa || datos.descripcion || '',
+                invernadero: datos.nombreInvernadero || datos.invernadero || '',
+                temperatura: temperaturaValue,
+                humedad: humedadValue,
+                co2: co2Value,
+                fecha,
+                hora,
+                sensorId: datos.idSensor || datos.sensorId || '',
+                sensorMarca: datos.marca || datos.sensorMarca || '',
+                sensorModelo: datos.modelo || datos.sensorModelo || '',
+                tipo,
+                // Para compatibilidad
+                ...datos
+            };
+        };
+
         const cargarDatosAnomalia = async () => {
             try {
-                // Corregido: Usar 'alertaSeleccionadaId' en lugar de 'alertaSeleccionada'
-                // que es el nombre correcto usado en TarjetaAlerta.jsx
                 const alertaId = id || localStorage.getItem('alertaSeleccionadaId');
-
                 if (!alertaId) {
                     setError('No se ha especificado una alerta para generar el reporte.');
                     setLoading(false);
                     return;
                 }
-
-
                 console.log(`[LevantarReporte] Obteniendo detalles de anomalía con ID: ${alertaId}`);
 
-                // Obtener detalles de la anomalía desde el backend
+                // Verificar si la anomalía ya tiene un reporte
+                const tieneReporte = await verificarReporteExistente(alertaId);
+
+                // Obtener los datos de la anomalía
                 const datosAnomalia = await obtenerDetallesAnomalia(alertaId);
                 console.log('[LevantarReporte] Datos de anomalía recibidos:', datosAnomalia);
 
-                setAlerta(datosAnomalia);
+                // Mapear los datos de la anomalía al formato del frontend
+                setAlerta(mapearDatosAnomalia(datosAnomalia));
+
+                // Si ya existe un reporte, cargarlo
+                if (tieneReporte) {
+                    try {
+                        const datosReporte = await obtenerReporteDeAnomalia(alertaId);
+                        console.log('[LevantarReporte] Reporte existente:', datosReporte);
+                        setReporteExistente(datosReporte);
+                        setAcciones(datosReporte.acciones || '');
+                        setNotas(datosReporte.comentarios || '');
+                        setModoVisualizacion(true);
+                    } catch (reporteError) {
+                        console.error('Error al obtener reporte existente:', reporteError);
+                    }
+                }
+
                 setLoading(false);
             } catch (error) {
                 console.error('Error al cargar datos de la anomalía:', error);
-
-                // Si falla la conexión con el backend, usamos datos mockeados temporalmente
-                cargarDatosMockeados();
+                setError('Error al obtener datos de la anomalía. Por favor, inténtalo más tarde.');
+                setLoading(false);
             }
-        };
-
-        // Función para cargar datos mockeados (eliminar cuando el backend esté listo)
-        const cargarDatosMockeados = () => {
-            const alertaId = id || localStorage.getItem('alertaSeleccionada');
-
-            // Datos de prueba adaptados al formato del backend
-            const alertasMock = [
-                {
-                    _id: { $oid: "ALT-001" },
-                    idSensor: "SEN-0105",
-                    macAddress: "00:11:22:33:44:55",
-                    marca: "Stercn",
-                    modelo: "LM35",
-                    magnitud: "Temperatura",
-                    unidad: "°C",
-                    valor: 28.0,
-                    fechaHora: new Date("2025-04-17T10:15:32"),
-                    idInvernadero: "INV-003",
-                    nombreInvernadero: "Invernadero 3",
-                    sector: "A",
-                    fila: "5",
-                    causa: "Temperatura alta",
-                    // Campos adicionales para mantener compatibilidad con UI existente
-                    id: "ALT-001",
-                    invernadero: "Invernadero 3",
-                    descripcion: "Temperatura alta",
-                    tiempo: "5 minutos",
-                    temperatura: "28°C",
-                    fecha: "17/04/2025",
-                    hora: "10:15:32 a.m.",
-                    umbral: "25°C",
-                    sensorId: "SEN-0105",
-                    sensorMarca: "Stercn",
-                    sensorModelo: "LM35",
-                    ultimaCalibracion: "24/08/2024",
-                    duracion: "3 minutos",
-                    tipo: "Temperatura"
-                },
-                {
-                    _id: { $oid: "ALT-002" },
-                    idSensor: "SEN-0205",
-                    macAddress: "00:11:22:33:44:66",
-                    marca: "DFRobot",
-                    modelo: "DHT11",
-                    magnitud: "Humedad",
-                    unidad: "%",
-                    valor: 50.0,
-                    fechaHora: new Date("2025-04-17T09:45:10"),
-                    idInvernadero: "INV-001",
-                    nombreInvernadero: "Invernadero 1",
-                    sector: "B",
-                    fila: "3",
-                    causa: "Humedad baja",
-                    // Campos adicionales para mantener compatibilidad con UI existente
-                    id: "ALT-002",
-                    invernadero: "Invernadero 1",
-                    descripcion: "Humedad baja",
-                    tiempo: "15 minutos",
-                    humedad: "50%",
-                    fecha: "17/04/2025",
-                    hora: "09:45:10 a.m.",
-                    umbral: "65%",
-                    sensorId: "SEN-0205",
-                    sensorMarca: "DFRobot",
-                    sensorModelo: "DHT11",
-                    ultimaCalibracion: "15/10/2024",
-                    duracion: "15 minutos",
-                    tipo: "Humedad"
-                },
-                // ... resto de alertas mock
-            ];
-
-            const alertaEncontrada = alertasMock.find(a => a.id === alertaId || a._id.$oid === alertaId);
-            if (alertaEncontrada) {
-                setAlerta(alertaEncontrada);
-            } else {
-                setError('No se encontró la alerta especificada.');
-            }
-            setLoading(false);
         };
 
         cargarDatosAnomalia();
@@ -265,8 +238,16 @@ function LevantarReporte() {
                                 <span className="text-2xl" role="img" aria-label="alerta">{obtenerIconoAlerta(alerta.tipo)}</span>
                             </div>
                             <div>
-                                <h1 className="text-xl font-bold text-gray-800">Reporte de Anomalía</h1>
+                                <h1 className="text-xl font-bold text-gray-800">
+                                    {modoVisualizacion ? 'Reporte de Anomalía' : 'Generar Reporte de Anomalía'}
+                                </h1>
                                 <p className="text-sm text-green-600">Alerta ID: {alerta.id} • {alerta.fecha}</p>
+                                {modoVisualizacion && reporteExistente && (
+                                    <p className="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded mt-1 inline-block">
+                                        📋 Reporte generado el {new Date(reporteExistente.fecha).toLocaleDateString()}
+                                        {reporteExistente.usuario && ` por ${reporteExistente.usuario}`}
+                                    </p>
+                                )}
                             </div>
                         </div>
                         <button 
@@ -275,6 +256,14 @@ function LevantarReporte() {
                             <span className="mr-1">←</span> Volver a Alertas
                         </button>
                     </div>
+
+                    {/* Mostrar un banner indicando que se está visualizando un reporte existente */}
+                    {modoVisualizacion && (
+                        <div className="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-lg text-blue-700 flex items-center text-sm">
+                            <span className="text-blue-500 text-lg mr-2">ℹ️</span>
+                            Estás visualizando un reporte que ya ha sido registrado para esta anomalía. Los campos no son editables.
+                        </div>
+                    )}
 
                     <form onSubmit={handleSubmit}>
                         {/* Banner de alerta */}
@@ -286,8 +275,7 @@ function LevantarReporte() {
                                     <p className="text-sm">
                                         {alerta.tipo === 'Temperatura' ? `Temperatura: ${alerta.temperatura}` : 
                                          alerta.tipo === 'Humedad' ? `Humedad: ${alerta.humedad}` : 
-                                         alerta.tipo === 'CO2' ? `CO2: ${alerta.co2}` : 'Valor anómalo'} 
-                                        | Umbral: {alerta.umbral} | Duración: {alerta.duracion}
+                                         alerta.tipo === 'CO2' ? `CO2: ${alerta.co2}` : 'Valor anómalo'}
                                     </p>
                                 </div>
                             </div>
@@ -318,17 +306,6 @@ function LevantarReporte() {
                                     </p>
                                 </div>
                                 <div className="bg-white p-3 rounded-md border border-green-100">
-                                    <p className="text-xs text-green-600 uppercase">Umbral establecido</p>
-                                    <p className="text-sm text-gray-800 font-medium">{alerta.umbral}</p>
-                                </div>
-                                <div className="bg-white p-3 rounded-md border border-green-100">
-                                    <p className="text-xs text-green-600 uppercase">Duración</p>
-                                    <div className="flex items-center">
-                                        <span className="text-sm text-gray-800 font-medium">{alerta.duracion}</span>
-                                        <span className="ml-2 text-gray-400">⏱️</span>
-                                    </div>
-                                </div>
-                                <div className="bg-white p-3 rounded-md border border-green-100">
                                     <p className="text-xs text-green-600 uppercase">Hora</p>
                                     <div className="flex items-center">
                                         <span className="text-sm text-gray-800 font-medium">{alerta.hora}</span>
@@ -345,8 +322,10 @@ function LevantarReporte() {
                                 <div className="bg-white p-3 rounded-md border border-green-100">
                                     <p className="text-xs text-green-600 uppercase">Estado actual</p>
                                     <div className="flex items-center">
-                                        <span className="h-2.5 w-2.5 rounded-full bg-yellow-500 mr-2"></span>
-                                        <span className="text-sm text-gray-800 font-medium">Pendiente de resolución</span>
+                                        <span className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></span>
+                                        <span className="text-sm text-gray-800 font-medium">
+                                            {modoVisualizacion ? 'Reporte generado' : 'Pendiente de resolución'}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -371,37 +350,6 @@ function LevantarReporte() {
                                     <p className="text-xs text-green-600 uppercase mb-1">Modelo</p>
                                     <p className="text-sm text-gray-800 font-medium">{alerta.sensorModelo}</p>
                                 </div>
-                                <div>
-                                    <p className="text-xs text-green-600 uppercase mb-1">Última calibración</p>
-                                    <div className="flex items-center">
-                                        <span className="text-sm text-gray-800 font-medium">{alerta.ultimaCalibracion}</span>
-                                        <span className="ml-2 text-gray-400">📅</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Métricas */}
-                        <div className="mb-8">
-                            <h2 className="text-base font-semibold text-gray-700 mb-4 flex items-center">
-                                <span className="text-green-500 mr-2">📊</span>
-                                Métricas
-                            </h2>
-                            <div className="h-64 bg-green-50 border border-green-100 rounded-lg flex flex-col items-center justify-center p-4">
-                                <div className="text-5xl mb-4 text-green-300">📈</div>
-                                <p className="text-gray-500 mb-2">Visualización de datos históricos</p>
-                                <div className="w-full max-w-md h-24 bg-white rounded-lg shadow-inner overflow-hidden flex items-end p-2">
-                                    <div className="h-50% w-4 bg-green-200 mx-1 rounded-t-sm"></div>
-                                    <div className="h-60% w-4 bg-green-300 mx-1 rounded-t-sm"></div>
-                                    <div className="h-40% w-4 bg-green-200 mx-1 rounded-t-sm"></div>
-                                    <div className="h-70% w-4 bg-green-400 mx-1 rounded-t-sm"></div>
-                                    <div className="h-90% w-4 bg-red-400 mx-1 rounded-t-sm"></div>
-                                    <div className="h-80% w-4 bg-red-300 mx-1 rounded-t-sm"></div>
-                                    <div className="h-60% w-4 bg-green-300 mx-1 rounded-t-sm"></div>
-                                    <div className="h-50% w-4 bg-green-200 mx-1 rounded-t-sm"></div>
-                                    <div className="h-40% w-4 bg-green-200 mx-1 rounded-t-sm"></div>
-                                    <div className="h-30% w-4 bg-green-100 mx-1 rounded-t-sm"></div>
-                                </div>
                             </div>
                         </div>
 
@@ -411,13 +359,19 @@ function LevantarReporte() {
                                 <span className="mr-2">🛠️</span>
                                 Acciones realizadas
                             </h2>
-                            <textarea
-                                className="w-full h-24 border border-green-200 rounded-lg p-3 text-sm text-gray-800 resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
-                                placeholder="Describe las acciones realizadas para resolver esta anomalía..."
-                                value={acciones}
-                                onChange={(e) => setAcciones(e.target.value)}
-                                required
-                            />
+                            {modoVisualizacion ? (
+                                <div className="w-full h-24 border border-green-200 bg-green-50 rounded-lg p-3 text-sm text-gray-800 overflow-auto">
+                                    {acciones || <span className="text-gray-400 italic">No se registraron acciones</span>}
+                                </div>
+                            ) : (
+                                <textarea
+                                    className="w-full h-24 border border-green-200 rounded-lg p-3 text-sm text-gray-800 resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    placeholder="Describe las acciones realizadas para resolver esta anomalía..."
+                                    value={acciones}
+                                    onChange={(e) => setAcciones(e.target.value)}
+                                    required
+                                />
+                            )}
                         </div>
 
                         {/* Notas o comentarios */}
@@ -426,12 +380,18 @@ function LevantarReporte() {
                                 <span className="mr-2">📝</span>
                                 Notas o comentarios
                             </h2>
-                            <textarea
-                                className="w-full h-24 border border-green-200 rounded-lg p-3 text-sm text-gray-800 resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
-                                placeholder="Agrega notas adicionales o comentarios relevantes..."
-                                value={notas}
-                                onChange={(e) => setNotas(e.target.value)}
-                            />
+                            {modoVisualizacion ? (
+                                <div className="w-full h-24 border border-green-200 bg-green-50 rounded-lg p-3 text-sm text-gray-800 overflow-auto">
+                                    {notas || <span className="text-gray-400 italic">No se registraron comentarios</span>}
+                                </div>
+                            ) : (
+                                <textarea
+                                    className="w-full h-24 border border-green-200 rounded-lg p-3 text-sm text-gray-800 resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    placeholder="Agrega notas adicionales o comentarios relevantes..."
+                                    value={notas}
+                                    onChange={(e) => setNotas(e.target.value)}
+                                />
+                            )}
                         </div>
 
                         {/* Botones de acción */}
@@ -440,13 +400,16 @@ function LevantarReporte() {
                                 type="button"
                                 onClick={volverAAlertasRecientes}
                                 className="bg-white border border-green-300 text-green-700 px-6 py-2 rounded-lg hover:bg-green-50 transition-colors duration-300">
-                                Cancelar
+                                {modoVisualizacion ? 'Volver' : 'Cancelar'}
                             </button>
-                            <button 
-                                type="submit"
-                                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors duration-300 flex items-center shadow-md">
-                                <span className="mr-2">📤</span> Enviar reporte
-                            </button>
+
+                            {!modoVisualizacion && (
+                                <button
+                                    type="submit"
+                                    className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors duration-300 flex items-center shadow-md">
+                                    <span className="mr-2">📤</span> Enviar reporte
+                                </button>
+                            )}
                         </div>
                     </form>
                 </div>

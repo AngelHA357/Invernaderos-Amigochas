@@ -13,4 +13,11 @@ public interface IReportesAnomaliasRepository extends MongoRepository<ReporteAno
 
     boolean existsByAnomalia__id(ObjectId anomaliaId);
 
+    /**
+     * Busca un reporte por el ID de la anomalía asociada
+     * @param anomaliaId ID de la anomalía a buscar
+     * @return El reporte encontrado o null si no existe
+     */
+    ReporteAnomalia findByAnomalia__id(ObjectId anomaliaId);
+
 }

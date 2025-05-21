@@ -16,6 +16,25 @@ const getAuthHeaders = () => {
 };
 
 /**
+ * Verifica si una anomalía ya tiene un reporte asociado
+ * @param {string} anomaliaId - ID de la anomalía
+ * @returns {Promise<boolean>} Promesa que resuelve a true si existe un reporte, false en caso contrario
+ */
+export const verificarReporteExistente = async (anomaliaId) => {
+    try {
+        // Llamada al endpoint para verificar si existe reporte
+        const response = await axios.get(`${API_URL}/verificar/${anomaliaId}`, {
+            headers: getAuthHeaders(),
+        });
+        return response.data; // Se espera que el backend retorne un boolean
+    } catch (error) {
+        console.error('Error al verificar si existe reporte:', error);
+        // Si falla la llamada, asumimos que no hay reporte o retornamos false
+        return false;
+    }
+};
+
+/**
  * Obtiene los detalles de una anomalía por su ID
  * @param {string} anomaliaId - ID de la anomalía
  * @returns {Promise} Promesa con los datos de la anomalía
@@ -29,6 +48,24 @@ export const obtenerDetallesAnomalia = async (anomaliaId) => {
         return response.data;
     } catch (error) {
         console.error('Error al obtener detalles de anomalía:', error);
+        throw error;
+    }
+};
+
+/**
+ * Obtiene un reporte existente para una anomalía específica
+ * @param {string} anomaliaId - ID de la anomalía
+ * @returns {Promise<Object>} Promesa con los datos del reporte
+ */
+export const obtenerReporteDeAnomalia = async (anomaliaId) => {
+    try {
+        // Llamada al endpoint para obtener el reporte asociado a la anomalía
+        const response = await axios.get(`${API_URL}/reporte-de-anomalia/${anomaliaId}`, {
+            headers: getAuthHeaders(),
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error al obtener reporte de anomalía:', error);
         throw error;
     }
 };

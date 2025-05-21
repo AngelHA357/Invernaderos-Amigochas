@@ -222,7 +222,34 @@ public class ReportesAnomaliasService {
         return reportesAnomaliasRepository.existsByAnomalia__id(new ObjectId(anomaliaId));
     }
 
-     public AnomaliaDTO obtenerAnomaliaPorId(String anomaliaObjectId) throws ReportesAnomaliasServiceException {
+    /**
+     * Obtiene un reporte asociado a una anomalía por su ID
+     * @param anomaliaId ID de la anomalía a buscar
+     * @return ReporteAnomaliaDTO con los datos del reporte encontrado
+     * @throws ReportesAnomaliasServiceException si no se encuentra un reporte para la anomalía
+     */
+    public ReporteAnomaliaDTO obtenerReportePorAnomaliaId(String anomaliaId) throws ReportesAnomaliasServiceException {
+        if (!ObjectId.isValid(anomaliaId)) {
+            throw new ReportesAnomaliasServiceException("ID de anomalía inválido: " + anomaliaId);
+        }
+
+        // Primero verificamos si la anomalía existe
+        Optional<Anomalia> anomaliaOpt = anomaliasRepository.findById(new ObjectId(anomaliaId));
+        if (!anomaliaOpt.isPresent()) {
+            throw new ReportesAnomaliasServiceException("No existe anomalía con ID: " + anomaliaId);
+        }
+
+        // Buscar el reporte por ID de anomalía - Utilizando el método correcto con dos guiones bajos
+        ReporteAnomalia reporteEncontrado = reportesAnomaliasRepository.findByAnomalia__id(new ObjectId(anomaliaId));
+        if (reporteEncontrado == null) {
+            throw new ReportesAnomaliasServiceException("No existe un reporte para la anomalía con ID: " + anomaliaId);
+        }
+
+        // Convertir y retornar el reporte
+        return convertirReporteAnomalia(reporteEncontrado);
+    }
+
+    public AnomaliaDTO obtenerAnomaliaPorId(String anomaliaObjectId) throws ReportesAnomaliasServiceException {
         if (!ObjectId.isValid(anomaliaObjectId)) {
             throw new ReportesAnomaliasServiceException("ID de anomalía inválido: " + anomaliaObjectId);
         }

@@ -154,5 +154,52 @@ public class ReportesAnomaliasController {
         }
     }
 
+    /**
+     * Verifica si existe un reporte para una anomalía específica.
+     * @param anomaliaId ID de la anomalía
+     * @return true si existe reporte, false en caso contrario
+     */
+    @GetMapping("/verificar/{anomaliaId}")
+    public ResponseEntity<Boolean> verificarReporteExistente(@PathVariable("anomaliaId") String anomaliaId) {
+        try {
+            if (!ObjectId.isValid(anomaliaId)) {
+                return ResponseEntity.badRequest().body(false);
+            }
+            boolean existe = reportesAnomaliasService.existeReporteParaAnomalia(anomaliaId);
+            return ResponseEntity.ok(existe);
+        } catch (Exception e) {
+            System.err.println("Error al verificar reporte existente: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
+        }
+    }
+
+    /**
+     * Obtiene un reporte asociado a una anomalía específica.
+     * @param anomaliaId ID de la anomalía
+     * @return El reporte encontrado o error si no existe
+     */
+    @GetMapping("/reporte-de-anomalia/{anomaliaId}")
+    public ResponseEntity<?> obtenerReportePorAnomaliaId(@PathVariable("anomaliaId") String anomaliaId) {
+        try {
+            if (!ObjectId.isValid(anomaliaId)) {
+                Map<String, String> error = new HashMap<>();
+                error.put("mensaje", "El ID de anomalía proporcionado no es válido.");
+                return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            }
+            ReporteAnomaliaDTO reporte = reportesAnomaliasService.obtenerReportePorAnomaliaId(anomaliaId);
+            return ResponseEntity.ok(reporte);
+        } catch (ReportesAnomaliasServiceException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("mensaje", e.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("mensaje", "Error al obtener reporte: " + e.getMessage());
+            System.err.println("Error al obtener reporte por ID de anomalía: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
 
 }
