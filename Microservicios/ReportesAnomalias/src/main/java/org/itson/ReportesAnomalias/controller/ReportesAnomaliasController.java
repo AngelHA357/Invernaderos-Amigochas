@@ -122,4 +122,12 @@ public class ReportesAnomaliasController {
         }
     }
 
+    @GetMapping("/existe")
+    public ResponseEntity<?> existeReporteParaAnomalia(@RequestParam("anomaliaId") String anomaliaId) {
+        boolean existe = reportesAnomaliasService.existeReporteParaAnomalia(anomaliaId);
+        Map<String, Boolean> respuesta = new HashMap<>();
+        respuesta.put("existe", existe);
+        return ResponseEntity.ok(respuesta);
+    }
+
 }

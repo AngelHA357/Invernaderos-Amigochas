@@ -23,6 +23,5 @@ public class AnomaliaResponseDTO {
     private String sector;
     private String fila;
     private String causa;
-    // [+] NUEVO CAMPO POTENCIAL (necesitaremos lógica para llenarlo)
     private boolean tieneReporte;
 }

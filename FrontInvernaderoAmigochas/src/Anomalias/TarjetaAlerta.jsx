@@ -1,16 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// Props actualizados: tipo (para color/icono), tieneReporte, y 'tiempo' ahora es una descripción
-function TarjetaAlerta({ id, invernadero, descripcion, tipo, tiempo, tieneReporte }) {
+// Props: tipo (para color/icono), tieneReporte, y 'tiempo' es una descripción
+function TarjetaAlerta({ id, invernadero, descripcion, tipo, tiempo }) {
     const navigate = useNavigate();
 
-    let colorBorde = 'border-yellow-400'; // Default más suave
+    let colorBorde = 'border-yellow-400'; // Default
     let colorFondoHover = 'hover:bg-yellow-50';
     let colorBoton = 'border-yellow-400 text-yellow-700 hover:bg-yellow-500 hover:text-white focus:ring-yellow-300';
-    let icono = '⚠️'; // Alerta genérica
+    let icono = '⚠️';
 
-    // Personalizar según el 'tipo' (que es la magnitud de la anomalía)
     if (tipo) {
         const tipoLowerCase = tipo.toLowerCase();
         if (tipoLowerCase.includes('temperatura')) {
@@ -41,15 +40,9 @@ function TarjetaAlerta({ id, invernadero, descripcion, tipo, tiempo, tieneReport
         }
     }
 
-    const handleLevantarReporte = () => {
-        if (tieneReporte) {
-            console.log("Un reporte para esta anomalía ya fue levantado. ID Anomalia:", id);
-            // Podrías mostrar una notificación al usuario aquí
-            return;
-        }
-        // Guardar el ID de la anomalía (no de la alerta hardcodeada)
+    const handleReporteClick = () => {
         localStorage.setItem('alertaSeleccionadaId', id); 
-        navigate(`/anomalias/${id}`); // Navega a la pantalla para crear el reporte, usando el ID de la anomalía
+        navigate(`/anomalias/${id}`);
     };
     
     return (
@@ -58,21 +51,17 @@ function TarjetaAlerta({ id, invernadero, descripcion, tipo, tiempo, tieneReport
                 <span className="text-2xl mr-3 mt-1">{icono}</span>
                 <div className="flex-grow">
                     <h3 className="text-md font-semibold text-gray-800">
-                        {/* 'descripcion' ahora es el título/causa de la anomalía */}
                         {descripcion} 
                         {invernadero !== 'N/A' && <span className="text-sm font-normal text-gray-600"> en {invernadero}</span>}
                     </h3>
-                    {/* 'tiempo' ahora es la fecha/hora formateada o tiempo relativo */}
                     <p className="text-xs text-gray-500 mt-0.5">{tiempo}</p> 
                 </div>
             </div>
             <button 
-                className={`px-3 py-1.5 border rounded-md text-xs font-medium ${colorBoton} active:bg-opacity-80 transition-all duration-150 focus:outline-none focus:ring-2 whitespace-nowrap 
-                            ${tieneReporte ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed hover:bg-gray-200 hover:text-gray-500 hover:border-gray-300' : ''}`}
-                onClick={handleLevantarReporte}
-                disabled={tieneReporte}
+                className={`px-3 py-1.5 border rounded-md text-xs font-medium ${colorBoton} active:bg-opacity-80 transition-all duration-150 focus:outline-none focus:ring-2 whitespace-nowrap`}
+                onClick={handleReporteClick}
             >
-                {tieneReporte ? 'Reporte Levantado' : 'Levantar Reporte'}
+                Levantar reporte
             </button>
         </div>
     );

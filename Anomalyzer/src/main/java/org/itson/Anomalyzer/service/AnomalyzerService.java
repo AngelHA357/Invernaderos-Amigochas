@@ -17,6 +17,7 @@ import org.itson.Anomalyzer.persistence.alarmas.IAlarmasRepository;
 import org.itson.Anomalyzer.proto.ClienteAlarmasGrpc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.security.PublicKey;
@@ -26,6 +27,9 @@ import java.util.*;
 
 @Service
 public class AnomalyzerService {
+    @Autowired
+    private RestTemplate restTemplate;
+
     @Autowired
     ClienteAlarmasGrpc clienteAlarmasGrpc;
 
@@ -167,11 +171,14 @@ public class AnomalyzerService {
         );
     }
 
-    private boolean verificarSiAnomaliaTieneReporte(String idAnomalia) {
-        System.out.println("[AnomalyzerService DEBUG] Verificando reporte para anomalía ID: " + idAnomalia + " (lógica no implementada, devolviendo false)");
-        // Ejemplo si ReportesAnomalias tuviera un endpoint o si hubiera una colección de reportes aquí:
-        // Reporte reporte = reporteRepository.findByIdAnomalia(idAnomalia);
-        // return reporte != null;
-        return false;
+    public boolean verificarSiAnomaliaTieneReporte(String anomaliaId) {
+        String url = "http://localhost:8081/api/v1/reportesAnomalias/existe?anomaliaId=" + anomaliaId;
+        try {
+            Map<String, Boolean> response = restTemplate.getForObject(url, Map.class);
+            return response != null && Boolean.TRUE.equals(response.get("existe"));
+        } catch (Exception e) {
+            System.err.println("Error consultando ReportesAnomalias: " + e.getMessage());
+            return false;
+        }
     }
 }

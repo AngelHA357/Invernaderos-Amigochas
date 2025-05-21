@@ -6,6 +6,15 @@ import axios from 'axios';
 // URL base para el microservicio de reportes de anomalías
 const API_URL = 'http://localhost:8080/api/v1/reportesAnomalias';
 
+// Helper para obtener los headers de autenticación
+const getAuthHeaders = () => {
+    const token = localStorage.getItem('authToken');
+    return {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+    };
+};
+
 /**
  * Obtiene los detalles de una anomalía por su ID
  * @param {string} anomaliaId - ID de la anomalía
@@ -14,7 +23,9 @@ const API_URL = 'http://localhost:8080/api/v1/reportesAnomalias';
 export const obtenerDetallesAnomalia = async (anomaliaId) => {
     try {
         // Usando el endpoint correcto para obtener una anomalía por ID
-        const response = await axios.get(`${API_URL}/anomalia/${anomaliaId}`);
+        const response = await axios.get(`${API_URL}/anomalia/${anomaliaId}`, {
+            headers: getAuthHeaders(),
+        });
         return response.data;
     } catch (error) {
         console.error('Error al obtener detalles de anomalía:', error);
@@ -39,7 +50,9 @@ export const enviarReporte = async (reporte) => {
         };
 
         // Endpoint correcto para registrar reporte
-        const response = await axios.post(`${API_URL}/registrarReporte`, reporteFormateado);
+        const response = await axios.post(`${API_URL}/registrarReporte`, reporteFormateado, {
+            headers: getAuthHeaders(),
+        });
         return response.data;
     } catch (error) {
         console.error('Error al enviar reporte:', error);
@@ -55,7 +68,9 @@ export const enviarReporte = async (reporte) => {
 export const verificarExistenciaReporte = async (anomaliaId) => {
     try {
         // Verificamos si ya existe un reporte para esta anomalía
-        const response = await axios.get(`${API_URL}/verificarReporte/${anomaliaId}`);
+        const response = await axios.get(`${API_URL}/verificarReporte/${anomaliaId}`, {
+            headers: getAuthHeaders(),
+        });
         return response.data;
     } catch (error) {
         console.error('Error al verificar existencia de reporte:', error);

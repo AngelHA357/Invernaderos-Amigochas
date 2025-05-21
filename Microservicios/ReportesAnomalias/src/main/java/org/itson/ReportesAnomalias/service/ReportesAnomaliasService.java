@@ -214,5 +214,8 @@ public class ReportesAnomaliasService {
         return reporteCreado;
     }
 
+    public boolean existeReporteParaAnomalia(String anomaliaId) {
+        return reportesAnomaliasRepository.existsByAnomalia__id(new ObjectId(anomaliaId));
+    }
 
 }

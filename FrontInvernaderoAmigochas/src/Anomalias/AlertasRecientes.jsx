@@ -61,12 +61,25 @@ function AlertasRecientes() {
                     // navigate('/login'); // Opcional: redirigir al login
                     throw new Error('Sesión expirada. Por favor, inicie sesión nuevamente.');
                 }
+                if (response.status === 403) {
+                    throw new Error('No tienes permisos para ver estas alertas.');
+                }
+                if (response.status === 502 || response.status === 503) {
+                    throw new Error('El servicio de alertas no está disponible en este momento. Intenta más tarde.');
+                }
                 let errorMsg = `Error ${response.status} al obtener alertas.`;
                 try {
                     const errorData = await response.json();
                     errorMsg = errorData.message || errorData.mensaje || errorMsg; // Ajustar según el campo de error del backend
                 } catch (e) { /* No hacer nada si el cuerpo no es JSON o si la conversión falla */ }
                 throw new Error(errorMsg);
+            }
+
+            // --- CAMBIO PARA MANEJAR RESPUESTA 204 NO CONTENT ---
+            if (response.status === 204) {
+                setAlertas([]);
+                setLoadingAlertas(false);
+                return;
             }
 
             const data = await response.json(); // Esperamos List<AnomaliaResponseDTO>
@@ -128,8 +141,12 @@ function AlertasRecientes() {
             }
 
         } catch (err) {
-            console.error("Error al obtener alertas:", err);
-            setErrorAlertas(err.message || "Error cargando alertas.");
+            // --- NUEVO BLOQUE PARA MANEJAR ERROR DE RED ---
+            if (err instanceof TypeError && err.message.match(/Failed to fetch|NetworkError/i)) {
+                setErrorAlertas("No se pudo conectar con el servicio de alertas. El sistema podría estar en mantenimiento o sin conexión. Intenta más tarde.");
+            } else {
+                setErrorAlertas(err.message || "Error cargando alertas.");
+            }
             setAlertas([]);
         } finally {
             setLoadingAlertas(false);
@@ -169,7 +186,7 @@ function AlertasRecientes() {
                     <p className="text-sm text-gray-500 mb-6">Últimas alertas detectadas por el sistema</p>
 
                     <div className="bg-white p-4 rounded-lg shadow-sm mb-6 border-l-4 border-green-500">
-                        <div className="flex flex-wrap gap-3 items-center"> {/* Ajuste para alinear botón si se añade */}
+                        <div className="flex flex-wrap gap-3 items-center">
                             <div className="flex items-center">
                                 <span className="mr-2 text-gray-700">Desde:</span>
                                 <input 
@@ -190,16 +207,7 @@ function AlertasRecientes() {
                                     disabled={loadingAlertas}
                                 />
                             </div>
-                            {/* Podrías añadir un botón de "Buscar" si prefieres no recargar en cada cambio de fecha
-                            <button 
-                                onClick={() => fetchAlertas(fechaInicio, fechaFin)} 
-                                disabled={loadingAlertas || !fechaInicio || !fechaFin || new Date(fechaInicio) > new Date(fechaFin)}
-                                className="px-4 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-300 text-sm">
-                                Aplicar Filtro
-                            </button>
-                            */}
                         </div>
-                         {/* Mostrar error de validación de fechas aquí si es el único error y no hay errorAlertas general */}
                         {new Date(fechaInicio) > new Date(fechaFin) && !errorAlertas && (
                             <p className="text-red-500 text-xs mt-2">La fecha de inicio no puede ser posterior a la fecha de fin.</p>
                         )}
@@ -209,29 +217,18 @@ function AlertasRecientes() {
 
                     {loadingAlertas && <div className="p-6 text-center text-gray-500">Cargando alertas...</div>}
 
-                    <div className="bg-white rounded-lg shadow-sm border border-green-100 divide-y divide-green-100"> {/* Añadido divide para separar tarjetas */}
+                    <div className="bg-white rounded-lg shadow-sm border border-green-100 divide-y divide-green-100">
                         {!loadingAlertas && alertas.length > 0 ? (
                             alertas.map((alerta) => (
                                 <Alerta
-                                    key={alerta.id} // Usar el ID único de la anomalía
-                                    // Pasar todas las propiedades mapeadas a TarjetaAlerta
-                                    // TarjetaAlerta deberá estar preparada para recibir estas props
+                                    key={alerta.id}
                                     id={alerta.id}
                                     invernadero={alerta.invernadero}
-                                    descripcion={alerta.descripcion} // Título de la tarjeta
-                                    detalleDescripcion={alerta.detalleDescripcion} // Causa, si se quiere mostrar
-                                    tiempo={alerta.tiempo} // Tiempo relativo o fecha/hora formateada
-                                    tipo={alerta.tipo} // Para colores e iconos
+                                    descripcion={alerta.descripcion}
+                                    detalleDescripcion={alerta.detalleDescripcion}
+                                    tiempo={alerta.tiempo}
+                                    tipo={alerta.tipo}
                                     tieneReporte={alerta.tieneReporte}
-                                    // Podrías querer pasar más datos si TarjetaAlerta los usa
-                                    // Por ejemplo, para un modal de detalles:
-                                    // sensorId={alerta.sensorId}
-                                    // sensorMarca={alerta.sensorMarca}
-                                    // sensorModelo={alerta.sensorModelo}
-                                    // valorOriginal={alerta.valorOriginal}
-                                    // unidadOriginal={alerta.unidadOriginal}
-                                    // fechaOriginal={alerta.fecha} // Ya está como fecha
-                                    // horaOriginal={alerta.hora}   // Ya está como hora
                                 />
                             ))
                         ) : (
