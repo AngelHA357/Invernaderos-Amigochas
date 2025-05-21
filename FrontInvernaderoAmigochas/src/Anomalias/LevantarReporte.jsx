@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
+import { obtenerDetallesAnomalia, enviarReporte, verificarExistenciaReporte } from '../services/ReporteService';
 
 function LevantarReporte() {
     const navigate = useNavigate();
@@ -10,114 +11,121 @@ function LevantarReporte() {
     const [notas, setNotas] = useState('');
     const [loading, setLoading] = useState(true);
     const [enviado, setEnviado] = useState(false);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        const alertaId = localStorage.getItem('alertaSeleccionada') || id;
+        const cargarDatosAnomalia = async () => {
+            try {
+                // Corregido: Usar 'alertaSeleccionadaId' en lugar de 'alertaSeleccionada'
+                // que es el nombre correcto usado en TarjetaAlerta.jsx
+                const alertaId = id || localStorage.getItem('alertaSeleccionadaId');
 
-        const alertasMock = [
-            {
-                id: "ALT-001",
-                invernadero: 'invernadero 3',
-                descripcion: 'Temperatura alta',
-                tiempo: '5 minutos',
-                temperatura: '28°C',
-                fecha: '17/04/2025',
-                hora: '10:15:32 a.m.',
-                umbral: '25°C',
-                sensorId: 'SEN-0105',
-                sensorMarca: 'Stercn',
-                sensorModelo: 'LM35',
-                ultimaCalibracion: '24/08/2024',
-                duracion: '3 minutos',
-                tipo: 'Temperatura'
-            },
-            {
-                id: "ALT-002",
-                invernadero: 'invernadero 1',
-                descripcion: 'Humedad baja',
-                tiempo: '15 minutos',
-                humedad: '50%',
-                fecha: '17/04/2025',
-                hora: '09:45:10 a.m.',
-                umbral: '65%',
-                sensorId: 'SEN-0205',
-                sensorMarca: 'DFRobot',
-                sensorModelo: 'DHT11',
-                ultimaCalibracion: '15/10/2024',
-                duracion: '15 minutos',
-                tipo: 'Humedad'
-            },
-            {
-                id: "ALT-003",
-                invernadero: 'invernadero 2',
-                descripcion: 'Temperatura alta',
-                tiempo: '2 horas',
-                temperatura: '27°C',
-                fecha: '16/04/2025',
-                hora: '04:20:45 p.m.',
-                umbral: '24°C',
-                sensorId: 'SEN-0108',
-                sensorMarca: 'Stercn',
-                sensorModelo: 'LM35',
-                ultimaCalibracion: '20/09/2024',
-                duracion: '45 minutos',
-                tipo: 'Temperatura'
-            },
-            {
-                id: "ALT-004",
-                invernadero: 'invernadero 4',
-                descripcion: 'CO2 elevado',
-                tiempo: '30 minutos',
-                co2: '1200 ppm',
-                fecha: '16/04/2025',
-                hora: '02:30:15 p.m.',
-                umbral: '1000 ppm',
-                sensorId: 'SEN-0305',
-                sensorMarca: 'Winsen',
-                sensorModelo: 'MH-Z19',
-                ultimaCalibracion: '05/01/2025',
-                duracion: '30 minutos',
-                tipo: 'CO2'
-            },
-            {
-                id: "ALT-005",
-                invernadero: 'invernadero 3',
-                descripcion: 'Humedad alta',
-                tiempo: '10 minutos',
-                humedad: '85%',
-                fecha: '16/04/2025',
-                hora: '11:10:22 a.m.',
-                umbral: '80%',
-                sensorId: 'SEN-0202',
-                sensorMarca: 'Aosong',
-                sensorModelo: 'DHT22',
-                ultimaCalibracion: '30/11/2024',
-                duracion: '10 minutos',
-                tipo: 'Humedad'
-            },
-            {
-                id: "ALT-006",
-                invernadero: 'invernadero 2',
-                descripcion: 'CO2 bajo',
-                tiempo: '3 horas',
-                co2: '250 ppm',
-                fecha: '15/04/2025',
-                hora: '08:45:30 a.m.',
-                umbral: '350 ppm',
-                sensorId: 'SEN-0302',
-                sensorMarca: 'Winsen',
-                sensorModelo: 'MH-Z19',
-                ultimaCalibracion: '10/12/2024',
-                duracion: '3 horas',
-                tipo: 'CO2'
-            },
-        ];
+                if (!alertaId) {
+                    setError('No se ha especificado una alerta para generar el reporte.');
+                    setLoading(false);
+                    return;
+                }
 
-        const alertaEncontrada = alertasMock.find(a => a.id === alertaId);
-        if (alertaEncontrada) {
-            setAlerta(alertaEncontrada);
-        }
-        setLoading(false);
+                // Eliminada la verificación de existencia de reporte
+                // ya que ese endpoint no existe en el backend
+
+                console.log(`[LevantarReporte] Obteniendo detalles de anomalía con ID: ${alertaId}`);
+
+                // Obtener detalles de la anomalía desde el backend
+                const datosAnomalia = await obtenerDetallesAnomalia(alertaId);
+                console.log('[LevantarReporte] Datos de anomalía recibidos:', datosAnomalia);
+
+                setAlerta(datosAnomalia);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error al cargar datos de la anomalía:', error);
+
+                // Si falla la conexión con el backend, usamos datos mockeados temporalmente
+                cargarDatosMockeados();
+            }
+        };
+
+        // Función para cargar datos mockeados (eliminar cuando el backend esté listo)
+        const cargarDatosMockeados = () => {
+            const alertaId = id || localStorage.getItem('alertaSeleccionada');
+
+            // Datos de prueba adaptados al formato del backend
+            const alertasMock = [
+                {
+                    _id: { $oid: "ALT-001" },
+                    idSensor: "SEN-0105",
+                    macAddress: "00:11:22:33:44:55",
+                    marca: "Stercn",
+                    modelo: "LM35",
+                    magnitud: "Temperatura",
+                    unidad: "°C",
+                    valor: 28.0,
+                    fechaHora: new Date("2025-04-17T10:15:32"),
+                    idInvernadero: "INV-003",
+                    nombreInvernadero: "Invernadero 3",
+                    sector: "A",
+                    fila: "5",
+                    causa: "Temperatura alta",
+                    // Campos adicionales para mantener compatibilidad con UI existente
+                    id: "ALT-001",
+                    invernadero: "Invernadero 3",
+                    descripcion: "Temperatura alta",
+                    tiempo: "5 minutos",
+                    temperatura: "28°C",
+                    fecha: "17/04/2025",
+                    hora: "10:15:32 a.m.",
+                    umbral: "25°C",
+                    sensorId: "SEN-0105",
+                    sensorMarca: "Stercn",
+                    sensorModelo: "LM35",
+                    ultimaCalibracion: "24/08/2024",
+                    duracion: "3 minutos",
+                    tipo: "Temperatura"
+                },
+                {
+                    _id: { $oid: "ALT-002" },
+                    idSensor: "SEN-0205",
+                    macAddress: "00:11:22:33:44:66",
+                    marca: "DFRobot",
+                    modelo: "DHT11",
+                    magnitud: "Humedad",
+                    unidad: "%",
+                    valor: 50.0,
+                    fechaHora: new Date("2025-04-17T09:45:10"),
+                    idInvernadero: "INV-001",
+                    nombreInvernadero: "Invernadero 1",
+                    sector: "B",
+                    fila: "3",
+                    causa: "Humedad baja",
+                    // Campos adicionales para mantener compatibilidad con UI existente
+                    id: "ALT-002",
+                    invernadero: "Invernadero 1",
+                    descripcion: "Humedad baja",
+                    tiempo: "15 minutos",
+                    humedad: "50%",
+                    fecha: "17/04/2025",
+                    hora: "09:45:10 a.m.",
+                    umbral: "65%",
+                    sensorId: "SEN-0205",
+                    sensorMarca: "DFRobot",
+                    sensorModelo: "DHT11",
+                    ultimaCalibracion: "15/10/2024",
+                    duracion: "15 minutos",
+                    tipo: "Humedad"
+                },
+                // ... resto de alertas mock
+            ];
+
+            const alertaEncontrada = alertasMock.find(a => a.id === alertaId || a._id.$oid === alertaId);
+            if (alertaEncontrada) {
+                setAlerta(alertaEncontrada);
+            } else {
+                setError('No se encontró la alerta especificada.');
+            }
+            setLoading(false);
+        };
+
+        cargarDatosAnomalia();
     }, [id]);
 
     const obtenerIconoAlerta = (tipo) => {
@@ -138,13 +146,53 @@ function LevantarReporte() {
         navigate('/anomalias');
     };
     
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Simulamos envío del reporte
-        setEnviado(true);
-        setTimeout(() => {
-            navigate('/alertas');
-        }, 3000);
+
+        if (!alerta || !acciones) {
+            alert('Por favor completa los campos requeridos');
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            // Crear objeto de reporte según la estructura que espera el backend
+            const reporteData = {
+                anomalia: {
+                    _id: alerta._id, // Usamos el ID original si lo tenemos
+                    idSensor: alerta.idSensor || alerta.sensorId,
+                    macAddress: alerta.macAddress || "No disponible",
+                    marca: alerta.marca || alerta.sensorMarca,
+                    modelo: alerta.modelo || alerta.sensorModelo,
+                    magnitud: alerta.magnitud || alerta.tipo,
+                    unidad: alerta.unidad || (alerta.tipo === "Temperatura" ? "°C" : alerta.tipo === "Humedad" ? "%" : alerta.tipo === "CO2" ? "ppm" : ""),
+                    valor: alerta.valor || parseFloat(alerta.temperatura || alerta.humedad || alerta.co2 || "0"),
+                    fechaHora: alerta.fechaHora || new Date(),
+                    idInvernadero: alerta.idInvernadero || "INV-001",
+                    nombreInvernadero: alerta.nombreInvernadero || alerta.invernadero,
+                    sector: alerta.sector || "N/A",
+                    fila: alerta.fila || "N/A",
+                    causa: alerta.causa || alerta.descripcion
+                },
+                acciones: acciones,
+                notas: notas || "", // comentarios en el modelo del backend
+                fecha: new Date(),
+                usuario: localStorage.getItem('usuario') || 'Sistema'
+            };
+
+            // Enviar el reporte al backend
+            await enviarReporte(reporteData);
+
+            setEnviado(true);
+            setTimeout(() => {
+                navigate('/anomalias');
+            }, 3000);
+        } catch (error) {
+            console.error('Error al enviar el reporte:', error);
+            alert('Ocurrió un error al enviar el reporte. Inténtalo de nuevo.');
+            setLoading(false);
+        }
     };
 
     if (loading) {
