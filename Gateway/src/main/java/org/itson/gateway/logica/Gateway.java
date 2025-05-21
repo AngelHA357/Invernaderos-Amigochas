@@ -10,7 +10,9 @@ import org.itson.Gateway.dtos.LecturaDTO;
 import org.itson.Gateway.dtos.LecturaEnriquecidaDTO;
 import org.springframework.stereotype.Component;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.concurrent.ExecutorService;
@@ -19,8 +21,9 @@ import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.itson.Gateway.encriptadores.EncriptadorRSA;
+
 /**
- *
  * @author ricar
  */
 @Component
@@ -32,18 +35,23 @@ public class Gateway {
 
     @PostConstruct
     public void iniciar() {
+
         try {
             // Mosquitto/MQTT
-            String brokerIP = "localhost"; // IP de Mosquitto (localhost si es en local)
+            String brokerIP = "mosquitto"; // IP de Mosquitto (localhost si es en local)
             String broker = "tcp://" + brokerIP + ":1883"; // URI del servidor Mosquitto
             String clientId = MqttClient.generateClientId(); // ID del cliente
-            MqttClient client = new MqttClient(broker, clientId, null); // Creamos el cliente
+            MqttClient client = new MqttClient(broker, clientId, null);
 
             // RabbitMQ
             ConnectionFactory factory = new ConnectionFactory();
-            factory.setHost("localhost"); // Indicamos la IP del host
-            Connection rabbitConnection = factory.newConnection(); // Creamos la conexión
-            Channel channel = rabbitConnection.createChannel(); // Creamos el canal
+            factory.setHost("rabbitmq");
+            factory.setPort(5672);
+            factory.setUsername("user");
+            factory.setPassword("password");
+
+            Connection rabbitConnection = factory.newConnection();
+            Channel channel = rabbitConnection.createChannel();
             channel.queueDeclare(QUEUE_NAME, false, false, false, null); // Declaramos la cola
 
             // Para serializar
@@ -65,7 +73,7 @@ public class Gateway {
                 /**
                  * Método llamado cuando llega un mensaje al topic suscrito.
                  *
-                 * @param topic El topic del mensaje.
+                 * @param topic   El topic del mensaje.
                  * @param message El mensaje recibido.
                  */
                 @Override
@@ -76,16 +84,20 @@ public class Gateway {
                      */
                     executor.submit(() -> {
                         try {
-                            PrivateKey llavePrivada = encriptadores.EncriptadorRSA.loadPrivateKey("src\\main\\resources\\keys\\clave_privada_gateway.pem");
+                            InputStream isPrivateKey = getClass().getClassLoader().getResourceAsStream("keys/clave_privada_gateway.pem");
+                            if (isPrivateKey == null) {
+                                throw new FileNotFoundException("No se encontró la clave privada en recursos");
+                            }
+                            PrivateKey llavePrivada = EncriptadorRSA.loadPrivateKey(isPrivateKey);
 
-                            String payload = encriptadores.EncriptadorRSA.decrypt(message.getPayload(), llavePrivada);
+                            String payload = EncriptadorRSA.decrypt(message.getPayload(), llavePrivada);
 
                             System.out.println("Mensaje recibido en " + topic + ": " + payload);
 
                             // Deserializar JSON
                             LecturaDTO lectura = gson.fromJson(payload, LecturaDTO.class);
 
-                            //Se agregan los datos del invernadero a la lectura
+                            // Se agregan los datos del invernadero a la lectura
                             LecturaEnriquecidaDTO lecturaEnriquecida = new LecturaEnriquecidaDTO();
 
                             lecturaEnriquecida.setIdInvernadero(ID_INVERNADERO);
@@ -102,13 +114,21 @@ public class Gateway {
                             // Publicar en RabbitMQ
                             String json = gson.toJson(lecturaEnriquecida);
 
-                            PublicKey llavePublica = encriptadores.EncriptadorRSA.loadPublicKey("src\\main\\resources\\keys\\clave_publica_lecturas.pem");
+                            // Abrimos el InputStream desde recursos en el classpath
+                            try (InputStream isPublicKey = getClass().getClassLoader().getResourceAsStream("keys/clave_publica_lecturas.pem")) {
+                                if (isPublicKey == null) {
+                                    throw new FileNotFoundException("No se encontró la llave pública en recursos");
+                                }
+                                PublicKey llavePublica = EncriptadorRSA.loadPublicKey(isPublicKey);
 
-                            String jsonEncriptado = encriptadores.EncriptadorRSA.encryptHybrid(json, llavePublica);
 
-                            channel.basicPublish("", QUEUE_NAME, null, jsonEncriptado.getBytes());
+                                String jsonEncriptado = EncriptadorRSA.encryptHybrid(json, llavePublica);
 
-                            System.out.println("Mensaje publicado en RabbitMQ con éxito.");
+                                channel.basicPublish("", QUEUE_NAME, null, jsonEncriptado.getBytes());
+
+                                System.out.println("Mensaje publicado en RabbitMQ con éxito.");
+                            }
+
                         } catch (IOException e) {
                             System.err.println("Error publicando en RabbitMQ: " + e.getMessage());
                         } catch (Exception e) {

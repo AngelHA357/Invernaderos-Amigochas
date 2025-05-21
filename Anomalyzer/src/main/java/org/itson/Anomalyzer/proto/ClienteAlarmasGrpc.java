@@ -7,8 +7,6 @@ import org.itson.alarma.Alarmas;
 import org.itson.alarma.AlarmasServidorGrpc;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @Slf4j
 public class ClienteAlarmasGrpc {

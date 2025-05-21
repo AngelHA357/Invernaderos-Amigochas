@@ -3,7 +3,7 @@ services:
     image: lecturas-imagen
     container_name: lecturas-service
     build:
-      context: Lecturas
+      context: Microservicios/Lecturas
       dockerfile: Dockerfile
     ports:
       - "8091:8091"
@@ -14,7 +14,7 @@ services:
     image: gestion-sensores-imagen
     container_name: gestion-sensores-service
     build:
-      context: GestionSensores
+      context: Microservicios/GestionSensores
       dockerfile: Dockerfile
     ports:
       - "8090:8090"
@@ -26,7 +26,7 @@ services:
     image: alarmas-imagen
     container_name: alarmas-service
     build:
-      context: Alarmas
+      context: Microservicios/Alarmas
       dockerfile: Dockerfile
     ports:
       - "8093:8093"
@@ -37,10 +37,33 @@ services:
     image: reportes-anomalias-imagen
     container_name: reportes-anomalias-service
     build:
-      context: ReportesAnomalias
+      context: Microservicios/ReportesAnomalias
       dockerfile: Dockerfile
     ports:
       - "8092:8092"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
+
+  anomalyzer-app:
+    image: anomalyzer-imagen
+    container_name: anomalyzer-service
+    build:
+      context: Anomalyzer
+      dockerfile: Dockerfile
+    ports:
+      - "8094:8094"
+      - "9094:9094"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
+
+  alarmator-app:
+    image: alarmator-imagen
+    container_name: alarmator-service
+    build:
+      context: Alarmator
+      dockerfile: Dockerfile
+    ports:
+      - "8097:8097"
     environment:
       SPRING_DATA_MONGODB_URI: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
 
@@ -48,7 +71,7 @@ services:
     image: login-imagen
     container_name: login-service
     build:
-      context: Login
+      context: Microservicios/Login
       dockerfile: Dockerfile
     ports:
       - "8095:8095"
@@ -59,12 +82,42 @@ services:
     image: simulador-imagen
     container_name: simulador
     build:
-      context:
+      context: Simulador
+      dockerfile: Dockerfile
+    depends_on:
+      - mosquitto
+
+  informes-app:
+    image: informes-imagen
+    container_name: informes-service
+    build:
+      context: Informes
       dockerfile: Dockerfile
     ports:
-      - "8095:8095"
+      - "8099:8099"
     environment:
       SPRING_DATA_MONGODB_URI: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
+
+  exposicion-datos-app:
+    image: exposicion-datos-imagen
+    container_name: exposicion-datos-service
+    build:
+      context: ExposicionDatos
+      dockerfile: Dockerfile
+    ports:
+      - "8096:8096"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
+
+  gateway-app:
+    image: gateway-imagen
+    container_name: gateway
+    build:
+      context: Gateway
+      dockerfile: Dockerfile
+    depends_on:
+      - rabbitmq
+      - mosquitto
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -75,9 +128,11 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: password
-
+      
   mosquitto:
     image: eclipse-mosquitto:2.0
     container_name: mosquitto
     ports:
       - "1883:1883"
+    volumes:
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf

@@ -31,10 +31,10 @@ public class EncriptadorRSA {
     static {
         Security.addProvider(new BouncyCastleProvider()); // Necesario para BouncyCastle
     }
-    
+
     // Cargar clave pública desde archivo PEM
-    public static PublicKey loadPublicKey(String filepath) throws Exception {
-        try (PemReader reader = new PemReader(new FileReader(filepath))) {
+    public static PublicKey loadPublicKey(InputStream is) throws Exception {
+        try (PemReader reader = new PemReader(new InputStreamReader(is))) {
             PemObject pemObject = reader.readPemObject();
             byte[] content = pemObject.getContent();
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(content);
@@ -43,8 +43,8 @@ public class EncriptadorRSA {
     }
 
     // Cargar clave privada desde archivo PEM
-    public static PrivateKey loadPrivateKey(InputStream filepath) throws Exception {
-        try (PemReader reader = new PemReader(new InputStreamReader(filepath))) {
+    public static PrivateKey loadPrivateKey(InputStream is) throws Exception {
+        try (PemReader reader = new PemReader(new InputStreamReader(is))) {
             PemObject pemObject = reader.readPemObject();
             byte[] content = pemObject.getContent();
             PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(content);

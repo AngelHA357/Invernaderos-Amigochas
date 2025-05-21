@@ -18,8 +18,8 @@ grpc:
     port: 9090
     security:
       enabled: true
-      certificate-chain: classpath:certs/localhost.crt
-      private-key: classpath:certs/localhost.pem
+      certificate-chain: classpath:certs/gestion-sensores-service.crt
+      private-key: classpath:certs/gestion-sensores-service.pem
 
 management:
   tracing:

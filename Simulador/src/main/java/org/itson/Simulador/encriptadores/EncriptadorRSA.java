@@ -4,6 +4,8 @@
 package org.itson.Simulador.encriptadores;
 
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.PublicKey;
@@ -24,8 +26,8 @@ public class EncriptadorRSA {
     }
 
     // Cargar clave pública desde archivo PEM
-    public static PublicKey loadPublicKey(String filepath) throws Exception {
-        try (PemReader reader = new PemReader(new FileReader(filepath))) {
+    public static PublicKey loadPublicKey(InputStream is) throws Exception {
+        try (PemReader reader = new PemReader(new InputStreamReader(is))) {
             PemObject pemObject = reader.readPemObject();
             byte[] content = pemObject.getContent();
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(content);

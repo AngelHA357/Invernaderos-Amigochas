@@ -17,14 +17,14 @@ grpc:
     port: 9094
     security:
       enabled: true
-      certificate-chain: classpath:certs/localhost.crt
-      private-key: classpath:certs/localhost.pem
+      certificate-chain: classpath:certs/anomalyzer-service.crt
+      private-key: classpath:certs/anomalyzer-service.pem
   client:
     alarmas:
-      address: static://localhost:9093
+      address: static://alarmas-service:9093
       negotiation-type: TLS
       security:
-        trust-cert-collection: classpath:certs/localhost.cert.pem
+        trust-cert-collection: classpath:certs/alarmas-service.cert.pem
       enable-keep-alive: true
 
 management:

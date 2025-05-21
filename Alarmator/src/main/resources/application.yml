@@ -21,15 +21,6 @@ twilio:
   auth-token: 02eed5e25d09dd292383d7d18ceabf8f
   phone-number: +18145177553
 
-grpc:
-  server:
-    port: 9097
-  client:
-    alarmas:
-      address: static://localhost:50053
-      negotiation-type: plaintext
-      enable-keep-alive: true
-
 management:
   tracing:
     sampling:

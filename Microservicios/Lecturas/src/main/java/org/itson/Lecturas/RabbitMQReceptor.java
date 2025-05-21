@@ -32,8 +32,10 @@ public class RabbitMQReceptor {
 
         new Thread(() -> {
             ConnectionFactory factory = new ConnectionFactory();
-            factory.setHost("localhost");
-
+            factory.setHost("rabbitmq");
+            factory.setPort(5672);
+            factory.setUsername("user");
+            factory.setPassword("password");
             try (Connection connection = factory.newConnection();
                  Channel channel = connection.createChannel()) {
 

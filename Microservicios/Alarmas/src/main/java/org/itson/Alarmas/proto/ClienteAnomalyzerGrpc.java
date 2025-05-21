@@ -2,8 +2,8 @@ package org.itson.Alarmas.proto;
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.itson.Alarmas.dtos.AlarmaDTO;
-import org.itson.anomalyzer.Anomalyzer;
-import org.itson.anomalyzer.AnomalyzerServidorGrpc;
+import org.itson.anomalyzerSever.Anomalyzer;
+import org.itson.anomalyzerSever.AnomalyzerServidorGrpc;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

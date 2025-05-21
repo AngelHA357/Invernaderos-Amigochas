@@ -113,7 +113,6 @@ public class GestionSensoresService {
             sensorEntidad.setIdInvernadero(new ObjectId(sensorDTO.getIdInvernadero()));
             sensorEntidad.setSector(sensorDTO.getSector());
             sensorEntidad.setFila(sensorDTO.getFila());
-            sensorEntidad.setEstado(sensorDTO.isEstado());
             // Guardar sensor actualizado
             Sensor resultado;
             try {
@@ -175,9 +174,7 @@ public class GestionSensoresService {
                 sensorEntidad.getIdInvernadero().toString(),
                 obtenerInvernaderoPorId(sensorEntidad.getIdInvernadero()).getNombre(),
                 sensorEntidad.getSector(),
-                sensorEntidad.getFila(),
-                sensorEntidad.isEstado()
-        );
+                sensorEntidad.getFila());
     }
 
     /**

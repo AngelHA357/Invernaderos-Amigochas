@@ -4,12 +4,8 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.itson.Anomalyzer.dtos.AlarmaDTO;
 import org.itson.Anomalyzer.service.Analizador;
-import org.itson.anomalyzer.Anomalyzer;
-import org.itson.anomalyzer.AnomalyzerServidorGrpc;
+import org.itson.anomalyzerSever.*;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @GrpcService
 public class ServidorAnomalyzerGrpc extends AnomalyzerServidorGrpc.AnomalyzerServidorImplBase {

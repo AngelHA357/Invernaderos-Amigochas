@@ -17,7 +17,9 @@ import org.itson.Anomalyzer.proto.ClienteAlarmasGrpc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +44,10 @@ public class AnomalyzerService {
     @PostConstruct
     private void init() {
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
+        factory.setHost("rabbitmq");
+        factory.setPort(5672);
+        factory.setUsername("user");
+        factory.setPassword("password");
         try {
             Connection connection = factory.newConnection();
             channel = connection.createChannel();
@@ -82,12 +87,18 @@ public class AnomalyzerService {
             AlarmaAnomaliaDTO alarmaAnomalia = new AlarmaAnomaliaDTO(alarmaDetonadora, anomalia);
             String json = gson.toJson(alarmaAnomalia);
 
-            PublicKey llavePublica = EncriptadorRSA.loadPublicKey("src/main/resources/keys/clave_publica_alarmator.pem");
+            // Abrimos el InputStream desde recursos en el classpath
+            try (InputStream isPublicKey = getClass().getClassLoader().getResourceAsStream("keys/clave_publica_alarmator.pem")) {
+                if (isPublicKey == null) {
+                    throw new FileNotFoundException("No se encontró la llave pública en recursos");
+                }
+                PublicKey llavePublica = EncriptadorRSA.loadPublicKey(isPublicKey);
 
             String jsonEncriptado = EncriptadorRSA.encryptHybrid(json, llavePublica);
 
             channel.queueDeclare(QUEUE_ALARMAS, false, false, false, null);
             channel.basicPublish("", QUEUE_ALARMAS, null, jsonEncriptado.getBytes());
+            }
         } catch (IOException e) {
             System.out.println("Error al enviar la anomalía: " + e.getMessage());
         } catch (Exception e) {

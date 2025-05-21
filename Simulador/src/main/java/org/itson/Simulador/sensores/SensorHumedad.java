@@ -1,11 +1,15 @@
 package org.itson.Simulador.sensores;
 
 import com.google.gson.Gson;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.security.PublicKey;
 import java.util.Date;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -52,17 +56,23 @@ public class SensorHumedad extends Sensor implements Runnable {
 
             // Convertimos a JSON
             String payload = gson.toJson(lectura);
-            
-            PublicKey llavePublica = EncriptadorRSA.loadPublicKey("src\\main\\resources\\keys\\clave_publica_gateway.pem");
-            
-            byte[] payloadEncriptado = EncriptadorRSA.encrypt(payload, llavePublica);
 
-            MqttMessage message = new MqttMessage(payloadEncriptado);
-            message.setQos(0);
-            client.publish(topic, message);
+            // Abrimos el InputStream desde recursos en el classpath
+            try (InputStream is = getClass().getClassLoader().getResourceAsStream("keys/clave_publica_gateway.pem")) {
+                if (is == null) {
+                    throw new FileNotFoundException("No se encontró la llave pública en recursos");
+                }
+                PublicKey llavePublica = EncriptadorRSA.loadPublicKey(is);
 
-            System.out.println(contador + " - DTO publicado: " + payload);
-            contador++;
+                byte[] payloadEncriptado = EncriptadorRSA.encrypt(payload, llavePublica);
+
+                MqttMessage message = new MqttMessage(payloadEncriptado);
+                message.setQos(0);
+                client.publish(topic, message);
+
+                System.out.println(contador + " - DTO publicado: " + payload);
+                contador++;
+            }
         } catch (MqttException ex) {
             Logger.getLogger(SensorHumedad.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {

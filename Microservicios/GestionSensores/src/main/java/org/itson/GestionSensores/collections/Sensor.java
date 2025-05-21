@@ -33,7 +33,6 @@ public class Sensor {
     private ObjectId idInvernadero;
     private String sector;
     private String fila;
-    private boolean estado;
 
     public Sensor(String idSensor, String macAddress, String marca, String modelo, String magnitud, String unidad, ObjectId idInvernadero, String sector, String fila) {
         this.idSensor = idSensor;
@@ -45,19 +44,5 @@ public class Sensor {
         this.idInvernadero = idInvernadero;
         this.sector = sector;
         this.fila = fila;
-        this.estado = true;
-    }
-
-    public Sensor(String idSensor, String macAddress, String marca, String modelo, String magnitud, String unidad, ObjectId idInvernadero, String sector, String fila, boolean estado) {
-        this.idSensor = idSensor;
-        this.macAddress = macAddress;
-        this.marca = marca;
-        this.modelo = modelo;
-        this.magnitud = magnitud;
-        this.unidad = unidad;
-        this.idInvernadero = idInvernadero;
-        this.sector = sector;
-        this.fila = fila;
-        this.estado = estado;
     }
 }

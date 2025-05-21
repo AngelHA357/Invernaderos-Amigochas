@@ -1,6 +1,8 @@
-package encriptadores;
+package org.itson.Gateway.encriptadores;
 
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.*;
@@ -17,8 +19,8 @@ public class EncriptadorRSA {
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    public static PublicKey loadPublicKey(String filepath) throws Exception {
-        try (PemReader reader = new PemReader(new FileReader(filepath))) {
+    public static PublicKey loadPublicKey(InputStream is) throws Exception {
+        try (PemReader reader = new PemReader(new InputStreamReader(is))) {
             PemObject pemObject = reader.readPemObject();
             byte[] content = pemObject.getContent();
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(content);
@@ -26,8 +28,8 @@ public class EncriptadorRSA {
         }
     }
 
-    public static PrivateKey loadPrivateKey(String filepath) throws Exception {
-        try (PemReader reader = new PemReader(new FileReader(filepath))) {
+    public static PrivateKey loadPrivateKey(InputStream is) throws Exception {
+        try (PemReader reader = new PemReader(new InputStreamReader(is))) {
             PemObject pemObject = reader.readPemObject();
             byte[] content = pemObject.getContent();
             PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(content);

@@ -23,7 +23,7 @@ public class Simulador {
         try {
             // ----------------- CON MQTT------------------
             // IP donde estará corriendo Mosquitto (localhost si es en local)
-            String brokerIP = "localhost";
+            String brokerIP = "mosquitto";
             // Dirección del broker (en este caso es Mosquitto en local)
             String broker = "tcp://" + brokerIP + ":1883";
             // Generamos un ID de cliente
@@ -40,7 +40,8 @@ public class Simulador {
             String tipoSensor;
             System.out.print("Indique el tipo de sensor que desea iniciar (Humedad / Temperatura): ");
             do {
-                tipoSensor = tec.nextLine();
+                tipoSensor = "Humedad"; //tec.nextLine();
+                //tipoSensor = tec.nextLine();
                 if (!tipoSensor.equalsIgnoreCase("Humedad") && !tipoSensor.equalsIgnoreCase("Temperatura")) {
                     System.out.print("Ingrese un tipo de sensor - Humedad / Temperatura: ");
                 }

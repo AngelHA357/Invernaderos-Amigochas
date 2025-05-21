@@ -4,172 +4,78 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9879af79-ecd7-44bc-bb39-f33813800b81" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../ExposicionDatos/src/main/java/org/itson/ExposicionDatos/ExposicionDatosApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ExposicionDatos/src/main/java/org/itson/ExposicionDatos/collections/Lectura.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ExposicionDatos/src/main/java/org/itson/ExposicionDatos/controller/ExposicionDatosController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ExposicionDatos/src/main/java/org/itson/ExposicionDatos/dtos/LecturaDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ExposicionDatos/src/main/java/org/itson/ExposicionDatos/exceptions/ExposicionDatosException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ExposicionDatos/src/main/java/org/itson/ExposicionDatos/persistence/ILecturasRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ExposicionDatos/src/main/java/org/itson/ExposicionDatos/service/ExposicionDatosService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ExposicionDatos/src/main/resources/application.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ExposicionDatos/src/main/resources/banner.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Gateway/src/main/java/org/itson/gateway/dtos/LecturaDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Gateway/src/main/java/org/itson/gateway/dtos/LecturaEnriquecidaDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Gateway/src/main/java/org/itson/gateway/encriptadores/EncriptadorRSA.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Gateway/src/main/java/org/itson/gateway/logica/Gateway.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Gateway/src/main/resources/banner.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/dtos/LecturaDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/encriptadores/EncriptadorRSA.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/sensores/Sensor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/sensores/SensorHumedad.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/sensores/SensorTemperatura.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/service/Simulador.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Simulador/src/main/resources/banner.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+    <list default="true" id="dfe9d1f7-0936-49ba-a9d1-fb14c5ec73f6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../Alarmator/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/certs/alarmas-service.cert.pem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/certs/anomalyzer-service.crt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/certs/anomalyzer-service.pem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ExposicionDatos/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Informes/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Informes/src/main/resources/certs/gestion-sensores-service.cert.pem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Microservicios/Login/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Simulador/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../APIGateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../APIGateway/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/comunication/AnomaliaConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/comunication/AnomaliaConsumer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/encriptadores/EncriptadorRSA.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Alarmator/src/main/java/org/itson/Alarmator/encriptadores/EncriptadorRSA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Alarmator/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Alarmator/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/.gitattributes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Certificados/ca.key.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Certificados/localhost.cert.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Certificados/localhost.cert.srl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Certificados/localhost.crt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Certificados/localhost.csr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Certificados/localhost.key" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Certificados/localhost.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Gateway/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Gateway/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Gateway/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/nbactions.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho1313652310400-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho13635794975100-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho14005193093900-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho14617484692900-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho15146781393600-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho15313489168900-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho15619192817200-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho15694183905900-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho15865507879900-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho16449932627900-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho16515576072299-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho17863199855800-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho18043270490800-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho18589690306100-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho18674071751000-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho18750199145800-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho19373555569800-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho19422762163300-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho19540891626600-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho19890482597100-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho19941964262500-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho20534380900000-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho2458241058900-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho26839740898900-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho27139150260700-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho28407383115600-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho28797140659200-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho29116474516600-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho29539238307500-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho43945169769900-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho44114693843200-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho44494479661100-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho45662577765300-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho8940669046900-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/paho9921044263900-tcplocalhost1883/.lck" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Gateway/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/src/main/java/dtos/LecturaDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/src/main/java/dtos/LecturaEnriquecidaDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/src/main/java/encriptadores/EncriptadorRSA.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/src/main/java/org/itson/gateway/Gateway.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/.gitattributes" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/src/main/java/org/itson/APIGateway/ApiGatewayApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/src/main/java/org/itson/APIGateway/config/AuthenticationFilter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/src/main/java/org/itson/APIGateway/config/GatewayCorsConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/src/main/java/org/itson/APIGateway/config/GrpcClientConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/src/main/proto/autenticacion.proto" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/src/main/resources/application.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/src/main/resources/banner.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/src/test/java/org/itson/APIGateway/ApiGatewayApplicationTests.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/ExposicionDatosApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/collections/Lectura.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/controller/ExposicionDatosController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/dtos/LecturaDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/exceptions/ExposicionDatosException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/persistence/ILecturasRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/service/ExposicionDatosService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/resources/application.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/resources/banner.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/proto/ServidorLecturasGrpc.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/proto/ServidorLecturasGrpc.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/comunication/LecturaConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/comunication/LecturaConsumer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/encriptadores/EncriptadorRSA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/encriptadores/EncriptadorRSA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/proto/ClienteAlarmasGrpc.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/proto/ClienteAlarmasGrpc.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/proto/ServidorAnomalyzerGrpc.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/proto/ServidorAnomalyzerGrpc.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/AnomalyzerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/AnomalyzerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/proto/anomalyzer.proto" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/proto/anomalyzer.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/certs/localhost.cert.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/certs/localhost.crt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/certs/localhost.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/itson/Anomalyzer/AnomalyzerApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/itson/Anomalyzer/AnomalyzerApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Gateway/src/main/java/org/itson/gateway/encriptadores/EncriptadorRSA.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Gateway/src/main/java/org/itson/gateway/encriptadores/EncriptadorRSA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Gateway/src/main/java/org/itson/gateway/logica/Gateway.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Gateway/src/main/java/org/itson/gateway/logica/Gateway.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Informes/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Informes/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Informes/src/main/resources/certs/localhost.cert.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/proto/ClienteAnomalyzerGrpc.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/proto/ClienteAnomalyzerGrpc.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/proto/anomalyzer.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/proto/anomalyzer.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/resources/certs/localhost.cert.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/resources/certs/localhost.crt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/resources/certs/localhost.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/docker-compose.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/DataLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/DataLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/collections/Sensor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/collections/Sensor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/dtos/SensorDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/dtos/SensorDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/service/GestionSensoresService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/service/GestionSensoresService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/.gitattributes" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/InformesApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/collections/InformeLectura.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/collections/LecturaCruda.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/controller/InformesController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/dtos/DatosFaltantesDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/dtos/InformeResponseDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/dtos/LecturaDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/persistence/IInformeLecturasRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/proto/ClienteGestionSensoresGrpc.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/service/InformeService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/proto/lecturas.proto" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/resources/application.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/resources/banner.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/resources/certs/localhost.cert.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/test/java/org/itson/Informes/InformesApplicationTests.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/docker-compose.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/nbactions.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/src/main/java/encriptadores/EncriptadorRSA.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/src/main/java/org/itson/dtos/LecturaDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/src/main/java/org/itson/simuladorsensores/sensores/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/src/main/java/org/itson/simuladorsensores/sensores/Sensor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/src/main/java/org/itson/simuladorsensores/sensores/SensorHumedad.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/src/main/java/org/itson/simuladorsensores/sensores/SensorTemperatura.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/src/main/java/org/itson/simuladorsensores/utils/DTOUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/src/main/resources/keys/clave_publica_gateway.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/resources/certs/localhost.crt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/resources/certs/localhost.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/RabbitMQReceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/RabbitMQReceptor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/encriptadores/EncriptadorRSA.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/encriptadores/EncriptadorRSA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/resources/certs/localhost.cert.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/encriptadores/EncriptadorRSA.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/encriptadores/EncriptadorRSA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/sensores/SensorHumedad.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/sensores/SensorHumedad.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/sensores/SensorTemperatura.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/sensores/SensorTemperatura.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/service/Simulador.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Simulador/src/main/java/org/itson/Simulador/service/Simulador.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Interface" />
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="KubernetesApiPersistence">{}</component>
-  <component name="KubernetesApiProvider">{
-  &quot;isMigrated&quot;: true
-}</component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -177,10 +83,10 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 5
-}</component>
-  <component name="ProjectId" id="2vyTymROsRszzjrMWCBYje4uKCX" />
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="2xOvqtPxB6OGEX5rP0PioxHIjCz" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
@@ -190,28 +96,24 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.AnomalyzerApplication.executor": "Run",
-    "Maven.Anomalyzer [clean].executor": "Run",
     "Maven.Anomalyzer [compile].executor": "Run",
-    "Maven.Anomalyzer [depenency-tree].executor": "Run",
     "Maven.Anomalyzer [package].executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
     "Spring Boot.AnomalyzerApplication.executor": "Run",
     "git-widget-placeholder": "Empresariales",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Familia/Documents/GitHub/Invernaderos-Amigochas/Anomalyzer",
+    "last_opened_file_path": "C:/Users/Familia/Documents/GitHub/Invernaderos-Amigochas/Microservicios",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
+    "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "reference.projectsettings.compiler.annotationProcessors",
     "vue.rearranger.settings.migration": "true"
@@ -219,29 +121,12 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\ricar\OneDrive\Documentos\Sistemas Distribuidos\Invernaderos-Amigochas\Anomalyzer\src\main\resources\keys" />
-      <recent name="C:\Users\Familia\Documents\GitHub\Invernaderos-Amigochas\Anomalyzer\src\main\resources\certs" />
-      <recent name="C:\Users\Familia\Documents\GitHub\Invernaderos-Amigochas\Anomalyzer\src\main\proto" />
-      <recent name="C:\Users\Familia\Documents\GitHub\Invernaderos-Amigochas\Anomalyzer\src\main\java" />
+      <recent name="C:\Users\Familia\Documents\GitHub\Invernaderos-Amigochas\Anomalyzer" />
+      <recent name="C:\Users\Familia\Documents\GitHub\Invernaderos-Amigochas\Anomalyzer\src" />
     </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="org.itson.Anomalyzer.encriptadores" />
-      <recent name="org.itson.Anomalyzer.persistence.alarmas" />
-      <recent name="org.itson.Anomalyzer.configurations" />
-      <recent name="org.itson.Anomalyzer.collections" />
-      <recent name="org.itson.Anomalyzer.proto" />
-    </key>
-  </component>
-  <component name="RunAnythingCache">
-    <option name="myCommands">
-      <command value="mvn depenency-tree" />
-    </option>
   </component>
   <component name="RunManager">
     <configuration name="AnomalyzerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <option name="ALTERNATIVE_JRE_PATH" value="21" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="Anomalyzer" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="org.itson.Anomalyzer.AnomalyzerApplication" />
       <method v="2">
@@ -260,66 +145,17 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="9879af79-ecd7-44bc-bb39-f33813800b81" name="Changes" comment="" />
+      <changelist id="dfe9d1f7-0936-49ba-a9d1-fb14c5ec73f6" name="Changes" comment="" />
       <created>1730182693366</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1730182693366</updated>
       <workItem from="1730182694407" duration="403000" />
-      <workItem from="1745116571575" duration="4781000" />
-      <workItem from="1745136793657" duration="7502000" />
-      <workItem from="1745170234963" duration="8800000" />
-      <workItem from="1745952708810" duration="2793000" />
-      <workItem from="1745983040073" duration="496000" />
-      <workItem from="1745985010957" duration="187000" />
-      <workItem from="1746079250435" duration="4620000" />
-      <workItem from="1746392534747" duration="5540000" />
-      <workItem from="1746398160340" duration="1706000" />
-      <workItem from="1746434154839" duration="96000" />
-      <workItem from="1746434271620" duration="472000" />
-      <workItem from="1746434796124" duration="92000" />
-      <workItem from="1747627234697" duration="1866000" />
-      <workItem from="1747629140876" duration="8909000" />
-      <workItem from="1747710263365" duration="2000" />
-      <workItem from="1747710602808" duration="2070000" />
-      <workItem from="1747715713640" duration="4627000" />
-      <workItem from="1747796295047" duration="727000" />
-      <workItem from="1747800142717" duration="1688000" />
+      <workItem from="1747822129832" duration="4367000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/Analizador.java</url>
-          <line>83</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-    <watches-manager>
-      <configuration name="SpringBootApplicationConfigurationType">
-        <watch expression="alarmasObtenidas" />
-        <watch expression="alarmasObtenidas" />
-      </configuration>
-      <configuration name="Application">
-        <watch expression="lecturaEnriquecida" />
-      </configuration>
-    </watches-manager>
   </component>
 </project>

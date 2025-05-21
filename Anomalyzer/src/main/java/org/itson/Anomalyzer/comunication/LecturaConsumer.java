@@ -6,14 +6,13 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 import jakarta.annotation.PostConstruct;
+import org.itson.Anomalyzer.dtos.LecturaDTO;
 import org.itson.Anomalyzer.encriptadores.EncriptadorRSA;
 import org.itson.Anomalyzer.service.Analizador;
-import org.itson.Anomalyzer.dtos.LecturaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.util.concurrent.CountDownLatch;
 
@@ -31,7 +30,10 @@ public class LecturaConsumer {
         new Thread(() -> {
             CountDownLatch latch = new CountDownLatch(1);
             ConnectionFactory factory = new ConnectionFactory();
-            factory.setHost("localhost");
+            factory.setHost("rabbitmq");
+            factory.setPort(5672);
+            factory.setUsername("user");
+            factory.setPassword("password");
             try (Connection connection = factory.newConnection();
                  Channel channel = connection.createChannel();) {
                 channel.queueDeclare(QUEUE_RECEIVE, false, false, false, null);
