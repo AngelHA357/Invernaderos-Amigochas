@@ -1,9 +1,12 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: msvc-api-gateway
-  config:
-    import: optional:configserver:http://localhost:8888
   cloud:
+    config:
+      enabled: false
     gateway:
       globalcors:
         corsConfigurations:
@@ -12,6 +15,39 @@ spring:
             allowedMethods: "*"
             allowedHeaders: "*"
             allowCredentials: true
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: msvc-gestion-sensores
+          uri: http://localhost:8090
+          predicates:
+            - Path=/api/v1/gestionSensores/**
+        - id: msvc-alarmas
+          uri: http://localhost:8093
+          predicates:
+            - Path=/api/v1/alarmas/**
+        - id: msvc-lecturas
+          uri: http://localhost:8091
+          predicates:
+            - Path=/api/v1/lecturas/**
+        - id: msvc-reportes-anomalias
+          uri: http://localhost:8092
+          predicates:
+            - Path=/api/v1/reportesAnomalias/**
+        - id: msvc-informes
+          uri: http://localhost:8094
+          predicates:
+            - Path=/api/v1/informes/**
+        - id: msvc-login
+          uri: http://localhost:8095
+          predicates:
+            - Path=/api/v1/login
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
 
 # Configuración del cliente gRPC
 grpc:

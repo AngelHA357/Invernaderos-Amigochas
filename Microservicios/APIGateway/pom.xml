@@ -23,7 +23,8 @@
         <developerConnection/>
         <tag/>
         <url/>
-    </scm>    <properties>
+    </scm>
+    <properties>
         <java.version>21</java.version>
         <spring-cloud.version>2024.0.1</spring-cloud.version>
         <grpc.version>1.70.0</grpc.version>
@@ -36,21 +37,14 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        
+
         <!-- gRPC dependencies -->
         <dependency>
             <groupId>io.grpc</groupId>
@@ -88,7 +82,8 @@
                 <scope>import</scope>
             </dependency>
         </dependencies>
-    </dependencyManagement>    <build>
+    </dependencyManagement>
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

@@ -5,23 +5,66 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9879af79-ecd7-44bc-bb39-f33813800b81" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/configurations/AnomaliaDBConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/configurations/MongoConfiguration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/dtos/DatosFaltantesDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/proto/ClienteGestionSensoresGrpc.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/proto/lecturas.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/resources/certs/localhost.cert.pem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Autenticacion/src/main/resources/banner.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-reportes-anomalias.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-reportes-anomalias.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/service/GestionSensoresService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/service/GestionSensoresService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Autenticacion/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Autenticacion/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Autenticacion/src/main/java/org/itson/Autenticacion/AutenticacionApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Autenticacion/src/main/java/org/itson/Autenticacion/AutenticacionApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Autenticacion/src/main/java/org/itson/Autenticacion/RestTemplateConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Autenticacion/src/main/java/org/itson/Autenticacion/RestTemplateConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Autenticacion/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Autenticacion/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Autenticacion/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/APIGateway/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/APIGateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/APIGateway/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/AlarmasApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/java/org/itson/Alarmas/AlarmasApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/java/org/itson/Config/ConfigApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/banner.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-alarmas.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-api-gateway.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-eureka.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-exposicion-datos.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-gestion-sensores.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-informes.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-lecturas.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-login.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/msvc-reportes-anomalias.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/main/resources/configurations/svc-autenticacion.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Config/src/test/java/org/itson/Config/ConfigApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/src/main/java/org/itson/Eureka/EurekaApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/src/main/resources/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/src/main/resources/banner.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Eureka/src/test/java/org/itson/Eureka/EurekaApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/ExposicionDatosApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/java/org/itson/ExposicionDatos/ExposicionDatosApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ExposicionDatos/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Informes/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/InformesApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Informes/src/main/java/org/itson/Informes/InformesApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Informes/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Informes/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/service/LecturaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/java/org/itson/Lecturas/service/LecturaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Lecturas/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Login/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Login/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Login/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Login/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Login/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/collections/Anomalia.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/collections/Anomalia.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/comunicacion/RabbitMQReceptor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/controller/ReportesAnomaliasController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/controller/ReportesAnomaliasController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/IAnomaliasRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/anomalias/IAnomaliasRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/IReportesAnomaliasRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/reportes/IReportesAnomaliasRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/service/ReportesAnomaliasService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/service/ReportesAnomaliasService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,35 +104,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.AnomalyzerApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.Anomalyzer [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.Anomalyzer [compile].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.Anomalyzer [depenency-tree].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.Anomalyzer [package].executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Spring Boot.AnomalyzerApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/ricar/OneDrive/Documentos/Sistemas Distribuidos/Invernaderos-Amigochas/Anomalyzer/src/main/resources/keys&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.projectsettings.compiler.annotationProcessors&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.AnomalyzerApplication.executor": "Run",
+    "Maven.Anomalyzer [clean].executor": "Run",
+    "Maven.Anomalyzer [compile].executor": "Run",
+    "Maven.Anomalyzer [depenency-tree].executor": "Run",
+    "Maven.Anomalyzer [package].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.AnomalyzerApplication.executor": "Run",
+    "git-widget-placeholder": "Empresariales",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/ricar/OneDrive/Documentos/Sistemas Distribuidos/Invernaderos-Amigochas/Anomalyzer/src/main/resources/keys",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.projectsettings.compiler.annotationProcessors",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\ricar\OneDrive\Documentos\Sistemas Distribuidos\Invernaderos-Amigochas\Anomalyzer\src\main\resources\keys" />
@@ -110,20 +153,7 @@
       <command value="mvn depenency-tree" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.AnomalyzerApplication">
-    <configuration name="AnomalyzerApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.itson.Anomalyzer.AnomalyzerApplication" />
-      <module name="Anomalyzer" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.itson.Anomalyzer.comunication.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager">
     <configuration name="AnomalyzerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="21" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -134,11 +164,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.AnomalyzerApplication" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -174,6 +199,7 @@
       <workItem from="1747710263365" duration="2000" />
       <workItem from="1747710602808" duration="2070000" />
       <workItem from="1747715713640" duration="4627000" />
+      <workItem from="1747796295047" duration="596000" />
     </task>
     <servers />
   </component>

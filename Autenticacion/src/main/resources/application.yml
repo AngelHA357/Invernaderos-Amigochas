@@ -1,10 +1,31 @@
+server:
+  port: 8097
+
 spring:
   application:
     name: svc-autenticacion
-  config:
-    import: optional:configserver:http://localhost:8888
+  cloud:
+    config:
+      enabled: false
 
-# Configuración del servidor gRPC
 grpc:
   server:
-    port: 9090
+    port: 9091
+
+jwt:
+  secret: "unaClaveSecretaMuyLargaYSeguraParaFirmarLosTokensJWT"
+  expiration: 3600000  # 1 hora
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true

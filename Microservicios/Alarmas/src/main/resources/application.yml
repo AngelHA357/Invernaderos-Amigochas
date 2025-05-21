@@ -1,5 +1,34 @@
+server:
+  port: 8093
+
 spring:
   application:
     name: msvc-alarmas
-  config:
-    import: optional:configserver:http://localhost:8888
+  data:
+    mongodb:
+      database: alarmas_db
+      uri: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
+      auto-index-creation: true
+  cloud:
+    config:
+      enabled: false
+
+grpc:
+  server:
+    port: 9093
+    security:
+      enabled: true
+      certificate-chain: classpath:certs/localhost.crt
+      private-key: classpath:certs/localhost.pem
+  client:
+    anomalyzer:
+      address: static://localhost:9094
+      negotiation-type: TLS
+      security:
+        trust-cert-collection: classpath:certs/localhost.cert.pem
+      enable-keep-alive: true
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0

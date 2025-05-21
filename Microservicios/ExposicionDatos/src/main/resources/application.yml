@@ -1,5 +1,18 @@
+server:
+  port: 8096
+
 spring:
   application:
     name: msvc-exposicion-datos
-  config:
-    import: optional:configserver:http://localhost:8888
+  data:
+    mongodb:
+      database: lecturas_db
+      uri: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
+  cloud:
+    config:
+      enabled: false
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0

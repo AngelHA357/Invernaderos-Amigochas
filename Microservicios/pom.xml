@@ -19,8 +19,6 @@
 
     <modules>
         <module>APIGateway</module>
-        <module>Eureka</module>
-        <module>Config</module>
         <module>Alarmas</module>
         <module>GestionSensores</module>
         <module>ReportesAnomalias</module>

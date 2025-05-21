@@ -1,6 +1,5 @@
 package org.itson.Lecturas.service;
 
-import io.grpc.StatusRuntimeException;
 import org.itson.Lecturas.collections.Lectura;
 import org.itson.Lecturas.dtos.LecturaDTO;
 import org.itson.Lecturas.excepciones.LecturasException;
