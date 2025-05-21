@@ -21,7 +21,14 @@ public class ServidorLecturasGrpc extends ServicioGestionLecturasGrpc.ServicioGe
     @Override
     public void obtenerDatosFaltantes(SolicitudDatos request, StreamObserver<RespuestaDatos> responseObserver) {
         List<String> idSensores = request.getIdSensorList();
-        List<DatosFaltantesDTO> listaDatosFaltantes = gestionSensoresService.obtenerDatosSensores(idSensores);
+        List<DatosFaltantesDTO> listaDatosFaltantes = null;
+        try {
+            listaDatosFaltantes = gestionSensoresService.obtenerDatosSensores(idSensores);
+        } catch (Exception e) {
+            // Manejo de excepciones
+            responseObserver.onError(new RuntimeException("Error al obtener datos faltantes: " + e.getMessage()));
+            return;
+        }
 
         // Convertimos la lista de DTOs al formato de la respuesta gRPC
         RespuestaDatos.Builder respuestaBuilder = RespuestaDatos.newBuilder();

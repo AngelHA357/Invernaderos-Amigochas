@@ -1,0 +1,11 @@
+services:
+  lecturas-app:
+    image: lecturas-imagen
+    container_name: lecturas-service
+    build:
+      context: Lecturas
+      dockerfile: Dockerfile
+    ports:
+      - "8091:8091"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas

@@ -18,13 +18,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>APIGateway</module>
         <module>Alarmas</module>
         <module>GestionSensores</module>
         <module>ReportesAnomalias</module>
         <module>Lecturas</module>
-        <module>Informes</module>
-        <module>ExposicionDatos</module>
         <module>Login</module>
     </modules>
 

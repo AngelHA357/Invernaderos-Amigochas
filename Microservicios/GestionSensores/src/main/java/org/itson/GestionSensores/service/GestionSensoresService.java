@@ -350,13 +350,19 @@ public class GestionSensoresService {
     private List<String> obtenerDatosFaltantes(String idSensor) {
         // Los vamos a buscar a la BD
         Optional<Sensor> sensorObtenido = gestionSensoresRepository.findByIdSensor(idSensor);
+        List<String> datos = new ArrayList<>();
         if (!sensorObtenido.isPresent()) {
+            String sector = "N/A";
+            String fila = "N/A";
+            // Creamos la lista con los datos y los mandamos
+            datos = Arrays.asList(sector, fila);
+            return datos;
         }
         Sensor sensor = sensorObtenido.get();
         String sector = sensor.getSector();
         String fila = sensor.getFila();
         // Creamos la lista con los datos y los mandamos
-        List<String> datos = Arrays.asList(sector, fila);
+        datos = Arrays.asList(sector, fila);
         return datos;
     }
 }

@@ -1,0 +1,64 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    config:
+      enabled: false
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:5173"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: msvc-gestion-sensores
+          uri: http://localhost:8090
+          predicates:
+            - Path=/api/v1/gestionSensores/**
+        - id: msvc-alarmas
+          uri: http://localhost:8093
+          predicates:
+            - Path=/api/v1/alarmas/**
+        - id: msvc-lecturas
+          uri: http://localhost:8091
+          predicates:
+            - Path=/api/v1/lecturas/**
+        - id: msvc-reportes-anomalias
+          uri: http://localhost:8092
+          predicates:
+            - Path=/api/v1/reportesAnomalias/**
+        - id: svc-informes
+          uri: http://localhost:8094
+          predicates:
+            - Path=/api/v1/informes/**
+        - id: msvc-login
+          uri: http://localhost:8095
+          predicates:
+            - Path=/api/v1/login
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+# Configuración del cliente gRPC
+grpc:
+  client:
+    autenticacion-service:
+      address: static://localhost:9091
+      negotiationType: plaintext
+
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.web.cors: TRACE
+    org.springframework.web.reactive: TRACE
+    reactor.netty.http.server: DEBUG
