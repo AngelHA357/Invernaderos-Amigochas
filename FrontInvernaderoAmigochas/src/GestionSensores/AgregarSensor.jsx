@@ -15,17 +15,17 @@ function AgregarSensor() {
     
     // Estado para el formulario
     const [formData, setFormData] = useState({
-        idSensor: '',          // ID del sensor (String)
-        macAddress: '',        // Dirección MAC (String)
-        marca: '',             // Marca del sensor (String)
-        modelo: '',            // Modelo del sensor (String)
-        tipoSensor: '',        // Tipo de sensor (String)
-        magnitud: '',          // Magnitud que mide el sensor (String)
-        unidad: '',            // Unidad de medida (String)
-        idInvernadero: '',     // ID del invernadero (ObjectId) - se llenará desde sessionStorage
-        sector: '',            // Sector del invernadero (String)
-        fila: '',              // Fila del invernadero (String)
-        estado: true           // Estado del sensor (Boolean)
+        idSensor: '',
+        macAddress: '',
+        marca: '',
+        modelo: '',
+        tipoSensor: '',
+        magnitud: '',
+        unidad: '',
+        idInvernadero: '',
+        sector: '',
+        fila: '',
+        estado: true
     });
 
     // Opciones para los tipos de sensores (limitados a Temperatura, Humedad y CO2)
@@ -38,8 +38,7 @@ function AgregarSensor() {
     // Opciones para las unidades según el tipo seleccionado
     const unidadesPorTipo = {
         'Temperatura': ['°C', '°F', 'K'],
-        'Humedad': ['%', 'g/m³'],
-        'CO2': ['ppm', 'mg/m³']
+        'Humedad': ['%', 'g/m³']
     };
 
     // Al iniciar, cargar el invernadero desde sessionStorage

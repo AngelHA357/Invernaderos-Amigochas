@@ -25,7 +25,6 @@ function AlertasRecientes() {
     
     const fetchAlertas = async (inicio, fin) => {
         if (!inicio || !fin) {
-            // No hacer fetch si las fechas no están seteadas (evitar llamadas en la carga inicial antes de que el primer useEffect las setee)
             return;
         }
         if (new Date(inicio) > new Date(fin)) {
@@ -42,8 +41,8 @@ function AlertasRecientes() {
         const endpoint = `${gatewayUrl}/api/v1/anomalyzer/anomalias`; 
         
         const params = new URLSearchParams({
-            fechaInicio: inicio, // Formato YYYY-MM-DD
-            fechaFin: fin        // Formato YYYY-MM-DD
+            fechaInicio: inicio,
+            fechaFin: fin
         });
         const url = `${endpoint}?${params.toString()}`;
         
@@ -58,7 +57,6 @@ function AlertasRecientes() {
                     localStorage.removeItem('authToken');
                     localStorage.removeItem('userRole');
                     localStorage.removeItem('username');
-                    // navigate('/login'); // Opcional: redirigir al login
                     throw new Error('Sesión expirada. Por favor, inicie sesión nuevamente.');
                 }
                 if (response.status === 403) {
@@ -70,12 +68,12 @@ function AlertasRecientes() {
                 let errorMsg = `Error ${response.status} al obtener alertas.`;
                 try {
                     const errorData = await response.json();
-                    errorMsg = errorData.message || errorData.mensaje || errorMsg; // Ajustar según el campo de error del backend
-                } catch (e) { /* No hacer nada si el cuerpo no es JSON o si la conversión falla */ }
+                    errorMsg = errorData.message || errorData.mensaje || errorMsg;
+                } catch (e) { }
                 throw new Error(errorMsg);
             }
 
-            // --- CAMBIO PARA MANEJAR RESPUESTA 204 NO CONTENT ---
+
             if (response.status === 204) {
                 setAlertas([]);
                 setLoadingAlertas(false);
@@ -94,8 +92,6 @@ function AlertasRecientes() {
                          descripcionTarjeta += ` (Valor: ${anomaliaBackend.valor} ${anomaliaBackend.unidad || ''})`;
                     }
 
-                    // Calcular tiempo relativo (simplificado) o usar fecha/hora
-                    // Para un tiempo relativo más preciso, considera una librería como date-fns o moment.js (o luxon)
                     const ahora = new Date();
                     const diffMs = ahora - fechaHoraAnomalia;
                     const diffMins = Math.round(diffMs / 60000);
@@ -114,23 +110,21 @@ function AlertasRecientes() {
                     return {
                         id: anomaliaBackend.id,
                         invernadero: anomaliaBackend.nombreInvernadero || 'N/A',
-                        descripcion: descripcionTarjeta, // Descripción principal para el título de la tarjeta
-                        detalleDescripcion: anomaliaBackend.causa, // Podría ser una descripción más detallada
-                        tiempo: tiempoRelativo, 
-                        // Valores específicos para mostrar si es necesario (ya incluidos en descripcionTarjeta)
-                        temperatura: anomaliaBackend.magnitud === 'Temperatura' ? `${anomaliaBackend.valor} ${anomaliaBackend.unidad || '°C'}` : undefined,
+                        descripcion: descripcionTarjeta,
+                        detalleDescripcion: anomaliaBackend.causa,
+                        tiempo: tiempoRelativo,
+                        temperatura: anomaliaBackend.magnitud === 'Temperatura' ? `${Number(anomaliaBackend.valor).toFixed(2)} ${anomaliaBackend.unidad || '°C'}` : undefined,
                         humedad: anomaliaBackend.magnitud === 'Humedad' ? `${anomaliaBackend.valor} ${anomaliaBackend.unidad || '%'}` : undefined,
                         co2: anomaliaBackend.magnitud === 'CO2' ? `${anomaliaBackend.valor} ${anomaliaBackend.unidad || 'ppm'}` : undefined,
-                        // ... otras magnitudes
                         fecha: fechaHoraAnomalia.toLocaleDateString(),
                         hora: fechaHoraAnomalia.toLocaleTimeString(),
-                        umbral: 'N/A', // Este campo no parece venir de Anomalia.java
+                        umbral: 'N/A',
                         sensorId: anomaliaBackend.idSensor,
                         sensorMarca: anomaliaBackend.marca,
                         sensorModelo: anomaliaBackend.modelo,
-                        ultimaCalibracion: 'N/A', // Este campo no parece venir de Anomalia.java
-                        duracion: 'N/A', // Este campo no parece venir de Anomalia.java
-                        tipo: anomaliaBackend.magnitud, // Para la lógica de colores/iconos en TarjetaAlerta
+                        ultimaCalibracion: 'N/A',
+                        duracion: 'N/A',
+                        tipo: anomaliaBackend.magnitud,
                         tieneReporte: anomaliaBackend.tieneReporte || false 
                     };
                 });
@@ -167,11 +161,11 @@ function AlertasRecientes() {
             setFechaInicio(formattedWeekAgo);
             setFechaFin(formattedToday);
         }
-    }, []); // Dependencia vacía para que se ejecute solo una vez al montar
+    }, []);
 
     // useEffect para recargar alertas cuando cambian las fechas (y las fechas son válidas)
     useEffect(() => {
-        if (fechaInicio && fechaFin) { // Asegurarse que ambas fechas estén seteadas
+        if (fechaInicio && fechaFin) {
             fetchAlertas(fechaInicio, fechaFin);
         }
     }, [fechaInicio, fechaFin]); 

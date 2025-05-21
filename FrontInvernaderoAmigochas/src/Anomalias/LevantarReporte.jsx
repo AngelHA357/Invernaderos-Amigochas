@@ -16,9 +16,7 @@ function LevantarReporte() {
     const [modoVisualizacion, setModoVisualizacion] = useState(false);
 
     useEffect(() => {
-        // Función para mapear los datos del backend al formato esperado por el frontend
         const mapearDatosAnomalia = (datos) => {
-            // Si ya tiene los campos esperados, no hacer nada
             if (datos.descripcion && datos.invernadero && (datos.temperatura || datos.humedad || datos.co2)) {
                 return datos;
             }
@@ -30,7 +28,6 @@ function LevantarReporte() {
             let fecha = fechaObj ? fechaObj.toLocaleDateString('es-MX') : '';
             let hora = fechaObj ? fechaObj.toLocaleTimeString('es-MX') : '';
 
-            // Adaptar valores según el tipo de magnitud y redondear a dos decimales
             let valorFormateado = valor !== null && valor !== undefined ? Number(valor).toFixed(2) : valor;
             let temperaturaValue = tipo === 'Temperatura' ? `${valorFormateado}${unidad}` : undefined;
             let humedadValue = tipo === 'Humedad' ? `${valorFormateado}${unidad}` : undefined;
@@ -49,7 +46,6 @@ function LevantarReporte() {
                 sensorMarca: datos.marca || datos.sensorMarca || '',
                 sensorModelo: datos.modelo || datos.sensorModelo || '',
                 tipo,
-                // Para compatibilidad
                 ...datos
             };
         };
@@ -147,9 +143,9 @@ function LevantarReporte() {
                     causa: alerta.causa || alerta.descripcion
                 },
                 acciones: acciones,
-                notas: notas || "", // comentarios en el modelo del backend
+                notas: notas || "",
                 fecha: new Date(),
-                usuario: localStorage.getItem('usuario') || 'Sistema'
+                usuario: localStorage.getItem('user') || 'Sistema'
             };
 
             // Enviar el reporte al backend
@@ -242,12 +238,7 @@ function LevantarReporte() {
                                     {modoVisualizacion ? 'Reporte de Anomalía' : 'Generar Reporte de Anomalía'}
                                 </h1>
                                 <p className="text-sm text-green-600">Alerta ID: {alerta.id} • {alerta.fecha}</p>
-                                {modoVisualizacion && reporteExistente && (
-                                    <p className="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded mt-1 inline-block">
-                                        📋 Reporte generado el {new Date(reporteExistente.fecha).toLocaleDateString()}
-                                        {reporteExistente.usuario && ` por ${reporteExistente.usuario}`}
-                                    </p>
-                                )}
+
                             </div>
                         </div>
                         <button 
@@ -257,13 +248,6 @@ function LevantarReporte() {
                         </button>
                     </div>
 
-                    {/* Mostrar un banner indicando que se está visualizando un reporte existente */}
-                    {modoVisualizacion && (
-                        <div className="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-lg text-blue-700 flex items-center text-sm">
-                            <span className="text-blue-500 text-lg mr-2">ℹ️</span>
-                            Estás visualizando un reporte que ya ha sido registrado para esta anomalía. Los campos no son editables.
-                        </div>
-                    )}
 
                     <form onSubmit={handleSubmit}>
                         {/* Banner de alerta */}

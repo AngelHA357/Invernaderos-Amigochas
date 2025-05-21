@@ -222,12 +222,6 @@ public class ReportesAnomaliasService {
         return reportesAnomaliasRepository.existsByAnomalia__id(new ObjectId(anomaliaId));
     }
 
-    /**
-     * Obtiene un reporte asociado a una anomalía por su ID
-     * @param anomaliaId ID de la anomalía a buscar
-     * @return ReporteAnomaliaDTO con los datos del reporte encontrado
-     * @throws ReportesAnomaliasServiceException si no se encuentra un reporte para la anomalía
-     */
     public ReporteAnomaliaDTO obtenerReportePorAnomaliaId(String anomaliaId) throws ReportesAnomaliasServiceException {
         if (!ObjectId.isValid(anomaliaId)) {
             throw new ReportesAnomaliasServiceException("ID de anomalía inválido: " + anomaliaId);

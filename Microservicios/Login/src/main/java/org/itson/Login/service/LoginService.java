@@ -22,15 +22,6 @@ public class LoginService {
   @Autowired
   private JwtService jwtService;
 
-  /**
-     * Intenta autenticar a un usuario usando el AuthenticationManager de Spring Security.
-     * Este manager usará internamente el UserDetailsService (que busca en tu BD)
-     * y el PasswordEncoder (BCrypt) que configuramos.
-     *
-     * @param request DTO con username y password que vienen del Controller.
-     * @return DTO de respuesta si la autenticación es exitosa.
-     * @throws AuthenticationException Si la autenticación falla (será capturada por el Controller).
-     */    
     public LoginResponseDTO login(LoginRequestDTO request) throws AuthenticationException {
         System.out.println("Intentando autenticar usuario: " + request.getUsername());
 
@@ -66,7 +57,7 @@ public class LoginService {
             return new LoginResponseDTO("Usuario autenticado exitosamente!", jwtToken);
         } catch (AuthenticationException e) {
             System.out.println("Error de autenticación: " + e.getMessage());
-            throw e; // Lanzar la excepción para que el controlador la maneje
+            throw e;
         }
     }
 }

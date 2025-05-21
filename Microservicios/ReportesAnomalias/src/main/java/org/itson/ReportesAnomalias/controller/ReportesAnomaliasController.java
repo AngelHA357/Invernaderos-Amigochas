@@ -154,11 +154,6 @@ public class ReportesAnomaliasController {
         }
     }
 
-    /**
-     * Verifica si existe un reporte para una anomalía específica.
-     * @param anomaliaId ID de la anomalía
-     * @return true si existe reporte, false en caso contrario
-     */
     @GetMapping("/verificar/{anomaliaId}")
     public ResponseEntity<Boolean> verificarReporteExistente(@PathVariable("anomaliaId") String anomaliaId) {
         try {
@@ -174,11 +169,6 @@ public class ReportesAnomaliasController {
         }
     }
 
-    /**
-     * Obtiene un reporte asociado a una anomalía específica.
-     * @param anomaliaId ID de la anomalía
-     * @return El reporte encontrado o error si no existe
-     */
     @GetMapping("/reporte-de-anomalia/{anomaliaId}")
     public ResponseEntity<?> obtenerReportePorAnomaliaId(@PathVariable("anomaliaId") String anomaliaId) {
         try {

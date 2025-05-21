@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { verificarReporteExistente } from '../services/ReporteService';
 
-// Props: tipo (para color/icono), tieneReporte, y 'tiempo' es una descripción
 function TarjetaAlerta({ id, invernadero, descripcion, tipo, tiempo }) {
     const navigate = useNavigate();
     const [tieneReporte, setTieneReporte] = useState(false);
@@ -25,7 +24,7 @@ function TarjetaAlerta({ id, invernadero, descripcion, tipo, tiempo }) {
         verificarReporte();
     }, [id]);
 
-    let colorBorde = 'border-yellow-400'; // Default
+    let colorBorde = 'border-yellow-400';
     let colorFondoHover = 'hover:bg-yellow-50';
     let colorBoton = 'border-yellow-400 text-yellow-700 hover:bg-yellow-500 hover:text-white focus:ring-yellow-300';
     let icono = '⚠️';
@@ -47,16 +46,6 @@ function TarjetaAlerta({ id, invernadero, descripcion, tipo, tiempo }) {
             colorFondoHover = 'hover:bg-purple-50';
             colorBoton = 'border-purple-400 text-purple-700 hover:bg-purple-500 hover:text-white focus:ring-purple-300';
             icono = '☁️';
-        } else if (tipoLowerCase.includes('luz') || tipoLowerCase.includes('luminosidad')) {
-            colorBorde = 'border-amber-500';
-            colorFondoHover = 'hover:bg-amber-50';
-            colorBoton = 'border-amber-400 text-amber-700 hover:bg-amber-500 hover:text-white focus:ring-amber-300';
-            icono = '💡';
-        } else if (tipoLowerCase.includes('ph')) {
-            colorBorde = 'border-green-500';
-            colorFondoHover = 'hover:bg-green-50';
-            colorBoton = 'border-green-400 text-green-700 hover:bg-green-500 hover:text-white focus:ring-green-300';
-            icono = '🧪';
         }
     }
 
