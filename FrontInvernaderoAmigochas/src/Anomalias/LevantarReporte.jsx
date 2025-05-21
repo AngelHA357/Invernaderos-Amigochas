@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
-import { obtenerDetallesAnomalia, enviarReporte, verificarExistenciaReporte } from '../services/ReporteService';
+import { obtenerDetallesAnomalia, enviarReporte } from '../services/ReporteService';
 
 function LevantarReporte() {
     const navigate = useNavigate();
@@ -26,8 +26,6 @@ function LevantarReporte() {
                     return;
                 }
 
-                // Eliminada la verificación de existencia de reporte
-                // ya que ese endpoint no existe en el backend
 
                 console.log(`[LevantarReporte] Obteniendo detalles de anomalía con ID: ${alertaId}`);
 

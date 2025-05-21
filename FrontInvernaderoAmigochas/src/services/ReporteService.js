@@ -23,7 +23,7 @@ const getAuthHeaders = () => {
 export const obtenerDetallesAnomalia = async (anomaliaId) => {
     try {
         // Usando el endpoint correcto para obtener una anomalía por ID
-        const response = await axios.get(`${API_URL}/anomalia/${anomaliaId}`, {
+        const response = await axios.get(`${API_URL}/${anomaliaId}`, {
             headers: getAuthHeaders(),
         });
         return response.data;
@@ -56,24 +56,6 @@ export const enviarReporte = async (reporte) => {
         return response.data;
     } catch (error) {
         console.error('Error al enviar reporte:', error);
-        throw error;
-    }
-};
-
-/**
- * Verifica si una anomalía ya tiene un reporte asociado
- * @param {string} anomaliaId - ID de la anomalía
- * @returns {Promise} Promesa con la respuesta del servidor
- */
-export const verificarExistenciaReporte = async (anomaliaId) => {
-    try {
-        // Verificamos si ya existe un reporte para esta anomalía
-        const response = await axios.get(`${API_URL}/verificarReporte/${anomaliaId}`, {
-            headers: getAuthHeaders(),
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Error al verificar existencia de reporte:', error);
         throw error;
     }
 };

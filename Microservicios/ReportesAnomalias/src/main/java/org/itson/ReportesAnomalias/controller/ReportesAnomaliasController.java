@@ -1,5 +1,6 @@
 package org.itson.ReportesAnomalias.controller;
 
+import org.bson.types.ObjectId;
 import org.itson.ReportesAnomalias.dtos.AnomaliaDTO;
 import org.itson.ReportesAnomalias.dtos.ReporteAnomaliaDTO;
 import org.itson.ReportesAnomalias.excepciones.ReportesAnomaliasServiceException;
@@ -129,5 +130,29 @@ public class ReportesAnomaliasController {
         respuesta.put("existe", existe);
         return ResponseEntity.ok(respuesta);
     }
+
+    @GetMapping("/{id}") 
+    public ResponseEntity<?> obtenerAnomaliaPorSuId(@PathVariable("id") String id) {
+        try {
+            if (!ObjectId.isValid(id)) {
+                Map<String, String> error = new HashMap<>();
+                error.put("mensaje", "El ID de anomalía proporcionado no es válido.");
+                return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            }
+            AnomaliaDTO anomalia = reportesAnomaliasService.obtenerAnomaliaPorId(id);
+            return ResponseEntity.ok(anomalia);
+        } catch (ReportesAnomaliasServiceException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("mensaje", e.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            System.err.println("Error en ReportesAnomaliasController al obtener anomalía por ID: " + e.getMessage());
+            e.printStackTrace();
+            error.put("mensaje", "Error interno al obtener la anomalía.");
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 }

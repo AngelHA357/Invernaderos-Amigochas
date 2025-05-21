@@ -15,10 +15,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnomaliaDTO extends LecturaDTO {
+    private String _id;
     private String causa;
 
-    public AnomaliaDTO(String idSensor, String macAddress, String marca, String modelo, String magnitud, String unidad, float valor, Date fechaHora, String idInvernadero, String nombreInvernadero, String sector, String fila, String causa) {
+    public AnomaliaDTO(String _id, String idSensor, String macAddress, String marca, String modelo, String magnitud, String unidad, float valor, Date fechaHora, String idInvernadero, String nombreInvernadero, String sector, String fila, String causa) {
         super(idSensor, macAddress, marca, modelo, magnitud, unidad, valor, fechaHora, idInvernadero, nombreInvernadero, sector, fila);
+        this._id = _id; 
         this.causa = causa;
     }
 }
