@@ -5,17 +5,60 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dfe9d1f7-0936-49ba-a9d1-fb14c5ec73f6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../Autenticacion/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/dtos/AnomaliaResponseDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.vscode/settings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../APIGateway/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../APIGateway/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../APIGateway/src/main/java/org/itson/APIGateway/config/GrpcClientConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../APIGateway/src/main/java/org/itson/APIGateway/config/GrpcClientConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../APIGateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../APIGateway/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Alarmator/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Alarmator/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Alarmator/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Alarmator/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/configurations/RestTemplateConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/controller/AnomalyzerController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/dtos/AnomaliaResponseDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/persistence/anomalias/IAnomaliasRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/persistence/anomalias/IAnomaliasRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/AnomalyzerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/itson/Anomalyzer/service/AnomalyzerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Autenticacion/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Autenticacion/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Autenticacion/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Autenticacion/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DTOs/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DTOs/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DTOs/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DTOs/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DTOs/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DTOs/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DTOs/src/main/java/org/itson/dtos/LecturaDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ExposicionDatos/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../ExposicionDatos/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/.idea/FrontInvernaderoAmigochas.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/.idea/FrontInvernaderoAmigochas.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/nbproject/project.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/nbproject/project.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/nbproject/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/nbproject/project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/Anomalias/AlertasRecientes.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/Anomalias/AlertasRecientes.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/GestionAlarmas/EditarAlarma.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/GestionAlarmas/EditarAlarma.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/Informes/GenerarInforme.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/Informes/GenerarInforme.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/Principal/InicioSesion.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/Principal/InicioSesion.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/components/AccesoDenegado.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/components/AccesoDenegado.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/components/Navigation.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/components/Navigation.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/components/ProtectedRoute.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/components/ProtectedRoute.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/context/AuthContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/context/AuthContext.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/services/ReporteService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/services/ReporteService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/services/alarmaService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/services/alarmaService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/services/sensorService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/src/services/sensorService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontInvernaderoAmigochas/vite.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Informes/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Informes/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/Alarmas/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/Alarmas/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/DataLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/DataLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/controller/GestionSensoresController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/GestionSensores/src/main/java/org/itson/GestionSensores/controller/GestionSensoresController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/controller/ReportesAnomaliasController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/controller/ReportesAnomaliasController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/anomalias/IAnomaliasRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/anomalias/IAnomaliasRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/reportes/IReportesAnomaliasRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/persistence/reportes/IReportesAnomaliasRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/service/ReportesAnomaliasService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microservicios/ReportesAnomalias/src/main/java/org/itson/ReportesAnomalias/service/ReportesAnomaliasService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microservicios/docker-compose.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Simulador/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Simulador/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SimuladorSensores/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,31 +86,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Maven.Anomalyzer [compile].executor": "Run",
-    "Maven.Anomalyzer [package].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.AnomalyzerApplication.executor": "Run",
-    "git-widget-placeholder": "Empresariales",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Familia/Documents/GitHub/Invernaderos-Amigochas/Anomalyzer",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.projectsettings.compiler.annotationProcessors",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.Anomalyzer [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Anomalyzer [package].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.AnomalyzerApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Empresas-Distribuidas&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Familia/Documents/GitHub/Invernaderos-Amigochas/Microservicios/ReportesAnomalias&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.projectsettings.compiler.annotationProcessors&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Familia\Documents\GitHub\Invernaderos-Amigochas\Anomalyzer" />
@@ -102,6 +145,10 @@
       <workItem from="1730182694407" duration="403000" />
       <workItem from="1747822129832" duration="4367000" />
       <workItem from="1747827869343" duration="826000" />
+      <workItem from="1747890297758" duration="1289000" />
+      <workItem from="1747895949822" duration="108000" />
+      <workItem from="1747899156810" duration="19000" />
+      <workItem from="1747900040090" duration="10000" />
     </task>
     <servers />
   </component>

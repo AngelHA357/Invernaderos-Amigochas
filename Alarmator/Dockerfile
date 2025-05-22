@@ -10,4 +10,4 @@ VOLUME /tmp
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar
 
-ENTRYPOINT ["/wait-for-it.sh", "rabbitmq:5672", "-t", "45", "--", "java", "-jar", "/app.jar"]
+ENTRYPOINT ["/wait-for-it.sh", "rabbitmq:9100", "-t", "45", "--", "java", "-jar", "/app.jar"]

@@ -38,7 +38,7 @@ function AlertasRecientes() {
         setAlertas([]); 
 
         const gatewayUrl = 'http://localhost:8080'; 
-        const endpoint = `${gatewayUrl}/api/v1/anomalyzer/anomalias`; 
+        const endpoint = `${gatewayUrl}/api/v1/reportesAnomalias/anomalias`; 
         
         const params = new URLSearchParams({
             fechaInicio: inicio,

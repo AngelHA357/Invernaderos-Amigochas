@@ -20,4 +20,5 @@ public interface IReportesAnomaliasRepository extends MongoRepository<ReporteAno
      */
     ReporteAnomalia findByAnomalia__id(ObjectId anomaliaId);
 
+    boolean existsByAnomalia__id(String anomaliaId);
 }

@@ -14,6 +14,7 @@ spring:
             allowedOrigins:
               - "http://localhost:5173"
               - "http://192.168.1.69:5173"
+              - "http://172.18.0.1:37768"
             allowedMethods: "*"
             allowedHeaders: "*"
             allowCredentials: true
@@ -76,10 +77,7 @@ grpc:
   client:
     autenticacion-service:
       address: static://autenticacion-service:9100
-      negotiation-type: TLS
-      security:
-        trust-cert-collection: classpath:certs/autenticacion-service.cert.pem
-      enable-keep-alive: true
+      negotiation-type: plaintext
 
 logging:
   level:

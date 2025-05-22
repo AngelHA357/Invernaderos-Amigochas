@@ -64,7 +64,7 @@ function GenerarInforme() {
             try {
                 const [invernaderosResponse, magnitudesResponse] = await Promise.all([
                     // AQUÍ EL CAMBIO: Obtener invernaderos desde el microservicio de Informes
-                    fetch(`${gatewayUrl}/api/v1/informes/invernaderos-desde-lecturas`, { headers: authHeaders }), 
+                    fetch(`${gatewayUrl}/api/v1/informes/invernaderos-desde-lecturas`, { headers: authHeaders }),
                     // Endpoint para magnitudes (asumiendo que ya está o usará fallback)
                     fetch(`${gatewayUrl}/api/v1/gestionSensores/magnitudes-disponibles-informes`, { headers: authHeaders })
                 ]);
@@ -86,28 +86,28 @@ function GenerarInforme() {
                     if (magnitudesResponse.status === 401) {
                         const errorMsg = handleAuthError('Error al cargar magnitudes', magnitudesResponse.status);
                         setErrorMagnitudes(errorMsg);
-                        setListaMagnitudes([]); 
-                    } else { 
+                        setListaMagnitudes([]);
+                    } else {
                         const errorBody = await magnitudesResponse.clone().text().catch(() => 'Cuerpo del error no legible');
                         console.warn(`Error ${magnitudesResponse.status} al cargar magnitudes desde '/magnitudes-disponibles-informes'. Respuesta: ${errorBody}`);
                         console.warn("Usando datos de respaldo para magnitudes: ['Temperatura', 'Humedad']");
-                        setListaMagnitudes(["Temperatura", "Humedad"]); 
+                        setListaMagnitudes(["Temperatura", "Humedad"]);
                         setErrorMagnitudes(`Error ${magnitudesResponse.status}. Usando datos de respaldo.`);
                     }
                 } else {
-                    const magnitudesData = await magnitudesResponse.json(); 
+                    const magnitudesData = await magnitudesResponse.json();
                     if (Array.isArray(magnitudesData)) {
                         setListaMagnitudes(magnitudesData);
-                        setErrorMagnitudes(null); 
+                        setErrorMagnitudes(null);
                     } else {
                         console.warn("Respuesta OK de '/magnitudes-disponibles-informes' pero no es un array. Respuesta:", magnitudesData);
                         console.warn("Usando datos de respaldo para magnitudes: ['Temperatura', 'Humedad']");
-                        setListaMagnitudes(["Temperatura", "Humedad"]); 
+                        setListaMagnitudes(["Temperatura", "Humedad"]);
                         setErrorMagnitudes("Formato de magnitudes inesperado. Usando datos de respaldo.");
                     }
                 }
 
-            } catch (generalError) { 
+            } catch (generalError) {
                 console.error("Error general en cargarOpciones:", generalError.message);
                 const generalErrorMessage = generalError.message || 'Error de red o al procesar la solicitud.';
                 if (!errorInvernaderos && listaInvernaderos.length === 0) setErrorInvernaderos(generalErrorMessage);
@@ -200,12 +200,12 @@ function GenerarInforme() {
 
             const data = await response.json();
             if (data && Array.isArray(data.lecturasEnriquecidas)) {
-            setLecturas(data.lecturasEnriquecidas); 
-        } else {
-            // Si data no existe o data.lecturasEnriquecidas no es un array (inesperado si la API funciona bien)
-            console.warn("El campo 'lecturasEnriquecidas' no es un array o no existe en la respuesta:", data);
-            setLecturas([]); // Establecer como array vacío para evitar errores de .map
-        }
+                setLecturas(data.lecturasEnriquecidas);
+            } else {
+                // Si data no existe o data.lecturasEnriquecidas no es un array (inesperado si la API funciona bien)
+                console.warn("El campo 'lecturasEnriquecidas' no es un array o no existe en la respuesta:", data);
+                setLecturas([]); // Establecer como array vacío para evitar errores de .map
+            }
             setIsSubmitted(true);
 
         } catch (err) {
@@ -219,13 +219,13 @@ function GenerarInforme() {
     };
 
     const handleInvernaderoChange = (e) => {
-    const selectedId = e.target.value;
-    console.log("[handleInvernaderoChange] Valor seleccionado del <select> (selectedId):", selectedId); // Log 1
+        const selectedId = e.target.value;
+        console.log("[handleInvernaderoChange] Valor seleccionado del <select> (selectedId):", selectedId); // Log 1
 
-    if (!selectedId) {
-        console.log("[handleInvernaderoChange] selectedId está vacío, retornando."); // Log 2
-        return;
-    }
+        if (!selectedId) {
+            console.log("[handleInvernaderoChange] selectedId está vacío, retornando."); // Log 2
+            return;
+        }
 
         // Imprime la lista completa de invernaderos para comparar
         console.log("[handleInvernaderoChange] listaInvernaderos actual:", JSON.stringify(listaInvernaderos, null, 2)); // Log 3
@@ -390,7 +390,7 @@ function GenerarInforme() {
                                             );
                                         })}
                                     </div>
-                                    {selectedMagnitudes.length === 0 && <p className="text-red-500 text-xs mt-1">Debe seleccionar al menos una magnitud</p> }
+                                    {selectedMagnitudes.length === 0 && <p className="text-red-500 text-xs mt-1">Debe seleccionar al menos una magnitud</p>}
                                     <input type="hidden" name="magnitudes" value={JSON.stringify(selectedMagnitudes)} />
                                 </div>
 
@@ -451,7 +451,7 @@ function GenerarInforme() {
                             </div>
                             <p className="text-gray-600 mb-4">
                                 {isSubmitted && formData
-                                    ? `Datos de ${formData.magnitudes.map(m => m.name).join(' y ')} del ${new Date(formData.startDate).toLocaleDateString()} al ${new Date(formData.endDate).toLocaleDateString()}`
+                                    ? `Datos de ${formData.magnitudes.map(m => m.name).join(' y ')} del ${new Date(formData.startDate).toLocaleDateString('es-MX', { day: 'numeric', month: 'numeric', year: 'numeric', timeZone: 'UTC' })} al ${new Date(formData.endDate).toLocaleDateString('es-MX', { day: 'numeric', month: 'numeric', year: 'numeric', timeZone: 'UTC' })}`
                                     : 'Configura los parámetros y genera un informe para visualizar los datos'
                                 }
                             </p>

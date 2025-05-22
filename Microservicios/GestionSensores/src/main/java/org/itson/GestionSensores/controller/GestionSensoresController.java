@@ -1,11 +1,13 @@
 package org.itson.GestionSensores.controller;
 
+import io.micrometer.core.instrument.config.MeterFilter;
 import org.itson.GestionSensores.dtos.InvernaderoDTO;
 import org.itson.GestionSensores.dtos.InvernaderoBasicoDTO;
 import org.itson.GestionSensores.excepciones.GestionSensoresException;
 import org.itson.GestionSensores.dtos.SensorDTO;
 import org.itson.GestionSensores.service.GestionSensoresService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,9 @@ public class GestionSensoresController {
     // Para inyectar dependencias automáticamente
     @Autowired
     private GestionSensoresService gestionSensoresService;
+    @Qualifier("metricsHttpServerUriTagFilter")
+    @Autowired
+    private MeterFilter metricsHttpServerUriTagFilter;
 
     /**
      * Metodo que maneja las peticiones GET. Devuelve todos los sensores que se encuentren en la base de datos.
@@ -46,7 +51,11 @@ public class GestionSensoresController {
 
     @GetMapping("/magnitudes-disponibles-informes")
     public ResponseEntity<List<String>> obtenerMagnitudesDisponiblesParaInformes() {
+        System.out.println("GET /magnitudes-disponibles-informes");
         List<String> magnitudesFijas = Arrays.asList("Temperatura", "Humedad");
+        for (String magnitud : magnitudesFijas) {
+            System.out.println("Magnitud fija: " + magnitud);
+        }
         return ResponseEntity.ok(magnitudesFijas);
     }
 

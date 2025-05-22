@@ -1,8 +1,9 @@
-package org.itson.Anomalyzer.dtos;
+package org.itson.ReportesAnomalias.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.Date;
 
 @Data

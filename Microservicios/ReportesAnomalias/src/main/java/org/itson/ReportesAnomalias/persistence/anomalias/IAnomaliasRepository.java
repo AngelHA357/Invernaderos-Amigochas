@@ -17,4 +17,6 @@ public interface IAnomaliasRepository extends MongoRepository<Anomalia, ObjectId
     public List<Anomalia> findAllByIdSensor(String id);
 
     public List<Anomalia> findAllByMagnitud(String magnitud);
+
+    List<Anomalia> findByFechaHoraBetween(Date fechaInicio, Date fechaFin);
 }

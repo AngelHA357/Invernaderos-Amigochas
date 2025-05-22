@@ -2,6 +2,7 @@ package org.itson.ReportesAnomalias.controller;
 
 import org.bson.types.ObjectId;
 import org.itson.ReportesAnomalias.dtos.AnomaliaDTO;
+import org.itson.ReportesAnomalias.dtos.AnomaliaResponseDTO;
 import org.itson.ReportesAnomalias.dtos.ReporteAnomaliaDTO;
 import org.itson.ReportesAnomalias.excepciones.ReportesAnomaliasServiceException;
 import org.itson.ReportesAnomalias.service.ReportesAnomaliasService;
@@ -189,6 +190,26 @@ public class ReportesAnomaliasController {
             System.err.println("Error al obtener reporte por ID de anomalía: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
+
+    @GetMapping("/anomalias")
+    public ResponseEntity<?> obtenerAnomalias(
+            @RequestParam String fechaInicio, // Espera YYYY-MM-DD
+            @RequestParam String fechaFin     // Espera YYYY-MM-DD
+    ) {
+        try {
+            List<AnomaliaResponseDTO> anomalias = reportesAnomaliasService.obtenerAnomaliasPorFechas(fechaInicio, fechaFin);
+            if (anomalias.isEmpty()) {
+                return ResponseEntity.noContent().build(); // 204 No Content si está vacío
+            }
+            return ResponseEntity.ok(anomalias);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Error en AnomalyzerController al obtener anomalías: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno al procesar la solicitud de anomalías.");
         }
     }
 

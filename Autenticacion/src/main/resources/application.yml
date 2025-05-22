@@ -11,10 +11,6 @@ spring:
 grpc:
   server:
     port: 9100
-  security:
-    enabled: true
-    certificate-chain: classpath:certs/autenticacion-service.crt
-    private-key: classpath:certs/autenticacion-service.pem
 
 jwt:
   secret: "unaClaveSecretaMuyLargaYSeguraParaFirmarLosTokensJWT"

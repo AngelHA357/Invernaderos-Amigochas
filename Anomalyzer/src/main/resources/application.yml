@@ -4,8 +4,6 @@ server:
 spring:
   application:
     name: anomalyzer
-  config:
-    import: optional:configserver:http://localhost:8888
   data:
     mongodb:
       anomalyzer:
@@ -13,14 +11,6 @@ spring:
       alarmas:
         uri: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/alarmas_db?retryWrites=true&w=majority&appName=InvernaderoAmigochas
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-    register-with-eureka: true
-    fetch-registry: true
-  instance:
-    prefer-ip-address: true
 
 grpc:
   server:
