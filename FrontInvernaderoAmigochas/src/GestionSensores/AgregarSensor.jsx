@@ -25,7 +25,6 @@ function AgregarSensor() {
         idInvernadero: '',
         sector: '',
         fila: '',
-        estado: true
     });
 
     // Opciones para los tipos de sensores (limitados a Temperatura, Humedad y CO2)
@@ -37,7 +36,7 @@ function AgregarSensor() {
 
     // Opciones para las unidades según el tipo seleccionado
     const unidadesPorTipo = {
-        'Temperatura': ['°C', '°F', 'K'],
+        'Temperatura': ['°C', '°F', '°K'],
         'Humedad': ['%', 'g/m³'],
         'CO2': ['ppm', 'mg/m³']
     };
@@ -465,27 +464,6 @@ function AgregarSensor() {
                                     )}
                                 </div>
                             </div>
-                        </div>
-
-                        {/* Estado */}
-                        <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
-                            <h2 className="text-lg font-semibold text-gray-700 mb-3">Estado</h2>
-                            <div className="flex items-center">
-                                <input
-                                    type="checkbox"
-                                    id="estado"
-                                    name="estado"
-                                    checked={formData.estado}
-                                    onChange={handleChange}
-                                    className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
-                                />
-                                <label htmlFor="estado" className="ml-2 block text-sm text-gray-700">
-                                    Activo
-                                </label>
-                            </div>
-                            <p className="text-xs text-gray-500 mt-1">
-                                Un sensor inactivo no procesará lecturas en el sistema
-                            </p>
                         </div>
 
                         {/* Botones de acción */}

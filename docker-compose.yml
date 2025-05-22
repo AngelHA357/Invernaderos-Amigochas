@@ -44,7 +44,6 @@ services:
       - "8092:8092"
     environment:
       SPRING_DATA_MONGODB_URI: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
-    command: sh -c "sleep 50 && java -jar /app/app.jar"
 
   anomalyzer-app:
     image: anomalyzer-imagen
@@ -118,7 +117,6 @@ services:
       - "8099:8099"
     environment:
       SPRING_DATA_MONGODB_URI: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
-    command: sh -c "sleep 50 && java -jar /app/app.jar"
 
   exposicion-datos-app:
     image: exposicion-datos-imagen
@@ -130,7 +128,6 @@ services:
       - "8096:8096"
     environment:
       SPRING_DATA_MONGODB_URI: mongodb+srv://invernaderosamigochas:D2YQsIyoTsPrNeLf@invernaderoamigochas.1yweuva.mongodb.net/?retryWrites=true&w=majority&appName=InvernaderoAmigochas
-    command: sh -c "sleep 50 && java -jar /app/app.jar"
 
   gateway-app:
     image: gateway-imagen

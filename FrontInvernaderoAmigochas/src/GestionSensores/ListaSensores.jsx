@@ -110,40 +110,6 @@ function ListaSensores() {
         }
     };
 
-    // Función para cambiar el estado del sensor
-    const handleCambiarEstado = async (sensor) => {
-        try {
-            setLoading(true);
-            
-            // Clonar el sensor actual y cambiar su estado
-            const nuevoEstado = sensor.status === 'Activo' ? 'Inactivo' : 'Activo';
-
-            const sensorActualizado = {
-                ...sensor,
-                status: nuevoEstado
-            };
-            
-            await editarSensor(sensorActualizado);
-            
-            // Actualizar el estado local
-            setSensores(prevSensores => prevSensores.map(s => {
-                if (s.id === sensor.id) {
-                    return {
-                        ...s,
-                        status: nuevoEstado
-                    };
-                }
-                return s;
-            }));
-            
-        } catch (err) {
-            console.error('Error al cambiar estado del sensor:', err);
-            alert(`Error al cambiar el estado del sensor: ${err.message}`);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     if (loading || !invernadero) {
         return (
             <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex justify-center items-center">
@@ -250,9 +216,6 @@ function ListaSensores() {
                                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">
                                                 Fabricante
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">
-                                                Estado
-                                            </th>
                                             <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-green-800 uppercase tracking-wider">
                                                 Acciones
                                             </th>
@@ -283,22 +246,7 @@ function ListaSensores() {
                                                     <div className="text-sm text-gray-900">{sensor.marca || 'N/A'}</div>
                                                     <div className="text-sm text-gray-500">{sensor.modelo || 'N/A'}</div>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <button
-                                                        onClick={() => handleCambiarEstado(sensor)}
-                                                        className={`relative inline-flex items-center h-6 rounded-full w-11
-                                                            ${sensor.status === 'Activo' ? 'bg-green-600' : 'bg-gray-400'}`}
-                                                    >
-                                                        <span className="sr-only">Cambiar estado</span>
-                                                        <span
-                                                            className={`inline-block w-4 h-4 transform transition ease-in-out duration-200 rounded-full bg-white
-                                                                ${sensor.status === 'Activo' ? 'translate-x-6' : 'translate-x-1'}`}
-                                                        />
-                                                    </button>
-                                                    <span className="ml-2 text-xs text-gray-500">
-                                                        {sensor.status === 'Activo' ? 'Activo' : 'Inactivo'}
-                                                    </span>
-                                                </td>
+                                                
                                                 <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                                     <div className="flex justify-center space-x-2">
                                                         <button
@@ -401,12 +349,6 @@ function ListaSensores() {
                                         <p className="flex justify-between">
                                             <span className="text-gray-600">Unidad:</span>
                                             <span className="font-medium">{sensorDetalle.unidad || 'N/A'}</span>
-                                        </p>
-                                        <p className="flex justify-between">
-                                            <span className="text-gray-600">Estado:</span>
-                                            <span className={`font-medium ${sensorDetalle.status === 'Activo' ? 'text-green-600' : 'text-red-600'}`}>
-                                                {sensorDetalle.status}
-                                            </span>
                                         </p>
                                     </div>
                                 </div>

@@ -41,7 +41,6 @@ function EditarSensor() {
         unidad: sensorSeleccionado.unidad || '',       // Unidad de medida
         sector: sensorSeleccionado.sector || '',
         fila: sensorSeleccionado.fila || '',
-        estado: sensorSeleccionado.status === 'Activo'
     });
 
     // Cargar datos del invernadero y configuración desde sessionStorage
@@ -197,7 +196,6 @@ function EditarSensor() {
                 idInvernadero: invernaderoSeleccionado?.id,
                 sector: formData.sector,
                 fila: formData.fila,
-                estado: formData.estado
             };
             
             console.log('Enviando datos para editar:', sensorData);
@@ -218,7 +216,6 @@ function EditarSensor() {
                 invernaderoId: invernaderoSeleccionado?.id,
                 sector: formData.sector,
                 fila: formData.fila,
-                status: formData.estado ? 'Activo' : 'Inactivo'
             };
             sessionStorage.setItem('sensorSeleccionado', JSON.stringify(sensorActualizado));
             
@@ -468,26 +465,6 @@ function EditarSensor() {
                             </div>
                         </div>
 
-                        {/* Estado */}
-                        <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
-                            <h2 className="text-lg font-semibold text-gray-700 mb-3">Estado</h2>
-                            <div className="flex items-center">
-                                <input
-                                    type="checkbox"
-                                    id="estado"
-                                    name="estado"
-                                    checked={formData.estado}
-                                    onChange={handleChange}
-                                    className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
-                                />
-                                <label htmlFor="estado" className="ml-2 block text-sm text-gray-700">
-                                    Activo
-                                </label>
-                            </div>
-                            <p className="text-xs text-gray-500 mt-1">
-                                Un sensor inactivo no procesará lecturas en el sistema
-                            </p>
-                        </div>
 
                         {/* Botones de acción */}
                         <div className="flex justify-end space-x-4 pt-4">
