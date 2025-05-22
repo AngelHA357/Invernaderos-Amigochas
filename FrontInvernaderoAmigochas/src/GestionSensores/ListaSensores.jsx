@@ -72,7 +72,7 @@ function ListaSensores() {
         try {
             setLoading(true);
             // Usar el ID adecuado para eliminar (preferimos _id de MongoDB)
-            const idParaEliminar = sensorToDelete._id;
+            const idParaEliminar = sensorToDelete.id;
             await eliminarSensor(idParaEliminar);
             
             // Actualizar el estado local eliminando el sensor

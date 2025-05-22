@@ -40,7 +40,7 @@ public class SensorHumedad extends Sensor implements Runnable {
     @Override
     public void run() {
         try {
-            valor = random.nextFloat(78.0f, 100.0f);
+            valor = random.nextFloat(10.0f, 30.0f);
 
             // Construimos el DTO
             LecturaDTO lectura = new LecturaDTO(
