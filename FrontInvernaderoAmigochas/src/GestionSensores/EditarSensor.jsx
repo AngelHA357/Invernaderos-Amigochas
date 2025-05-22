@@ -23,8 +23,8 @@ function EditarSensor() {
         { value: 'CO2', label: 'CO2' }
     ];
 
-    // Opciones para las magnitudes/unidades según el tipo seleccionado
-    const magnitudesPorTipo = {
+    // Opciones para las unidades según el tipo seleccionado
+    const unidadesPorTipo = {
         'Temperatura': ['°C', '°F', 'K'],
         'Humedad': ['%', 'g/m³'],
         'CO2': ['ppm', 'mg/m³']
@@ -38,8 +38,9 @@ function EditarSensor() {
         marca: sensorSeleccionado.marca || '',      
         modelo: sensorSeleccionado.modelo || '',    
         tipoSensor: sensorSeleccionado.type || '',  
-        magnitud: sensorSeleccionado.magnitud || '',
-        sector: sensorSeleccionado.sector || '',    
+        magnitud: sensorSeleccionado.type || '',    // Ahora magnitud almacena el tipo
+        unidad: sensorSeleccionado.magnitud || '',  // La "magnitud" anterior era realmente la unidad
+        sector: sensorSeleccionado.sector || '',
         fila: sensorSeleccionado.fila || '',        
         estado: sensorSeleccionado.status === 'Activo' // true o false
     });
@@ -110,15 +111,17 @@ function EditarSensor() {
         setFormData(prevData => ({
             ...prevData,
             tipoSensor: tipo,
-            magnitud: magnitudesPorTipo[tipo] ? magnitudesPorTipo[tipo][0] : ''
+            magnitud: tipo, // La magnitud coincide con el tipo de sensor
+            unidad: unidadesPorTipo[tipo] ? unidadesPorTipo[tipo][0] : ''
         }));
 
-        // Limpiar errores de validación
+        // Limpiar errores
         if (validationErrors.tipoSensor) {
             setValidationErrors(prev => ({
                 ...prev,
                 tipoSensor: '',
-                magnitud: ''
+                magnitud: '',
+                unidad: ''
             }));
         }
     };
@@ -153,8 +156,8 @@ function EditarSensor() {
             errors.tipoSensor = 'El tipo de sensor es obligatorio';
         }
         
-        if (!formData.magnitud) {
-            errors.magnitud = 'La magnitud es obligatoria';
+        if (!formData.unidad) {
+            errors.unidad = 'La unidad es obligatoria';
         }
         
         if (!formData.sector) {
@@ -212,7 +215,7 @@ function EditarSensor() {
                 marca: formData.marca,
                 modelo: formData.modelo,
                 type: formData.tipoSensor,
-                magnitud: formData.magnitud,
+                magnitud: formData.unidad,
                 invernaderoId: invernaderoSeleccionado?.id,
                 sector: formData.sector,
                 fila: formData.fila,
@@ -386,27 +389,27 @@ function EditarSensor() {
                                     )}
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="magnitud">
-                                        Magnitud/Unidad *
+                                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="unidad">
+                                        Unidad *
                                     </label>
                                     <select
-                                        id="magnitud"
-                                        name="magnitud"
-                                        value={formData.magnitud}
+                                        id="unidad"
+                                        name="unidad"
+                                        value={formData.unidad}
                                         onChange={handleChange}
                                         required
                                         disabled={!formData.tipoSensor}
-                                        className={`w-full border ${validationErrors.magnitud ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-100 disabled:text-gray-500`}
+                                        className={`w-full border ${validationErrors.unidad ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-100 disabled:text-gray-500`}
                                     >
-                                        <option value="">Seleccionar magnitud</option>
-                                        {formData.tipoSensor && magnitudesPorTipo[formData.tipoSensor]?.map(mag => (
-                                            <option key={mag} value={mag}>
-                                                {mag}
+                                        <option value="">Seleccionar unidad</option>
+                                        {formData.tipoSensor && unidadesPorTipo[formData.tipoSensor]?.map(unidad => (
+                                            <option key={unidad} value={unidad}>
+                                                {unidad}
                                             </option>
                                         ))}
                                     </select>
-                                    {validationErrors.magnitud && (
-                                        <p className="text-red-500 text-xs mt-1">{validationErrors.magnitud}</p>
+                                    {validationErrors.unidad && (
+                                        <p className="text-red-500 text-xs mt-1">{validationErrors.unidad}</p>
                                     )}
                                 </div>
                             </div>
@@ -542,3 +545,4 @@ function EditarSensor() {
 }
 
 export default EditarSensor;
+

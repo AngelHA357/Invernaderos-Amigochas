@@ -1,0 +1,27 @@
+package org.itson.Anomalyzer.dtos;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.Date;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class AnomaliaResponseDTO {
+    private String id; // Para el _id de MongoDB
+    private String idSensor;
+    private String macAddress;
+    private String marca;
+    private String modelo;
+    private String magnitud;
+    private String unidad;
+    private float valor;
+    private Date fechaHora;
+    private String idInvernadero;
+    private String nombreInvernadero;
+    private String sector;
+    private String fila;
+    private String causa;
+    private boolean tieneReporte;
+}

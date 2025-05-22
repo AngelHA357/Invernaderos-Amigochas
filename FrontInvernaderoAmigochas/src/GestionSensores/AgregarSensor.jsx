@@ -15,16 +15,17 @@ function AgregarSensor() {
     
     // Estado para el formulario
     const [formData, setFormData] = useState({
-        idSensor: '',          // ID del sensor (String)
-        macAddress: '',        // Dirección MAC (String)
-        marca: '',             // Marca del sensor (String)
-        modelo: '',            // Modelo del sensor (String)
-        tipoSensor: '',        // Tipo de sensor (String)
-        magnitud: '',          // Unidad de medida (String)
-        idInvernadero: '',     // ID del invernadero (ObjectId) - se llenará desde sessionStorage
-        sector: '',            // Sector del invernadero (String)
-        fila: '',              // Fila del invernadero (String)
-        estado: true           // Estado del sensor (Boolean)
+        idSensor: '',
+        macAddress: '',
+        marca: '',
+        modelo: '',
+        tipoSensor: '',
+        magnitud: '',
+        unidad: '',
+        idInvernadero: '',
+        sector: '',
+        fila: '',
+        estado: true
     });
 
     // Opciones para los tipos de sensores (limitados a Temperatura, Humedad y CO2)
@@ -34,11 +35,10 @@ function AgregarSensor() {
         { value: 'CO2', label: 'CO2' }
     ];
 
-    // Opciones para las magnitudes/unidades según el tipo seleccionado
-    const magnitudesPorTipo = {
+    // Opciones para las unidades según el tipo seleccionado
+    const unidadesPorTipo = {
         'Temperatura': ['°C', '°F', 'K'],
-        'Humedad': ['%', 'g/m³'],
-        'CO2': ['ppm', 'mg/m³']
+        'Humedad': ['%', 'g/m³']
     };
 
     // Al iniciar, cargar el invernadero desde sessionStorage
@@ -113,8 +113,8 @@ function AgregarSensor() {
             errors.tipoSensor = 'El tipo de sensor es obligatorio';
         }
         
-        if (!formData.magnitud) {
-            errors.magnitud = 'La magnitud es obligatoria';
+        if (!formData.unidad) {
+            errors.unidad = 'La unidad de medida es obligatoria';
         }
         
         if (!formData.idInvernadero) {
@@ -154,14 +154,15 @@ function AgregarSensor() {
         }
     };
 
-    // Maneja la selección de tipo de sensor para actualizar opciones de magnitud
+    // Maneja la selección de tipo de sensor para actualizar opciones de unidad y magnitud
     const handleTipoChange = (e) => {
         const tipo = e.target.value;
         setFormData(prevData => ({
             ...prevData,
             tipoSensor: tipo,
-            // Reseteamos la magnitud o seleccionamos la primera disponible
-            magnitud: magnitudesPorTipo[tipo] ? magnitudesPorTipo[tipo][0] : ''
+            magnitud: tipo, // La magnitud coincide con el tipo de sensor
+            // Reseteamos la unidad o seleccionamos la primera disponible
+            unidad: unidadesPorTipo[tipo] ? unidadesPorTipo[tipo][0] : ''
         }));
         
         // Limpiar errores de validación
@@ -169,7 +170,8 @@ function AgregarSensor() {
             setValidationErrors(prev => ({
                 ...prev,
                 tipoSensor: '',
-                magnitud: ''
+                magnitud: '',
+                unidad: ''
             }));
         }
     };
@@ -373,27 +375,27 @@ function AgregarSensor() {
                                     )}
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="magnitud">
-                                        Magnitud/Unidad *
+                                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="unidad">
+                                        Unidad de Medida *
                                     </label>
                                     <select
-                                        id="magnitud"
-                                        name="magnitud"
-                                        value={formData.magnitud}
+                                        id="unidad"
+                                        name="unidad"
+                                        value={formData.unidad}
                                         onChange={handleChange}
                                         required
                                         disabled={!formData.tipoSensor}
-                                        className={`w-full border ${validationErrors.magnitud ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-100 disabled:text-gray-500`}
+                                        className={`w-full border ${validationErrors.unidad ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-100 disabled:text-gray-500`}
                                     >
-                                        <option value="">Seleccionar magnitud</option>
-                                        {formData.tipoSensor && magnitudesPorTipo[formData.tipoSensor]?.map(mag => (
-                                            <option key={mag} value={mag}>
-                                                {mag}
+                                        <option value="">Seleccionar unidad</option>
+                                        {formData.tipoSensor && unidadesPorTipo[formData.tipoSensor]?.map(unidad => (
+                                            <option key={unidad} value={unidad}>
+                                                {unidad}
                                             </option>
                                         ))}
                                     </select>
-                                    {validationErrors.magnitud && (
-                                        <p className="text-red-500 text-xs mt-1">{validationErrors.magnitud}</p>
+                                    {validationErrors.unidad && (
+                                        <p className="text-red-500 text-xs mt-1">{validationErrors.unidad}</p>
                                     )}
                                 </div>
                             </div>
@@ -518,3 +520,4 @@ function AgregarSensor() {
 }
 
 export default AgregarSensor;
+

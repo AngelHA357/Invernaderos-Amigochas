@@ -1,5 +1,6 @@
 package org.itson.ReportesAnomalias.controller;
 
+import org.bson.types.ObjectId;
 import org.itson.ReportesAnomalias.dtos.AnomaliaDTO;
 import org.itson.ReportesAnomalias.dtos.ReporteAnomaliaDTO;
 import org.itson.ReportesAnomalias.excepciones.ReportesAnomaliasServiceException;
@@ -119,6 +120,75 @@ public class ReportesAnomaliasController {
             error.put("mensaje", e.getMessage()); // Se mapea el error del mensaje.
             ResponseEntity<Map<String, String>> respuesta = new ResponseEntity<>(error, HttpStatus.NOT_FOUND); // Creamos la respuesta.
             return respuesta;
+        }
+    }
+
+    @GetMapping("/existe")
+    public ResponseEntity<?> existeReporteParaAnomalia(@RequestParam("anomaliaId") String anomaliaId) {
+        boolean existe = reportesAnomaliasService.existeReporteParaAnomalia(anomaliaId);
+        Map<String, Boolean> respuesta = new HashMap<>();
+        respuesta.put("existe", existe);
+        return ResponseEntity.ok(respuesta);
+    }
+
+    @GetMapping("/{id}") 
+    public ResponseEntity<?> obtenerAnomaliaPorSuId(@PathVariable("id") String id) {
+        try {
+            if (!ObjectId.isValid(id)) {
+                Map<String, String> error = new HashMap<>();
+                error.put("mensaje", "El ID de anomalía proporcionado no es válido.");
+                return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            }
+            AnomaliaDTO anomalia = reportesAnomaliasService.obtenerAnomaliaPorId(id);
+            return ResponseEntity.ok(anomalia);
+        } catch (ReportesAnomaliasServiceException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("mensaje", e.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            System.err.println("Error en ReportesAnomaliasController al obtener anomalía por ID: " + e.getMessage());
+            e.printStackTrace();
+            error.put("mensaje", "Error interno al obtener la anomalía.");
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/verificar/{anomaliaId}")
+    public ResponseEntity<Boolean> verificarReporteExistente(@PathVariable("anomaliaId") String anomaliaId) {
+        try {
+            if (!ObjectId.isValid(anomaliaId)) {
+                return ResponseEntity.badRequest().body(false);
+            }
+            boolean existe = reportesAnomaliasService.existeReporteParaAnomalia(anomaliaId);
+            return ResponseEntity.ok(existe);
+        } catch (Exception e) {
+            System.err.println("Error al verificar reporte existente: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
+        }
+    }
+
+    @GetMapping("/reporte-de-anomalia/{anomaliaId}")
+    public ResponseEntity<?> obtenerReportePorAnomaliaId(@PathVariable("anomaliaId") String anomaliaId) {
+        try {
+            if (!ObjectId.isValid(anomaliaId)) {
+                Map<String, String> error = new HashMap<>();
+                error.put("mensaje", "El ID de anomalía proporcionado no es válido.");
+                return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            }
+            ReporteAnomaliaDTO reporte = reportesAnomaliasService.obtenerReportePorAnomaliaId(anomaliaId);
+            return ResponseEntity.ok(reporte);
+        } catch (ReportesAnomaliasServiceException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("mensaje", e.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("mensaje", "Error al obtener reporte: " + e.getMessage());
+            System.err.println("Error al obtener reporte por ID de anomalía: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
 

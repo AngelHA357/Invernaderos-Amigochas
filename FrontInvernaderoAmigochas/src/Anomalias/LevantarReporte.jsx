@@ -1,123 +1,98 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
+import { obtenerDetallesAnomalia, enviarReporte, verificarReporteExistente, obtenerReporteDeAnomalia } from '../services/ReporteService';
 
 function LevantarReporte() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [alerta, setAlerta] = useState(null);
+    const [reporteExistente, setReporteExistente] = useState(null);
     const [acciones, setAcciones] = useState('');
     const [notas, setNotas] = useState('');
     const [loading, setLoading] = useState(true);
     const [enviado, setEnviado] = useState(false);
+    const [error, setError] = useState(null);
+    const [modoVisualizacion, setModoVisualizacion] = useState(false);
 
     useEffect(() => {
-        const alertaId = localStorage.getItem('alertaSeleccionada') || id;
+        const mapearDatosAnomalia = (datos) => {
+            if (datos.descripcion && datos.invernadero && (datos.temperatura || datos.humedad || datos.co2)) {
+                return datos;
+            }
+            // Mapear campos del backend a los del frontend
+            let tipo = datos.magnitud || datos.tipo || '';
+            let valor = datos.valor;
+            let unidad = datos.unidad || (tipo === 'Temperatura' ? '°C' : tipo === 'Humedad' ? '%' : tipo === 'CO2' ? 'ppm' : '');
+            let fechaObj = datos.fechaHora ? new Date(datos.fechaHora) : null;
+            let fecha = fechaObj ? fechaObj.toLocaleDateString('es-MX') : '';
+            let hora = fechaObj ? fechaObj.toLocaleTimeString('es-MX') : '';
 
-        const alertasMock = [
-            {
-                id: "ALT-001",
-                invernadero: 'invernadero 3',
-                descripcion: 'Temperatura alta',
-                tiempo: '5 minutos',
-                temperatura: '28°C',
-                fecha: '17/04/2025',
-                hora: '10:15:32 a.m.',
-                umbral: '25°C',
-                sensorId: 'SEN-0105',
-                sensorMarca: 'Stercn',
-                sensorModelo: 'LM35',
-                ultimaCalibracion: '24/08/2024',
-                duracion: '3 minutos',
-                tipo: 'Temperatura'
-            },
-            {
-                id: "ALT-002",
-                invernadero: 'invernadero 1',
-                descripcion: 'Humedad baja',
-                tiempo: '15 minutos',
-                humedad: '50%',
-                fecha: '17/04/2025',
-                hora: '09:45:10 a.m.',
-                umbral: '65%',
-                sensorId: 'SEN-0205',
-                sensorMarca: 'DFRobot',
-                sensorModelo: 'DHT11',
-                ultimaCalibracion: '15/10/2024',
-                duracion: '15 minutos',
-                tipo: 'Humedad'
-            },
-            {
-                id: "ALT-003",
-                invernadero: 'invernadero 2',
-                descripcion: 'Temperatura alta',
-                tiempo: '2 horas',
-                temperatura: '27°C',
-                fecha: '16/04/2025',
-                hora: '04:20:45 p.m.',
-                umbral: '24°C',
-                sensorId: 'SEN-0108',
-                sensorMarca: 'Stercn',
-                sensorModelo: 'LM35',
-                ultimaCalibracion: '20/09/2024',
-                duracion: '45 minutos',
-                tipo: 'Temperatura'
-            },
-            {
-                id: "ALT-004",
-                invernadero: 'invernadero 4',
-                descripcion: 'CO2 elevado',
-                tiempo: '30 minutos',
-                co2: '1200 ppm',
-                fecha: '16/04/2025',
-                hora: '02:30:15 p.m.',
-                umbral: '1000 ppm',
-                sensorId: 'SEN-0305',
-                sensorMarca: 'Winsen',
-                sensorModelo: 'MH-Z19',
-                ultimaCalibracion: '05/01/2025',
-                duracion: '30 minutos',
-                tipo: 'CO2'
-            },
-            {
-                id: "ALT-005",
-                invernadero: 'invernadero 3',
-                descripcion: 'Humedad alta',
-                tiempo: '10 minutos',
-                humedad: '85%',
-                fecha: '16/04/2025',
-                hora: '11:10:22 a.m.',
-                umbral: '80%',
-                sensorId: 'SEN-0202',
-                sensorMarca: 'Aosong',
-                sensorModelo: 'DHT22',
-                ultimaCalibracion: '30/11/2024',
-                duracion: '10 minutos',
-                tipo: 'Humedad'
-            },
-            {
-                id: "ALT-006",
-                invernadero: 'invernadero 2',
-                descripcion: 'CO2 bajo',
-                tiempo: '3 horas',
-                co2: '250 ppm',
-                fecha: '15/04/2025',
-                hora: '08:45:30 a.m.',
-                umbral: '350 ppm',
-                sensorId: 'SEN-0302',
-                sensorMarca: 'Winsen',
-                sensorModelo: 'MH-Z19',
-                ultimaCalibracion: '10/12/2024',
-                duracion: '3 horas',
-                tipo: 'CO2'
-            },
-        ];
+            let valorFormateado = valor !== null && valor !== undefined ? Number(valor).toFixed(2) : valor;
+            let temperaturaValue = tipo === 'Temperatura' ? `${valorFormateado}${unidad}` : undefined;
+            let humedadValue = tipo === 'Humedad' ? `${valorFormateado}${unidad}` : undefined;
+            let co2Value = tipo === 'CO2' ? `${valorFormateado}${unidad}` : undefined;
 
-        const alertaEncontrada = alertasMock.find(a => a.id === alertaId);
-        if (alertaEncontrada) {
-            setAlerta(alertaEncontrada);
-        }
-        setLoading(false);
+            return {
+                id: datos._id || datos.id || '',
+                descripcion: datos.causa || datos.descripcion || '',
+                invernadero: datos.nombreInvernadero || datos.invernadero || '',
+                temperatura: temperaturaValue,
+                humedad: humedadValue,
+                co2: co2Value,
+                fecha,
+                hora,
+                sensorId: datos.idSensor || datos.sensorId || '',
+                sensorMarca: datos.marca || datos.sensorMarca || '',
+                sensorModelo: datos.modelo || datos.sensorModelo || '',
+                tipo,
+                ...datos
+            };
+        };
+
+        const cargarDatosAnomalia = async () => {
+            try {
+                const alertaId = id || localStorage.getItem('alertaSeleccionadaId');
+                if (!alertaId) {
+                    setError('No se ha especificado una alerta para generar el reporte.');
+                    setLoading(false);
+                    return;
+                }
+                console.log(`[LevantarReporte] Obteniendo detalles de anomalía con ID: ${alertaId}`);
+
+                // Verificar si la anomalía ya tiene un reporte
+                const tieneReporte = await verificarReporteExistente(alertaId);
+
+                // Obtener los datos de la anomalía
+                const datosAnomalia = await obtenerDetallesAnomalia(alertaId);
+                console.log('[LevantarReporte] Datos de anomalía recibidos:', datosAnomalia);
+
+                // Mapear los datos de la anomalía al formato del frontend
+                setAlerta(mapearDatosAnomalia(datosAnomalia));
+
+                // Si ya existe un reporte, cargarlo
+                if (tieneReporte) {
+                    try {
+                        const datosReporte = await obtenerReporteDeAnomalia(alertaId);
+                        console.log('[LevantarReporte] Reporte existente:', datosReporte);
+                        setReporteExistente(datosReporte);
+                        setAcciones(datosReporte.acciones || '');
+                        setNotas(datosReporte.comentarios || '');
+                        setModoVisualizacion(true);
+                    } catch (reporteError) {
+                        console.error('Error al obtener reporte existente:', reporteError);
+                    }
+                }
+
+                setLoading(false);
+            } catch (error) {
+                console.error('Error al cargar datos de la anomalía:', error);
+                setError('Error al obtener datos de la anomalía. Por favor, inténtalo más tarde.');
+                setLoading(false);
+            }
+        };
+
+        cargarDatosAnomalia();
     }, [id]);
 
     const obtenerIconoAlerta = (tipo) => {
@@ -138,13 +113,53 @@ function LevantarReporte() {
         navigate('/anomalias');
     };
     
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Simulamos envío del reporte
-        setEnviado(true);
-        setTimeout(() => {
-            navigate('/alertas');
-        }, 3000);
+
+        if (!alerta || !acciones) {
+            alert('Por favor completa los campos requeridos');
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            // Crear objeto de reporte según la estructura que espera el backend
+            const reporteData = {
+                anomalia: {
+                    _id: alerta._id, // Usamos el ID original si lo tenemos
+                    idSensor: alerta.idSensor || alerta.sensorId,
+                    macAddress: alerta.macAddress || "No disponible",
+                    marca: alerta.marca || alerta.sensorMarca,
+                    modelo: alerta.modelo || alerta.sensorModelo,
+                    magnitud: alerta.magnitud || alerta.tipo,
+                    unidad: alerta.unidad || (alerta.tipo === "Temperatura" ? "°C" : alerta.tipo === "Humedad" ? "%" : alerta.tipo === "CO2" ? "ppm" : ""),
+                    valor: alerta.valor || parseFloat(alerta.temperatura || alerta.humedad || alerta.co2 || "0"),
+                    fechaHora: alerta.fechaHora || new Date(),
+                    idInvernadero: alerta.idInvernadero || "INV-001",
+                    nombreInvernadero: alerta.nombreInvernadero || alerta.invernadero,
+                    sector: alerta.sector || "N/A",
+                    fila: alerta.fila || "N/A",
+                    causa: alerta.causa || alerta.descripcion
+                },
+                acciones: acciones,
+                notas: notas || "",
+                fecha: new Date(),
+                usuario: localStorage.getItem('user') || 'Sistema'
+            };
+
+            // Enviar el reporte al backend
+            await enviarReporte(reporteData);
+
+            setEnviado(true);
+            setTimeout(() => {
+                navigate('/anomalias');
+            }, 3000);
+        } catch (error) {
+            console.error('Error al enviar el reporte:', error);
+            alert('Ocurrió un error al enviar el reporte. Inténtalo de nuevo.');
+            setLoading(false);
+        }
     };
 
     if (loading) {
@@ -219,8 +234,11 @@ function LevantarReporte() {
                                 <span className="text-2xl" role="img" aria-label="alerta">{obtenerIconoAlerta(alerta.tipo)}</span>
                             </div>
                             <div>
-                                <h1 className="text-xl font-bold text-gray-800">Reporte de Anomalía</h1>
+                                <h1 className="text-xl font-bold text-gray-800">
+                                    {modoVisualizacion ? 'Reporte de Anomalía' : 'Generar Reporte de Anomalía'}
+                                </h1>
                                 <p className="text-sm text-green-600">Alerta ID: {alerta.id} • {alerta.fecha}</p>
+
                             </div>
                         </div>
                         <button 
@@ -229,6 +247,7 @@ function LevantarReporte() {
                             <span className="mr-1">←</span> Volver a Alertas
                         </button>
                     </div>
+
 
                     <form onSubmit={handleSubmit}>
                         {/* Banner de alerta */}
@@ -240,8 +259,7 @@ function LevantarReporte() {
                                     <p className="text-sm">
                                         {alerta.tipo === 'Temperatura' ? `Temperatura: ${alerta.temperatura}` : 
                                          alerta.tipo === 'Humedad' ? `Humedad: ${alerta.humedad}` : 
-                                         alerta.tipo === 'CO2' ? `CO2: ${alerta.co2}` : 'Valor anómalo'} 
-                                        | Umbral: {alerta.umbral} | Duración: {alerta.duracion}
+                                         alerta.tipo === 'CO2' ? `CO2: ${alerta.co2}` : 'Valor anómalo'}
                                     </p>
                                 </div>
                             </div>
@@ -272,17 +290,6 @@ function LevantarReporte() {
                                     </p>
                                 </div>
                                 <div className="bg-white p-3 rounded-md border border-green-100">
-                                    <p className="text-xs text-green-600 uppercase">Umbral establecido</p>
-                                    <p className="text-sm text-gray-800 font-medium">{alerta.umbral}</p>
-                                </div>
-                                <div className="bg-white p-3 rounded-md border border-green-100">
-                                    <p className="text-xs text-green-600 uppercase">Duración</p>
-                                    <div className="flex items-center">
-                                        <span className="text-sm text-gray-800 font-medium">{alerta.duracion}</span>
-                                        <span className="ml-2 text-gray-400">⏱️</span>
-                                    </div>
-                                </div>
-                                <div className="bg-white p-3 rounded-md border border-green-100">
                                     <p className="text-xs text-green-600 uppercase">Hora</p>
                                     <div className="flex items-center">
                                         <span className="text-sm text-gray-800 font-medium">{alerta.hora}</span>
@@ -299,8 +306,10 @@ function LevantarReporte() {
                                 <div className="bg-white p-3 rounded-md border border-green-100">
                                     <p className="text-xs text-green-600 uppercase">Estado actual</p>
                                     <div className="flex items-center">
-                                        <span className="h-2.5 w-2.5 rounded-full bg-yellow-500 mr-2"></span>
-                                        <span className="text-sm text-gray-800 font-medium">Pendiente de resolución</span>
+                                        <span className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></span>
+                                        <span className="text-sm text-gray-800 font-medium">
+                                            {modoVisualizacion ? 'Reporte generado' : 'Pendiente de resolución'}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -325,37 +334,6 @@ function LevantarReporte() {
                                     <p className="text-xs text-green-600 uppercase mb-1">Modelo</p>
                                     <p className="text-sm text-gray-800 font-medium">{alerta.sensorModelo}</p>
                                 </div>
-                                <div>
-                                    <p className="text-xs text-green-600 uppercase mb-1">Última calibración</p>
-                                    <div className="flex items-center">
-                                        <span className="text-sm text-gray-800 font-medium">{alerta.ultimaCalibracion}</span>
-                                        <span className="ml-2 text-gray-400">📅</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Métricas */}
-                        <div className="mb-8">
-                            <h2 className="text-base font-semibold text-gray-700 mb-4 flex items-center">
-                                <span className="text-green-500 mr-2">📊</span>
-                                Métricas
-                            </h2>
-                            <div className="h-64 bg-green-50 border border-green-100 rounded-lg flex flex-col items-center justify-center p-4">
-                                <div className="text-5xl mb-4 text-green-300">📈</div>
-                                <p className="text-gray-500 mb-2">Visualización de datos históricos</p>
-                                <div className="w-full max-w-md h-24 bg-white rounded-lg shadow-inner overflow-hidden flex items-end p-2">
-                                    <div className="h-50% w-4 bg-green-200 mx-1 rounded-t-sm"></div>
-                                    <div className="h-60% w-4 bg-green-300 mx-1 rounded-t-sm"></div>
-                                    <div className="h-40% w-4 bg-green-200 mx-1 rounded-t-sm"></div>
-                                    <div className="h-70% w-4 bg-green-400 mx-1 rounded-t-sm"></div>
-                                    <div className="h-90% w-4 bg-red-400 mx-1 rounded-t-sm"></div>
-                                    <div className="h-80% w-4 bg-red-300 mx-1 rounded-t-sm"></div>
-                                    <div className="h-60% w-4 bg-green-300 mx-1 rounded-t-sm"></div>
-                                    <div className="h-50% w-4 bg-green-200 mx-1 rounded-t-sm"></div>
-                                    <div className="h-40% w-4 bg-green-200 mx-1 rounded-t-sm"></div>
-                                    <div className="h-30% w-4 bg-green-100 mx-1 rounded-t-sm"></div>
-                                </div>
                             </div>
                         </div>
 
@@ -365,13 +343,19 @@ function LevantarReporte() {
                                 <span className="mr-2">🛠️</span>
                                 Acciones realizadas
                             </h2>
-                            <textarea
-                                className="w-full h-24 border border-green-200 rounded-lg p-3 text-sm text-gray-800 resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
-                                placeholder="Describe las acciones realizadas para resolver esta anomalía..."
-                                value={acciones}
-                                onChange={(e) => setAcciones(e.target.value)}
-                                required
-                            />
+                            {modoVisualizacion ? (
+                                <div className="w-full h-24 border border-green-200 bg-green-50 rounded-lg p-3 text-sm text-gray-800 overflow-auto">
+                                    {acciones || <span className="text-gray-400 italic">No se registraron acciones</span>}
+                                </div>
+                            ) : (
+                                <textarea
+                                    className="w-full h-24 border border-green-200 rounded-lg p-3 text-sm text-gray-800 resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    placeholder="Describe las acciones realizadas para resolver esta anomalía..."
+                                    value={acciones}
+                                    onChange={(e) => setAcciones(e.target.value)}
+                                    required
+                                />
+                            )}
                         </div>
 
                         {/* Notas o comentarios */}
@@ -380,12 +364,18 @@ function LevantarReporte() {
                                 <span className="mr-2">📝</span>
                                 Notas o comentarios
                             </h2>
-                            <textarea
-                                className="w-full h-24 border border-green-200 rounded-lg p-3 text-sm text-gray-800 resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
-                                placeholder="Agrega notas adicionales o comentarios relevantes..."
-                                value={notas}
-                                onChange={(e) => setNotas(e.target.value)}
-                            />
+                            {modoVisualizacion ? (
+                                <div className="w-full h-24 border border-green-200 bg-green-50 rounded-lg p-3 text-sm text-gray-800 overflow-auto">
+                                    {notas || <span className="text-gray-400 italic">No se registraron comentarios</span>}
+                                </div>
+                            ) : (
+                                <textarea
+                                    className="w-full h-24 border border-green-200 rounded-lg p-3 text-sm text-gray-800 resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    placeholder="Agrega notas adicionales o comentarios relevantes..."
+                                    value={notas}
+                                    onChange={(e) => setNotas(e.target.value)}
+                                />
+                            )}
                         </div>
 
                         {/* Botones de acción */}
@@ -394,13 +384,16 @@ function LevantarReporte() {
                                 type="button"
                                 onClick={volverAAlertasRecientes}
                                 className="bg-white border border-green-300 text-green-700 px-6 py-2 rounded-lg hover:bg-green-50 transition-colors duration-300">
-                                Cancelar
+                                {modoVisualizacion ? 'Volver' : 'Cancelar'}
                             </button>
-                            <button 
-                                type="submit"
-                                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors duration-300 flex items-center shadow-md">
-                                <span className="mr-2">📤</span> Enviar reporte
-                            </button>
+
+                            {!modoVisualizacion && (
+                                <button
+                                    type="submit"
+                                    className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors duration-300 flex items-center shadow-md">
+                                    <span className="mr-2">📤</span> Enviar reporte
+                                </button>
+                            )}
                         </div>
                     </form>
                 </div>

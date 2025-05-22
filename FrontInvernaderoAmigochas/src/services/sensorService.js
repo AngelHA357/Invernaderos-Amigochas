@@ -1,11 +1,6 @@
-// sensorService.js
-
 const API_BASE_URL = '/api/v1/gestionSensores';
 
-/**
- * Obtiene todos los invernaderos
- * @returns {Promise<Array>} Array de invernaderos
- */
+
 export const obtenerInvernaderos = async () => {
   // Verificar si hay un token en localStorage
   const authToken = localStorage.getItem('authToken');
@@ -52,11 +47,7 @@ export const obtenerInvernaderos = async () => {
   }
 };
 
-/**
- * Obtiene todos los sensores asociados a un invernadero específico
- * @param {string} invernaderoId - ID del invernadero
- * @returns {Promise<Array>} Array de sensores
- */
+
 export const obtenerSensoresPorInvernadero = async (invernaderoId) => {
   try {
     const authToken = localStorage.getItem('authToken');
@@ -64,7 +55,7 @@ export const obtenerSensoresPorInvernadero = async (invernaderoId) => {
       { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' } :
       { 'Content-Type': 'application/json' };
 
-    // Asegurarnos de que la URL coincide exactamente con la definida en el controlador del backend
+
     const url = `http://localhost:8080${API_BASE_URL}/invernadero/${invernaderoId}/sensores`;
     console.log(`Consultando sensores en: ${url}`);
 
@@ -83,7 +74,7 @@ export const obtenerSensoresPorInvernadero = async (invernaderoId) => {
         const errorData = await response.json();
         errorMessage = errorData.mensaje || errorMessage;
       } catch (e) {
-        // Si no se puede parsear el error, usamos el mensaje genérico
+
       }
 
       throw new Error(errorMessage);
@@ -99,15 +90,15 @@ export const obtenerSensoresPorInvernadero = async (invernaderoId) => {
     return data.map(sensor => ({
       id: sensor.idSensor,
       invernaderoId: sensor.idInvernadero,
-      type: sensor.tipoSensor || sensor.magnitud, // Manejar ambos posibles nombres de campo
+      type: sensor.tipoSensor || sensor.magnitud,
       status: sensor.estado === true || sensor.estado === 'true' ? 'Activo' : 'Inactivo',
       marca: sensor.marca,
       modelo: sensor.modelo,
       macAddress: sensor.macAddress,
-      magnitud: sensor.unidad || sensor.magnitud, // Manejar ambos posibles nombres de campo
+      magnitud: sensor.unidad || sensor.magnitud,
       sector: sensor.sector,
       fila: sensor.fila,
-      _id: sensor._id  // Guardamos el ID de MongoDB
+      _id: sensor._id
     }));
   } catch (error) {
     console.error(`Error al obtener sensores para el invernadero ${invernaderoId}:`, error);
@@ -115,11 +106,7 @@ export const obtenerSensoresPorInvernadero = async (invernaderoId) => {
   }
 };
 
-/**
- * Obtiene un sensor específico por su ID
- * @param {string} sensorId - ID del sensor
- * @returns {Promise<Object>} Objeto sensor
- */
+
 export const obtenerSensorPorId = async (sensorId) => {
   try {
     const authToken = localStorage.getItem('authToken');
@@ -138,7 +125,7 @@ export const obtenerSensorPorId = async (sensorId) => {
     
     const sensor = await response.json();
     
-    // Transformar formato para frontend
+
     return {
       id: sensor.idSensor,
       invernaderoId: sensor.idInvernadero,
@@ -158,11 +145,7 @@ export const obtenerSensorPorId = async (sensorId) => {
   }
 };
 
-/**
- * Registra un nuevo sensor
- * @param {Object} sensorData - Datos del sensor a registrar
- * @returns {Promise<Object>} Objeto sensor registrado
- */
+
 export const registrarSensor = async (sensorData) => {
   try {
     const authToken = localStorage.getItem('authToken');
@@ -219,11 +202,6 @@ export const registrarSensor = async (sensorData) => {
   }
 };
 
-/**
- * Edita un sensor existente
- * @param {Object} sensorData - Datos actualizados del sensor
- * @returns {Promise<Object>} Objeto sensor actualizado
- */
 export const editarSensor = async (sensorData) => {
   try {
     const authToken = localStorage.getItem('authToken');
@@ -281,11 +259,7 @@ export const editarSensor = async (sensorData) => {
   }
 };
 
-/**
- * Elimina un sensor por su ID
- * @param {string} sensorId - ID del sensor a eliminar
- * @returns {Promise<void>}
- */
+
 export const eliminarSensor = async (sensorId) => {
   try {
     const authToken = localStorage.getItem('authToken');

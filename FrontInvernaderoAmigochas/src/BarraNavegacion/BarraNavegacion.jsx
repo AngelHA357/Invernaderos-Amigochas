@@ -47,8 +47,7 @@ function BarraNavegacion() {
         <Link to="/invernaderos" className={navLinkClass("/invernaderos")}>
           Invernaderos
         </Link>
-        
-        {/* Se eliminó la sección de Sensores ya que ahora forma parte de invernaderos */}
+
 
         {/* Alarmas - Solo visible para ADMIN y OPERATOR */}
         {canAccess('alarmas') && (
@@ -71,9 +70,9 @@ function BarraNavegacion() {
           </Link>
         )}
         
-        {/* Mostrar información del usuario y rol */}
+        {/* Mostrar información del usuario */}
         <span className="ml-2 px-3 py-1 bg-zinc-700 rounded-md text-sm">
-          {username} ({userRole})
+          {username.charAt(0).toUpperCase() + username.slice(1)}
         </span>
         
         <button

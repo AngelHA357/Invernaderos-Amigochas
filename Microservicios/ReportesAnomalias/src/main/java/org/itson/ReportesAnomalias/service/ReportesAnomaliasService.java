@@ -167,17 +167,21 @@ public class ReportesAnomaliasService {
      * \______\____/|_| \_|   \/   |______|_|  \_\_____/ \____/|_|  \_\______|_____/
      */
 
-    private Anomalia convertirAnomaliaDTO(AnomaliaDTO anomalia) {
-        Anomalia anomaliaCreada = new Anomalia(anomalia.getIdSensor(), anomalia.getMacAddress(), anomalia.getMarca(),
-                anomalia.getModelo(), anomalia.getMagnitud(), anomalia.getUnidad(), anomalia.getValor(),
-                anomalia.getFechaHora(), anomalia.getIdInvernadero(), anomalia.getNombreInvernadero(),
-                anomalia.getSector(), anomalia.getFila(), anomalia.getCausa());
-
+    private Anomalia convertirAnomaliaDTO(AnomaliaDTO anomaliaDTO) {
+        Anomalia anomaliaCreada = new Anomalia(
+                anomaliaDTO.getIdSensor(), anomaliaDTO.getMacAddress(), anomaliaDTO.getMarca(),
+                anomaliaDTO.getModelo(), anomaliaDTO.getMagnitud(), anomaliaDTO.getUnidad(), anomaliaDTO.getValor(),
+                anomaliaDTO.getFechaHora(), anomaliaDTO.getIdInvernadero(), anomaliaDTO.getNombreInvernadero(),
+                anomaliaDTO.getSector(), anomaliaDTO.getFila(), anomaliaDTO.getCausa());
+        if (anomaliaDTO.get_id() != null && ObjectId.isValid(anomaliaDTO.get_id())) {
+            anomaliaCreada.set_id(new ObjectId(anomaliaDTO.get_id()));
+        }
         return anomaliaCreada;
     }
 
     private AnomaliaDTO convertirAnomalia(Anomalia anomalia) {
         AnomaliaDTO anomaliaCreada = new AnomaliaDTO(
+                anomalia.get_id().toString(),
                 anomalia.getIdSensor(),
                 anomalia.getMacAddress(),
                 anomalia.getMarca(),
@@ -214,5 +218,42 @@ public class ReportesAnomaliasService {
         return reporteCreado;
     }
 
+    public boolean existeReporteParaAnomalia(String anomaliaId) {
+        return reportesAnomaliasRepository.existsByAnomalia__id(new ObjectId(anomaliaId));
+    }
+
+    public ReporteAnomaliaDTO obtenerReportePorAnomaliaId(String anomaliaId) throws ReportesAnomaliasServiceException {
+        if (!ObjectId.isValid(anomaliaId)) {
+            throw new ReportesAnomaliasServiceException("ID de anomalía inválido: " + anomaliaId);
+        }
+
+        // Primero verificamos si la anomalía existe
+        Optional<Anomalia> anomaliaOpt = anomaliasRepository.findById(new ObjectId(anomaliaId));
+        if (!anomaliaOpt.isPresent()) {
+            throw new ReportesAnomaliasServiceException("No existe anomalía con ID: " + anomaliaId);
+        }
+
+        // Buscar el reporte por ID de anomalía - Utilizando el método correcto con dos guiones bajos
+        ReporteAnomalia reporteEncontrado = reportesAnomaliasRepository.findByAnomalia__id(new ObjectId(anomaliaId));
+        if (reporteEncontrado == null) {
+            throw new ReportesAnomaliasServiceException("No existe un reporte para la anomalía con ID: " + anomaliaId);
+        }
+
+        // Convertir y retornar el reporte
+        return convertirReporteAnomalia(reporteEncontrado);
+    }
+
+    public AnomaliaDTO obtenerAnomaliaPorId(String anomaliaObjectId) throws ReportesAnomaliasServiceException {
+        if (!ObjectId.isValid(anomaliaObjectId)) {
+            throw new ReportesAnomaliasServiceException("ID de anomalía inválido: " + anomaliaObjectId);
+        }
+        Optional<Anomalia> anomaliaOpt = anomaliasRepository.findById(new ObjectId(anomaliaObjectId));
+        if (anomaliaOpt.isPresent()) {
+            Anomalia anomalia = anomaliaOpt.get();
+            return convertirAnomalia(anomalia);
+        } else {
+            throw new ReportesAnomaliasServiceException("Anomalía con ID: " + anomaliaObjectId + " no encontrada en el servicio de reportes.");
+        }
+    }
 
 }

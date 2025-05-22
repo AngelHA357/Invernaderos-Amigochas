@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import BarraNavegacion from '../BarraNavegacion/BarraNavegacion';
 import { fetchAlarmaPorId, editarAlarma } from '../services/alarmaService';
@@ -104,14 +104,32 @@ function EditarAlarma() {
           // Actualizar el nombre del invernadero cuando cambia la selección
           const invernaderoSeleccionado = invernaderos.find(inv => inv.id === formData.invernaderoId);
           if (invernaderoSeleccionado) {
-            setFormData(prev => ({
-              ...prev,
-              invernaderoNombre: invernaderoSeleccionado.name
-            }));
+            // Si no hay sensores, no limpiamos los sensores seleccionados, mantenemos el invernadero anterior
+            if (data.length > 0) {
+              setFormData(prev => ({
+                ...prev,
+                invernaderoNombre: invernaderoSeleccionado.name,
+                sensores: [] // Limpiamos los sensores seleccionados al cambiar de invernadero
+              }));
+            } else {
+              // Si no hay sensores, mostramos un mensaje pero no cambiamos el invernadero
+              alert("No hay sensores disponibles en este invernadero. Por favor, seleccione otro invernadero.");
+
+              // Restaurar el invernadero anterior si tenemos sensores seleccionados
+              if (formData.sensores.length > 0) {
+                const invernaderoAnterior = invernaderos.find(inv => inv.name === formData.invernaderoNombre);
+                if (invernaderoAnterior) {
+                  setFormData(prev => ({
+                    ...prev,
+                    invernaderoId: invernaderoAnterior.id
+                  }));
+                }
+              }
+            }
           }
         } catch (err) {
           console.error('Error al cargar sensores:', err);
-          alert('Error al cargar los sensores. Inténtalo de nuevo.');
+          setSensores([]); // Si hay un error, simplemente establecemos un array vacío
         } finally {
           setLoadingSensores(false);
         }
@@ -127,9 +145,31 @@ function EditarAlarma() {
     setFormData({ ...formData, [name]: value });
   };
 
+  // Determinar el tipo de sensor seleccionado actualmente para restringir la selección
+  const tipoSensorSeleccionado = useMemo(() => {
+    // Si ya hay sensores seleccionados, obtener el tipo del primer sensor
+    if (formData.sensores.length > 0) {
+      const primerSensorId = formData.sensores[0];
+      const primerSensor = sensores.find(s => s.id === primerSensorId);
+      return primerSensor?.type || null;
+    }
+    return null; // No hay tipo seleccionado aún
+  }, [formData.sensores, sensores]);
+
   const handleSensorChange = (e) => {
     const selectedId = e.target.value;
     if (selectedId && !formData.sensores.includes(selectedId)) {
+      const sensorSeleccionado = sensores.find(s => s.id === selectedId);
+
+      // Verificar si ya hay un tipo de sensor seleccionado
+      if (formData.sensores.length > 0 && sensorSeleccionado) {
+        // Si el tipo del nuevo sensor es diferente, mostrar un mensaje y no agregarlo
+        if (tipoSensorSeleccionado !== sensorSeleccionado.type) {
+          alert(`Solo puede seleccionar sensores del mismo tipo (${tipoSensorSeleccionado}).`);
+          return;
+        }
+      }
+
       setFormData({ ...formData, sensores: [...formData.sensores, selectedId] });
     }
   };
