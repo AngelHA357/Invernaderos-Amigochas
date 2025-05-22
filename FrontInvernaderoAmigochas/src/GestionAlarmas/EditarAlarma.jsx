@@ -27,6 +27,7 @@ function EditarAlarma() {
   const [loadingInvernaderos, setLoadingInvernaderos] = useState(true);
   const [loadingSensores, setLoadingSensores] = useState(false);
   const [error, setError] = useState(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true); // Nuevo estado para controlar la carga inicial
 
   const formas_notificacion = [
     { id: 'SMS', name: 'Mensaje de texto' },
@@ -78,6 +79,20 @@ function EditarAlarma() {
           unidad: alarma.unidad,
           activo: alarma.activo,
         });
+
+        // Si tenemos un invernaderoId, cargar sus sensores de inmediato
+        if (invernaderoId) {
+          try {
+            setLoadingSensores(true);
+            const sensoresData = await obtenerSensoresPorInvernadero(invernaderoId);
+            setSensores(sensoresData);
+            console.log("Sensores cargados:", sensoresData);
+          } catch (error) {
+            console.error("Error al cargar los sensores del invernadero:", error);
+          } finally {
+            setLoadingSensores(false);
+          }
+        }
       } catch (err) {
         console.error('Error al cargar alarma:', err);
         setError('No se pudo cargar la alarma. Inténtalo de nuevo.');
@@ -104,12 +119,22 @@ function EditarAlarma() {
           // Actualizar el nombre del invernadero cuando cambia la selección
           const invernaderoSeleccionado = invernaderos.find(inv => inv.id === formData.invernaderoId);
           if (invernaderoSeleccionado) {
-            // Si no hay sensores, no limpiamos los sensores seleccionados, mantenemos el invernadero anterior
+            // Guardamos los sensores actuales para verificar si este es un cambio de invernadero manual
+            const sensoresActuales = formData.sensores;
+
+            // Si hay datos y no son los sensores iniciales de la alarma
             if (data.length > 0) {
+              // Verificamos si este cambio es debido a una selección manual de invernadero
+              // Si los sensores actuales son diferentes a los que venían con la alarma original
+              // y ya hay un invernadero seleccionado anteriormente, es un cambio manual
+              const esCambioManual = formData.idAlarma && formData.invernaderoNombre !== "" &&
+                                     formData.invernaderoNombre !== invernaderoSeleccionado.name;
+
               setFormData(prev => ({
                 ...prev,
                 invernaderoNombre: invernaderoSeleccionado.name,
-                sensores: [] // Limpiamos los sensores seleccionados al cambiar de invernadero
+                // Solo limpiamos los sensores si es un cambio manual de invernadero
+                sensores: esCambioManual ? [] : prev.sensores
               }));
             } else {
               // Si no hay sensores, mostramos un mensaje pero no cambiamos el invernadero
@@ -207,8 +232,8 @@ function EditarAlarma() {
         const primerSensor = sensores.find(s => s.id === primerSensorId);
 
         if (primerSensor) {
-          magnitud = primerSensor.type;
-          unidad = primerSensor.magnitud;
+          magnitud = primerSensor.magnitud;
+          unidad = primerSensor.unidad;
         }
 
         const alarmaDTO = {
@@ -385,20 +410,25 @@ function EditarAlarma() {
                 </option>
                 {sensores.map((sensor) => (
                   <option key={sensor.id} value={sensor.id}>
-                    {sensor.id} ({sensor.type}, {sensor.magnitud})
+                    {sensor.id} ({sensor.magnitud}, {sensor.unidad})
                   </option>
                 ))}
               </select>
               {loadingSensores && <p className="text-gray-500 text-xs mt-1">Cargando sensores...</p>}
               <div className="mt-3 flex flex-wrap gap-2">
                 {formData.sensores.map((sensorId) => {
+                  // Buscar el sensor en la lista de sensores cargados
                   const sensor = sensores.find((s) => s.id === sensorId);
+                  // Si el sensor está en la lista, mostrar sus datos. Si no, solo mostrar el ID.
                   return (
                     <span
                       key={sensorId}
-                      className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full flex items-center"
+                      className={`px-3 py-1 rounded-full flex items-center ${sensor ? 'bg-gray-100 text-gray-700' : 'bg-orange-100 text-orange-700'}`}
                     >
-                      {sensor ? `${sensor.id} (${sensor.type})` : sensorId}
+                      {sensor
+                        ? `${sensor.id} (${sensor.magnitud}, ${sensor.unidad})`
+                        : `${sensorId} (sensor de otra ubicación)`
+                      }
                       <button
                         type="button"
                         className="ml-2 text-gray-500 hover:text-gray-700"
@@ -410,6 +440,7 @@ function EditarAlarma() {
                   );
                 })}
               </div>
+
               {errors.sensores && <p className="text-red-500 text-xs mt-1">{errors.sensores}</p>}
             </div>
 

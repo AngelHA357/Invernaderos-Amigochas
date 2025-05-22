@@ -15,34 +15,33 @@ function EditarSensor() {
     
     // Obtener sensor del sessionStorage para datos iniciales
     const sensorSeleccionado = JSON.parse(sessionStorage.getItem('sensorSeleccionado')) || {};
+    console.log("Sensor a editar:", sensorSeleccionado); // Verificar los datos del sensor
 
     // Opciones para los tipos de sensores (limitados a Temperatura, Humedad y CO2)
     const tiposSensor = [
         { value: 'Temperatura', label: 'Temperatura' },
-        { value: 'Humedad', label: 'Humedad' },
-        { value: 'CO2', label: 'CO2' }
+        { value: 'Humedad', label: 'Humedad' }
     ];
 
     // Opciones para las unidades según el tipo seleccionado
     const unidadesPorTipo = {
         'Temperatura': ['°C', '°F', 'K'],
-        'Humedad': ['%', 'g/m³'],
-        'CO2': ['ppm', 'mg/m³']
+        'Humedad': ['%', 'g/m³']
     };
 
-    // Estado para el formulario
+    // Estado para el formulario - Inicializado con los valores del sensor seleccionado
     const [formData, setFormData] = useState({
-        _id: sensorSeleccionado._id || '',          // ID de MongoDB
-        idSensor: sensorSeleccionado.id || '',      // ID del sensor
+        _id: sensorSeleccionado._id || '',
+        idSensor: sensorSeleccionado.id || '',
         macAddress: sensorSeleccionado.macAddress || '',
-        marca: sensorSeleccionado.marca || '',      
-        modelo: sensorSeleccionado.modelo || '',    
-        tipoSensor: sensorSeleccionado.type || '',  
-        magnitud: sensorSeleccionado.type || '',    // Ahora magnitud almacena el tipo
-        unidad: sensorSeleccionado.magnitud || '',  // La "magnitud" anterior era realmente la unidad
+        marca: sensorSeleccionado.marca || '',
+        modelo: sensorSeleccionado.modelo || '',
+        tipoSensor: sensorSeleccionado.magnitud || '', // Usar magnitud como tipo
+        magnitud: sensorSeleccionado.magnitud || '',   // La magnitud es lo mismo que tipoSensor
+        unidad: sensorSeleccionado.unidad || '',       // Unidad de medida
         sector: sensorSeleccionado.sector || '',
-        fila: sensorSeleccionado.fila || '',        
-        estado: sensorSeleccionado.status === 'Activo' // true o false
+        fila: sensorSeleccionado.fila || '',
+        estado: sensorSeleccionado.status === 'Activo'
     });
 
     // Cargar datos del invernadero y configuración desde sessionStorage
@@ -105,14 +104,13 @@ function EditarSensor() {
         }
     };
 
-    // Manejar cambio en el tipo de sensor
+    // Manejar cambio en el tipo de sensor (magnitud)
     const handleTipoChange = (e) => {
         const tipo = e.target.value;
         setFormData(prevData => ({
             ...prevData,
             tipoSensor: tipo,
-            magnitud: tipo, // La magnitud coincide con el tipo de sensor
-            unidad: unidadesPorTipo[tipo] ? unidadesPorTipo[tipo][0] : ''
+            magnitud: tipo // La magnitud coincide con el tipo seleccionado
         }));
 
         // Limpiar errores
@@ -120,8 +118,7 @@ function EditarSensor() {
             setValidationErrors(prev => ({
                 ...prev,
                 tipoSensor: '',
-                magnitud: '',
-                unidad: ''
+                magnitud: ''
             }));
         }
     };
@@ -196,7 +193,8 @@ function EditarSensor() {
                 modelo: formData.modelo,
                 tipoSensor: formData.tipoSensor,
                 magnitud: formData.magnitud,
-                idInvernadero: invernaderoSeleccionado?.id, // Usar el ID del invernadero seleccionado
+                unidad: formData.unidad,
+                idInvernadero: invernaderoSeleccionado?.id,
                 sector: formData.sector,
                 fila: formData.fila,
                 estado: formData.estado
@@ -215,7 +213,8 @@ function EditarSensor() {
                 marca: formData.marca,
                 modelo: formData.modelo,
                 type: formData.tipoSensor,
-                magnitud: formData.unidad,
+                magnitud: formData.magnitud,
+                unidad: formData.unidad,
                 invernaderoId: invernaderoSeleccionado?.id,
                 sector: formData.sector,
                 fila: formData.fila,
@@ -367,7 +366,7 @@ function EditarSensor() {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="tipoSensor">
-                                        Tipo de Sensor *
+                                        Magnitud *
                                     </label>
                                     <select
                                         id="tipoSensor"
@@ -377,7 +376,7 @@ function EditarSensor() {
                                         required
                                         className={`w-full border ${validationErrors.tipoSensor ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500`}
                                     >
-                                        <option value="">Seleccionar tipo</option>
+                                        <option value="">Seleccionar magnitud</option>
                                         {tiposSensor.map(tipo => (
                                             <option key={tipo.value} value={tipo.value}>
                                                 {tipo.label}
@@ -398,8 +397,7 @@ function EditarSensor() {
                                         value={formData.unidad}
                                         onChange={handleChange}
                                         required
-                                        disabled={!formData.tipoSensor}
-                                        className={`w-full border ${validationErrors.unidad ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-100 disabled:text-gray-500`}
+                                        className={`w-full border ${validationErrors.unidad ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500`}
                                     >
                                         <option value="">Seleccionar unidad</option>
                                         {formData.tipoSensor && unidadesPorTipo[formData.tipoSensor]?.map(unidad => (

@@ -20,8 +20,8 @@ function AgregarSensor() {
         marca: '',
         modelo: '',
         tipoSensor: '',
-        magnitud: '',
-        unidad: '',
+        magnitud: '', // Este campo almacenará el tipo (ej. Temperatura, Humedad)
+        unidad: '',   // Este campo almacenará la unidad (ej. °C, %)
         idInvernadero: '',
         sector: '',
         fila: '',
@@ -38,7 +38,8 @@ function AgregarSensor() {
     // Opciones para las unidades según el tipo seleccionado
     const unidadesPorTipo = {
         'Temperatura': ['°C', '°F', 'K'],
-        'Humedad': ['%', 'g/m³']
+        'Humedad': ['%', 'g/m³'],
+        'CO2': ['ppm', 'mg/m³']
     };
 
     // Al iniciar, cargar el invernadero desde sessionStorage
@@ -160,7 +161,7 @@ function AgregarSensor() {
         setFormData(prevData => ({
             ...prevData,
             tipoSensor: tipo,
-            magnitud: tipo, // La magnitud coincide con el tipo de sensor
+            magnitud: tipo, // La magnitud ahora es el mismo tipo de sensor
             // Reseteamos la unidad o seleccionamos la primera disponible
             unidad: unidadesPorTipo[tipo] ? unidadesPorTipo[tipo][0] : ''
         }));

@@ -95,8 +95,8 @@ function ListaSensores() {
     };
 
     // Función para obtener el icono según el tipo de sensor
-    const getIconoSensor = (tipo) => {
-        switch(tipo?.toLowerCase()) {
+    const getIconoSensor = (magnitud) => {
+        switch(magnitud?.toLowerCase()) {
             case 'temperatura':
                 return '🌡️';
             case 'humedad':
@@ -267,11 +267,11 @@ function ListaSensores() {
                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                     <div className="flex items-center">
                                                         <span className="flex-shrink-0 h-10 w-10 flex items-center justify-center rounded-full bg-green-100 text-xl">
-                                                            {getIconoSensor(sensor.type)}
+                                                            {getIconoSensor(sensor.magnitud)}
                                                         </span>
                                                         <div className="ml-3">
-                                                            <div className="text-sm font-medium text-gray-900">{sensor.type}</div>
-                                                            <div className="text-sm text-gray-500">{sensor.magnitud || 'N/A'}</div>
+                                                            <div className="text-sm font-medium text-gray-900">{sensor.magnitud}</div>
+                                                            <div className="text-sm text-gray-500">{sensor.unidad || 'N/A'}</div>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -379,7 +379,7 @@ function ListaSensores() {
                     <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full">
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center">
-                                <span className="text-3xl mr-3">{getIconoSensor(sensorDetalle.type)}</span>
+                                <span className="text-3xl mr-3">{getIconoSensor(sensorDetalle.magnitud)}</span>
                                 <h3 className="text-xl font-bold text-gray-800">Sensor {sensorDetalle.id}</h3>
                             </div>
                             <button
@@ -395,12 +395,12 @@ function ListaSensores() {
                                     <h4 className="text-md font-semibold text-gray-700 mb-3 border-b pb-2">Características</h4>
                                     <div className="space-y-2">
                                         <p className="flex justify-between">
-                                            <span className="text-gray-600">Tipo:</span>
-                                            <span className="font-medium">{sensorDetalle.type || 'N/A'}</span>
-                                        </p>
-                                        <p className="flex justify-between">
                                             <span className="text-gray-600">Magnitud:</span>
                                             <span className="font-medium">{sensorDetalle.magnitud || 'N/A'}</span>
+                                        </p>
+                                        <p className="flex justify-between">
+                                            <span className="text-gray-600">Unidad:</span>
+                                            <span className="font-medium">{sensorDetalle.unidad || 'N/A'}</span>
                                         </p>
                                         <p className="flex justify-between">
                                             <span className="text-gray-600">Estado:</span>

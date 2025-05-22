@@ -90,12 +90,13 @@ export const obtenerSensoresPorInvernadero = async (invernaderoId) => {
     return data.map(sensor => ({
       id: sensor.idSensor,
       invernaderoId: sensor.idInvernadero,
-      type: sensor.tipoSensor || sensor.magnitud,
+      type: sensor.tipoSensor,
       status: sensor.estado === true || sensor.estado === 'true' ? 'Activo' : 'Inactivo',
       marca: sensor.marca,
       modelo: sensor.modelo,
       macAddress: sensor.macAddress,
-      magnitud: sensor.unidad || sensor.magnitud,
+      magnitud: sensor.magnitud, // Asegurarnos de usar el campo correcto para la magnitud
+      unidad: sensor.unidad,     // Añadir explícitamente el campo unidad
       sector: sensor.sector,
       fila: sensor.fila,
       _id: sensor._id
@@ -135,6 +136,7 @@ export const obtenerSensorPorId = async (sensorId) => {
       modelo: sensor.modelo,
       macAddress: sensor.macAddress,
       magnitud: sensor.magnitud,
+      unidad: sensor.unidad,    // Añadir el campo unidad explícitamente
       sector: sensor.sector,
       fila: sensor.fila,
       _id: sensor._id
@@ -158,6 +160,7 @@ export const registrarSensor = async (sensorData) => {
       modelo: sensorData.modelo,
       tipoSensor: sensorData.tipoSensor || sensorData.type,
       magnitud: sensorData.magnitud,
+      unidad: sensorData.unidad,    // Añadir el campo unidad explícitamente
       idInvernadero: sensorData.idInvernadero || sensorData.invernaderoId,
       sector: sensorData.sector,
       fila: sensorData.fila,
@@ -192,6 +195,7 @@ export const registrarSensor = async (sensorData) => {
       modelo: sensor.modelo,
       macAddress: sensor.macAddress,
       magnitud: sensor.magnitud,
+      unidad: sensor.unidad,    // Añadir el campo unidad explícitamente
       sector: sensor.sector,
       fila: sensor.fila,
       _id: sensor._id
@@ -215,6 +219,7 @@ export const editarSensor = async (sensorData) => {
       modelo: sensorData.modelo,
       tipoSensor: sensorData.tipoSensor || sensorData.type, // Aceptar ambos formatos
       magnitud: sensorData.magnitud,
+      unidad: sensorData.unidad,    // Añadir el campo unidad explícitamente
       idInvernadero: sensorData.idInvernadero || sensorData.invernaderoId, // Aceptar ambos formatos
       sector: sensorData.sector,
       fila: sensorData.fila,
@@ -249,6 +254,7 @@ export const editarSensor = async (sensorData) => {
       modelo: sensor.modelo,
       macAddress: sensor.macAddress,
       magnitud: sensor.magnitud,
+      unidad: sensor.unidad,    // Añadir el campo unidad explícitamente
       sector: sensor.sector,
       fila: sensor.fila,
       _id: sensor._id

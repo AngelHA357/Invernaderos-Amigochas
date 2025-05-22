@@ -159,12 +159,12 @@ function AgregarAlarma() {
 
         const alarmaDTO = {
           idAlarma: formData.id,
-          magnitud: primerSensor.type, // Magnitud del sensor
+          magnitud: primerSensor.magnitud, // Usar magnitud correcta del sensor
           sensores: formData.sensores,
           invernadero: invernaderoSeleccionado?.name || "Desconocido", // Usar el nombre del invernadero en lugar del ID
           valorMinimo: parseFloat(formData.valorMinimo),
           valorMaximo: parseFloat(formData.valorMaximo),
-          unidad: primerSensor.magnitud, // Unidad del sensor
+          unidad: primerSensor.unidad, // Usar la unidad correcta del sensor
           medioNotificacion: formData.medioNotificacion,
           activo: true,
         };
@@ -288,7 +288,7 @@ function AgregarAlarma() {
                 </option>
                 {sensores.map((sensor) => (
                   <option key={sensor.id} value={sensor.id}>
-                    {sensor.id} ({sensor.type}, {sensor.magnitud})
+                    {sensor.id} ({sensor.magnitud}, {sensor.unidad})
                   </option>
                 ))}
               </select>
@@ -301,7 +301,7 @@ function AgregarAlarma() {
                       key={sensorId}
                       className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full flex items-center"
                     >
-                      {sensor ? `${sensor.id} (${sensor.type})` : sensorId}
+                      {sensor ? `${sensor.id} (${sensor.magnitud})` : sensorId}
                       <button
                         type="button"
                         className="ml-2 text-gray-500 hover:text-gray-700"
