@@ -73,7 +73,7 @@ This project includes a `docker-compose.yml` file to spin up the entire infrastr
 
 1.  **Clone the repository**
     ```bash
-    git clone [https://github.com/tu-usuario/invernaderos-amigochas.git](https://github.com/tu-usuario/invernaderos-amigochas.git)
+    git clone [https://github.com/angelha357/invernaderos-amigochas.git](https://github.com/angelha357/invernaderos-amigochas.git)
     cd invernaderos-amigochas
     ```
 
